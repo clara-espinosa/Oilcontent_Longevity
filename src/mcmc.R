@@ -93,3 +93,13 @@ summary(m1)$Gcovariances[2, 3] %>% round(2)
 summary(m1)$Gcovariances[3, 1] %>% round(2)
 summary(m1)$Gcovariances[3, 2] %>% round(2) 
 summary(m1)$Gcovariances[3, 3] %>% round(2)
+
+
+### Gaussian priors
+
+priors <- list(R = list(V = 1, nu = 0.2),
+               G = list(G1 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
+                        G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
+                        G3 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
+                        G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
+                        G5 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
