@@ -2,13 +2,43 @@ library(tidyverse)
 
 ### Read data
 
-read.csv("data/germination.csv") %>%
-  gather(days, germinated, D7:D28) %>%
-  group_by(code, ageing, sown) %>%
+raw_df <-read.csv("data/germination.csv", sep =";") 
+df <- raw_df %>%
+  gather(raw_df, germinated, D7:D28) %>%
+  group_by(code, ageing, seeds) %>%
   summarise(germinated = sum(germinated, na.rm = TRUE)) %>%
-  merge(read.csv("data/species.csv"), by = "code") %>%
+  merge(read.csv("data/species.csv", sep =";")) %>%
   mutate(ID = gsub(" ", "_", species), animal = ID) %>%
-  na.omit -> df
+  na.omit %>% 
+  unite("ecology",habitat:micro, sep=" ", remove = FALSE) %>%
+  mutate(micro=factor(micro)) %>% 
+  mutate(micro=fct_relevel(micro,c("neutral","snowbed","fellfield"))) %>%
+  arrange(micro)
+
+### calculate germination indices
+library (GerminaR)
+
+#change data structure
+dat <- raw_df %>% 
+  mutate(across(c(code, ageing), as.factor))
+str(dat)
+gerind <- ger_summary(SeedN = "seeds", evalName = "D", data=dat[3:7])
+
+# choose germination indices 
+#              GRP - germination percentage (from 0 to 100%)
+#              MGR - mean germination rate (time units)
+#              SYN - syncronization index (from 0 to 1)
+gerind <- gerind %>% 
+  select(grp, mgr, syn)
+
+# join germination indices with dat info (code and ageing days)
+gerind <- bind_cols(dat[,1:2], gerind)
+str(gerind)
+# write.csv (gerind, file = "data/indices.csv")
+# add variable to the dataframe
+df <- df %>% 
+  merge(read.csv("data/indices.csv", sep =";"))
+  
 
 ### Read tree
 
@@ -24,6 +54,7 @@ nite = 1000000
 nthi = 100
 nbur = 100000
 
+# shorter iterations
 nite = 10000
 nthi = 10
 nbur = 100
@@ -33,18 +64,20 @@ nbur = 100
 priors <- list(R = list(V = 1, nu = 50), 
                G = list(G1 = list(V = 1, nu = 1, alpha.mu = 0, alpha.V = 500), 
                         G2 = list(V = 1, nu = 1, alpha.mu = 0, alpha.V = 500),
-                        G3 = list(V = 1, nu = 1, alpha.mu = 0, alpha.V = 500)))
+                        G3 = list(V = 1, nu = 1, alpha.mu = 0, alpha.V = 500), 
+                        G4 = list(V = 1, nu = 1, alpha.mu = 0, alpha.V = 500)))
 
 ### All species model
 
-MCMCglmm::MCMCglmm(cbind(germinated, sown - germinated) ~
-                     scale(ageing) * snow + scale(ageing) * habitat + scale(ageing) * bedrock,
-                   random = ~ animal + ID + site,
+MCMCglmm::MCMCglmm(cbind(germinated, seeds - germinated) ~
+                     scale(ageing) * micro + scale(ageing) * habitat,
+                   random = ~ animal + ID + bedrock + site:bedrock,
                    family = "multinomial2", pedigree = nnls_orig, prior = priors, data = df,
                    nitt = nite, thin = nthi, burnin = nbur,
                    verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> m1
 
 # save(m1, file = "results/mcmc.Rdata")
+x11()
 plot(m1)
 
 # load("results/mcmc.Rdata")
@@ -52,19 +85,19 @@ summary(m1)
 
 ### GLM without phylogeny
 
-glm(cbind(germinated, sown - germinated) ~
-      ageing * snow, family = "binomial", data = df) -> m2
+glm(cbind(germinated, seeds - germinated) ~
+      ageing * micro, family = "binomial", data = df) -> m2
 summary(m2)
 
 ### Overall percentages
 
 df %>%
-  group_by(ageing, snow) %>%
-  summarise(p = sum(germinated) / sum(sown))
+  group_by(ageing, micro) %>%
+  summarise(p = sum(germinated) / sum(seeds))
 
 df %>%
   group_by(ageing, bedrock) %>%
-  summarise(p = sum(germinated) / sum(sown))
+  summarise(p = sum(germinated) / sum(seeds))
 
 ### Random and phylo
 
@@ -103,3 +136,4 @@ priors <- list(R = list(V = 1, nu = 0.2),
                         G3 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
                         G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
                         G5 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
+

@@ -2,21 +2,21 @@ library(tidyverse)
 
 ### Phylo tree
 
-read.csv("data/species.csv") %>%
-  separate(Specie, into = c("Genus", "Species"), sep = " ") %>%
-  mutate(species = paste(Genus, Species),
-         genus = Genus,
-         family = Family) %>%
+read.csv("data/species.csv", sep =";") %>%
+  separate(species, into = c("genus", "species"), sep = " ") %>%
+  mutate(species = paste(genus, species),
+         genus = genus,
+         family = familia) %>%
   select(species, genus, family) %>%
-  unique %>%
-  mutate(family = fct_recode(family, 
-                             "Asteraceae" = "Compositae",
-                             "Fabaceae" = "Leguminosae",
-                             "Asphodelaceae" = "Xanthorrhoeaceae")) %>%
+  #unique %>%
+  #mutate(family() = fct_recode(family, 
+  #                            "Asteraceae" = "Compositae",
+  #                           "Fabaceae" = "Leguminosae",
+  #                          "Asphodelaceae" = "Xanthorrhoeaceae")) %>%
   arrange(species) %>%
   na.omit -> 
   ranks1
-
+#devtools::install_github("jinyizju/V.PhyloMaker")
 library(V.PhyloMaker)
 
 phylo.maker(sp.list = ranks1,

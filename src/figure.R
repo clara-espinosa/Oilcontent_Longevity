@@ -1,6 +1,6 @@
 library(tidyverse)
 
-### Snow bed vs fellfield
+### Snowbed vs fellfield
 
 read.csv("data/germination.csv") %>%
   gather(days, germinated, D7:D28) %>%
