@@ -70,7 +70,7 @@ priors <- list(R = list(V = 1, nu = 50),
 ### All species model
 
 MCMCglmm::MCMCglmm(cbind(germinated, seeds - germinated) ~
-                     scale(ageing) * micro + scale(ageing) * habitat,
+                    scale(ageing)*micro + scale(ageing)*habitat,
                    random = ~ animal + ID + bedrock + site:bedrock,
                    family = "multinomial2", pedigree = nnls_orig, prior = priors, data = df,
                    nitt = nite, thin = nthi, burnin = nbur,
@@ -86,7 +86,7 @@ summary(m1)
 ### GLM without phylogeny
 
 glm(cbind(germinated, seeds - germinated) ~
-      ageing * micro, family = "binomial", data = df) -> m2
+      ageing * micro + ageing *habitat, family = "binomial", data = df) -> m2
 summary(m2)
 
 ### Overall percentages
@@ -96,8 +96,9 @@ df %>%
   summarise(p = sum(germinated) / sum(seeds))
 
 df %>%
-  group_by(ageing, bedrock) %>%
+  group_by(ageing, habitat) %>%
   summarise(p = sum(germinated) / sum(seeds))
+
 
 ### Random and phylo
 
@@ -121,12 +122,17 @@ summary(m1)$Gcovariances[2, 1] %>% round(2)
 summary(m1)$Gcovariances[2, 2] %>% round(2) 
 summary(m1)$Gcovariances[2, 3] %>% round(2) 
 
-# Random effects site
+# Random effects bedrock
 
 summary(m1)$Gcovariances[3, 1] %>% round(2)
 summary(m1)$Gcovariances[3, 2] %>% round(2) 
 summary(m1)$Gcovariances[3, 3] %>% round(2)
 
+# Random effects site:bedrock
+
+summary(m1)$Gcovariances[4, 1] %>% round(2)
+summary(m1)$Gcovariances[4, 2] %>% round(2) 
+summary(m1)$Gcovariances[4, 3] %>% round(2)
 
 ### Gaussian priors
 
@@ -134,6 +140,17 @@ priors <- list(R = list(V = 1, nu = 0.2),
                G = list(G1 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
                         G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
                         G3 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        G5 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
+                        G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
 
+# Gaussian model
+MCMCglmm::MCMCglmm(syn ~ scale(ageing) * micro+ scale(ageing)*habitat,
+                   random = ~ animal + ID + bedrock + site:bedrock,
+                   family = "gaussian", pedigree = nnls_orig, prior = priors, data = df,
+                   nitt = nite, thin = nthi, burnin = nbur,
+                   verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g1
+# save(m1, file = "results/mcmc.Rdata")
+x11()
+plot(g1)
+
+# load("results/mcmc.Rdata")
+summary(g1)

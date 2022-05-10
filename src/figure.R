@@ -1,64 +1,45 @@
 library(tidyverse)
 
 ### Snowbed vs fellfield
-
-read.csv("data/germination.csv") %>%
-  gather(days, germinated, D7:D28) %>%
-  group_by(code, ageing, sown) %>%
+raw_df <-read.csv("data/germination.csv", sep =";") 
+df <- raw_df %>%
+  gather(raw_df, germinated, D7:D28) %>%
+  group_by(code, ageing, seeds) %>%
   summarise(germinated = sum(germinated, na.rm = TRUE)) %>%
-  merge(read.csv("data/species.csv"), by = "code") %>%
-  na.omit %>%
-  group_by(ageing, snow) %>%
-  summarise(germinated = sum(germinated), sown = sum(sown))-> df
+  merge(read.csv("data/species.csv", sep =";")) %>%
+  na.omit %>% 
+  group_by(ageing, micro) %>%
+  summarise(germinated = sum(germinated), seeds = sum(seeds))
 
-binom::binom.confint(df$germinated, df$sown, method = "wilson") %>%
+binom::binom.confint(df$germinated, df$seeds, method = "wilson") %>%
   select(mean:upper) -> binomials
 
 cbind(df, binomials) %>%
-  ggplot(aes(ageing, mean, ymin = lower, ymax = upper, color = snow)) +
-  # facet_wrap(~ snow) +
+  ggplot(aes(ageing, mean, ymin = lower, ymax = upper, color = micro)) +
+  #facet_wrap(~ habitat) +
   geom_line() +
-  geom_errorbar() +
-  geom_smooth()
-  
+  geom_errorbar() 
+ # geom_smooth()
+ 
 ### Habitat
-
-read.csv("data/germination.csv") %>%
-  gather(days, germinated, D7:D28) %>%
-  group_by(code, ageing, sown) %>%
+raw_df <-read.csv("data/germination.csv", sep =";") 
+df <- raw_df %>%
+  gather(raw_df, germinated, D7:D28) %>%
+  group_by(code, ageing, seeds) %>%
   summarise(germinated = sum(germinated, na.rm = TRUE)) %>%
-  merge(read.csv("data/species.csv"), by = "code") %>%
-  na.omit %>%
+  merge(read.csv("data/species.csv", sep =";")) %>%
+  na.omit %>% 
   group_by(ageing, habitat) %>%
-  summarise(germinated = sum(germinated), sown = sum(sown))-> df
+  summarise(germinated = sum(germinated), seeds = sum(seeds))
 
-binom::binom.confint(df$germinated, df$sown, method = "wilson") %>%
+binom::binom.confint(df$germinated, df$seeds, method = "wilson") %>%
   select(mean:upper) -> binomials
 
 cbind(df, binomials) %>%
   ggplot(aes(ageing, mean, ymin = lower, ymax = upper, color = habitat)) +
   # facet_wrap(~ habitat) +
   geom_line() +
-  geom_errorbar() +
-  geom_smooth()
+  geom_errorbar() 
+  # geom_smooth()
 
-### Bedrock
 
-read.csv("data/germination.csv") %>%
-  gather(days, germinated, D7:D28) %>%
-  group_by(code, ageing, sown) %>%
-  summarise(germinated = sum(germinated, na.rm = TRUE)) %>%
-  merge(read.csv("data/species.csv"), by = "code") %>%
-  na.omit %>%
-  group_by(ageing, bedrock) %>%
-  summarise(germinated = sum(germinated), sown = sum(sown))-> df
-
-binom::binom.confint(df$germinated, df$sown, method = "wilson") %>%
-  select(mean:upper) -> binomials
-
-cbind(df, binomials) %>%
-  ggplot(aes(ageing, mean, ymin = lower, ymax = upper, color = bedrock)) +
-  # facet_wrap(~ bedrock) +
-  geom_line() +
-  geom_errorbar() +
-  geom_smooth()
