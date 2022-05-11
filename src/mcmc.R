@@ -10,7 +10,7 @@ df <- raw_df %>%
   merge(read.csv("data/species.csv", sep =";")) %>%
   mutate(ID = gsub(" ", "_", species), animal = ID) %>%
   na.omit %>% 
-  unite("ecology",habitat:micro, sep=" ", remove = FALSE) %>%
+  unite("ecology",distribution:micro, sep=" ", remove = FALSE) %>%
   mutate(micro=factor(micro)) %>% 
   mutate(micro=fct_relevel(micro,c("neutral","snowbed","fellfield"))) %>%
   arrange(micro)
@@ -70,7 +70,7 @@ priors <- list(R = list(V = 1, nu = 50),
 ### All species model
 
 MCMCglmm::MCMCglmm(cbind(germinated, seeds - germinated) ~
-                    scale(ageing)*micro + scale(ageing)*habitat,
+                    scale(ageing)*micro + scale(ageing)*distribution,
                    random = ~ animal + ID + bedrock + site:bedrock,
                    family = "multinomial2", pedigree = nnls_orig, prior = priors, data = df,
                    nitt = nite, thin = nthi, burnin = nbur,
@@ -86,7 +86,7 @@ summary(m1)
 ### GLM without phylogeny
 
 glm(cbind(germinated, seeds - germinated) ~
-      ageing * micro + ageing *habitat, family = "binomial", data = df) -> m2
+      ageing * micro + ageing *distribution, family = "binomial", data = df) -> m2
 summary(m2)
 
 ### Overall percentages
@@ -96,7 +96,7 @@ df %>%
   summarise(p = sum(germinated) / sum(seeds))
 
 df %>%
-  group_by(ageing, habitat) %>%
+  group_by(ageing, distribution) %>%
   summarise(p = sum(germinated) / sum(seeds))
 
 
@@ -143,7 +143,7 @@ priors <- list(R = list(V = 1, nu = 0.2),
                         G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
 
 # Gaussian model
-MCMCglmm::MCMCglmm(syn ~ scale(ageing) * micro+ scale(ageing)*habitat,
+MCMCglmm::MCMCglmm(grp ~ scale(ageing),
                    random = ~ animal + ID + bedrock + site:bedrock,
                    family = "gaussian", pedigree = nnls_orig, prior = priors, data = df,
                    nitt = nite, thin = nthi, burnin = nbur,
