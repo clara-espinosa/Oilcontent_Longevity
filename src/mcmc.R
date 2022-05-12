@@ -69,8 +69,8 @@ priors <- list(R = list(V = 1, nu = 50),
 
 ### All species model
 
-MCMCglmm::MCMCglmm(cbind(germinated, seeds - germinated) ~
-                    scale(ageing)*micro + scale(ageing)*distribution,
+ MCMCglmm::MCMCglmm(cbind(germinated, seeds - germinated) ~
+                    scale(ageing)*micro + scale(ageing) * habitat,
                    random = ~ animal + ID + bedrock + site:bedrock,
                    family = "multinomial2", pedigree = nnls_orig, prior = priors, data = df,
                    nitt = nite, thin = nthi, burnin = nbur,
