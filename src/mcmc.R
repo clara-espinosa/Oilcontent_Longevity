@@ -49,15 +49,14 @@ phangorn::nnls.tree(cophenetic(ape::read.tree("results/tree.tree")),
 nnls_orig$node.label <- NULL
 
 ### Set number of iterations
-
 nite = 1000000
 nthi = 100
 nbur = 100000
 
 # shorter iterations
-nite = 10000
-nthi = 10
-nbur = 100
+#nite = 10000
+#nthi = 10
+#nbur = 100
 
 ### Set priors for germination models
 
@@ -111,31 +110,28 @@ coda::HPDinterval(m1$VCV[,"animal"]/(m1$VCV[,"animal"] + m1$VCV[,"units"]))[, 1]
 coda::HPDinterval(m1$VCV[,"animal"]/(m1$VCV[,"animal"] + m1$VCV[,"units"]))[, 2] %>% round(2)
 
 # Random effects animal
-
 summary(m1)$Gcovariances[1, 1] %>% round(2) 
 summary(m1)$Gcovariances[1, 2] %>% round(2) 
 summary(m1)$Gcovariances[1, 3] %>% round(2)
 
 # Random effects species ID
-
 summary(m1)$Gcovariances[2, 1] %>% round(2)
 summary(m1)$Gcovariances[2, 2] %>% round(2) 
 summary(m1)$Gcovariances[2, 3] %>% round(2) 
 
 # Random effects bedrock
-
 summary(m1)$Gcovariances[3, 1] %>% round(2)
 summary(m1)$Gcovariances[3, 2] %>% round(2) 
 summary(m1)$Gcovariances[3, 3] %>% round(2)
 
 # Random effects site:bedrock
-
 summary(m1)$Gcovariances[4, 1] %>% round(2)
 summary(m1)$Gcovariances[4, 2] %>% round(2) 
 summary(m1)$Gcovariances[4, 3] %>% round(2)
 
-### Gaussian priors
 
+
+### Gaussian priors
 priors <- list(R = list(V = 1, nu = 0.2),
                G = list(G1 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
                         G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
