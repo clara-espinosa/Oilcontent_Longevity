@@ -10,10 +10,10 @@ df <- raw_df %>%
   merge(read.csv("data/species.csv", sep =";")) %>%
   mutate(ID = gsub(" ", "_", species), animal = ID) %>%
   na.omit %>% 
-  unite("ecology",distribution:micro, sep=" ", remove = FALSE) %>%
-  mutate(micro=factor(micro)) %>% 
-  mutate(micro=fct_relevel(micro,c("neutral","snowbed","fellfield"))) %>%
-  arrange(micro)
+  unite("ecology",distribution:microhabitat, sep=" ", remove = FALSE) %>%
+  mutate(microhabitat=factor(microhabitat)) %>% 
+  mutate(microhabitat=fct_relevel(microhabitat,c("neutral","snowbed","fellfield"))) %>%
+  arrange(microhabitat)
 
 ### calculate germination indices
 library (GerminaR)
@@ -69,7 +69,7 @@ priors <- list(R = list(V = 1, nu = 50),
 ### All species model
 
  MCMCglmm::MCMCglmm(cbind(germinated, seeds - germinated) ~
-                    scale(ageing)*micro + scale(ageing) * habitat,
+                    scale(ageing)*microhabitat + scale(ageing) * habitat,
                    random = ~ animal + ID + bedrock + site:bedrock,
                    family = "multinomial2", pedigree = nnls_orig, prior = priors, data = df,
                    nitt = nite, thin = nthi, burnin = nbur,
@@ -85,13 +85,13 @@ summary(m1)
 ### GLM without phylogeny
 
 glm(cbind(germinated, seeds - germinated) ~
-      ageing * micro + ageing *distribution, family = "binomial", data = df) -> m2
+      ageing * microhabitat + ageing *distribution, family = "binomial", data = df) -> m2
 summary(m2)
 
 ### Overall percentages
 
 df %>%
-  group_by(ageing, micro) %>%
+  group_by(ageing, microhabitat) %>%
   summarise(p = sum(germinated) / sum(seeds))
 
 df %>%
