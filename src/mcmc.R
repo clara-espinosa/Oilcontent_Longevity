@@ -1,7 +1,6 @@
 library(tidyverse)
 
 ### Read data
-
 raw_df <-read.csv("data/germination.csv", sep =";") 
 df <- raw_df %>%
   gather(raw_df, germinated, D7:D28) %>%
@@ -69,7 +68,7 @@ priors <- list(R = list(V = 1, nu = 50),
 ### All species model
 
  MCMCglmm::MCMCglmm(cbind(germinated, seeds - germinated) ~
-                    scale(ageing)*microhabitat + scale(ageing) * habitat,
+                    scale(ageing)*microhabitat + scale(ageing) * distribution,
                    random = ~ animal + ID + bedrock + site:bedrock,
                    family = "multinomial2", pedigree = nnls_orig, prior = priors, data = df,
                    nitt = nite, thin = nthi, burnin = nbur,
@@ -150,3 +149,32 @@ plot(g1)
 
 # load("results/mcmc.Rdata")
 summary(g1)
+
+#### GENSTAT DATA ANALISYS ####
+genstat_df <-read.csv("data/genstat.csv", sep =";") 
+str (genstat_df)
+genstat_df$code <- as.factor(genstat_df$code)
+genstat_df$species <- as.factor(genstat_df$species)
+genstat_df$familia <- as.factor(genstat_df$familia)
+genstat_df$site <- as.factor(genstat_df$site)
+genstat_df$bedrock <- as.factor(genstat_df$bedrock)
+genstat_df$micro <- as.factor(genstat_df$micro)
+genstat_df$distribution <- as.factor(genstat_df$distribution)
+View (genstat_df)
+genstat_df <- genstat_df %>%
+mutate(ID = gsub(" ", "_", species), animal = ID)
+
+# compare p50, Ki, Slope!!
+glm (slope ~ micro*distribution, family = "gaussian", data = genstat_df) -> m3
+summary(m3)
+# Normal glm show no effect of microhabitat preference and distribution on p50, Ki and slope values
+
+# take into account phylogeny! 
+# correct glm? ASK EDUARDO!!!
+MCMCglmm::MCMCglmm(slope ~ micro*distribution,
+                   random = ~ animal + ID + bedrock + site:bedrock,
+                   family = "gaussian", pedigree = nnls_orig, prior = priors, data = genstat_df,
+                   nitt = nite, thin = nthi, burnin = nbur,
+                   verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g3
+summary(g3)
+#p50, Ki and slope no differences found according to micro and distribution
