@@ -146,6 +146,8 @@ MCMCglmm::MCMCglmm(grp ~ scale(ageing),
 # save(m1, file = "results/mcmc.Rdata")
 x11()
 plot(g1)
+glm (grp ~ scale(ageing)*microhabitat*distribution, family = "gaussian", data = df) -> grp
+summary(grp)
 
 # load("results/mcmc.Rdata")
 summary(g1)
@@ -161,11 +163,12 @@ genstat_df$bedrock <- as.factor(genstat_df$bedrock)
 genstat_df$micro <- as.factor(genstat_df$micro)
 genstat_df$distribution <- as.factor(genstat_df$distribution)
 View (genstat_df)
+
 genstat_df <- genstat_df %>%
 mutate(ID = gsub(" ", "_", species), animal = ID)
 
 # compare p50, Ki, Slope!!
-glm (slope ~ micro*distribution, family = "gaussian", data = genstat_df) -> m3
+glm (slope ~ distribution*micro, family = "gaussian", data = genstat_df) -> m3
 summary(m3)
 # Normal glm show no effect of microhabitat preference and distribution on p50, Ki and slope values
 
