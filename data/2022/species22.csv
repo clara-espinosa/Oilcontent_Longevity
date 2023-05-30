@@ -4,7 +4,7 @@ code;species;familia;site;bedrock;microhabitat;distribution
 300821-08;Arenaria erinacea;Caryophyllaceae;Hoyo;Calcareous;neutral;alpine
 240821-01;Armeria duriaei;Plumbaginaceae;Rabinalto;Siliceous;neutral;alpine
 310821-13;Carex sempervirens;Cyperaceae;Cazadores;Calcareous;snowbed;alpine
-280721-02;Cerastium sp.;Caryophyllaceae;Rabinalto;Siliceous;snowbed;generalist
+280721-02;Cerastium ramossissimum;Caryophyllaceae;Rabinalto;Siliceous;snowbed;generalist
 110821-01;Dianthus langeanus;Caryophyllaceae;Penauta;Siliceous;snowbed;alpine
 240821-02;Festuca summilusitana;Poaceae;Rabinalto;Siliceous;fellfield;alpine
 130921-06;Gentiana verna;Gentianaceae;Hou;Calcareous;snowbed;alpine
@@ -29,7 +29,7 @@ code;species;familia;site;bedrock;microhabitat;distribution
 140921-03;Silene acaulis;Caryophyllaceae;Boches;Calcareous;fellfield;alpine
 230921-01;Silene ciliata;Caryophyllaceae;Penauta;Siliceous;snowbed;alpine
 300821-11;Silene ciliata;Caryophyllaceae;Hoyo;Calcareous;fellfield;alpine
-240821-08;Solidago virgaurea;Compositae;Rabinalto;Siliceous;fellfield;generalist
+240821-08;Solidago virgaurea;Asteraceae;Rabinalto;Siliceous;fellfield;generalist
 150721-01;Spergula morisonii;Caryophyllaceae;Cañada;Siliceous;fellfield;generalist
 120821-06;Thymus praecox;Lamiaceae;Rabinalto;Siliceous;fellfield;generalist
 300821-07;Thymus praecox;Lamiaceae;Hoyo;Calcareous;fellfield;generalist
