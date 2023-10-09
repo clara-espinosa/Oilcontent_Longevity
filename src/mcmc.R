@@ -1,5 +1,13 @@
 library(tidyverse)
-##################  2022  #########################
+
+#### SPECIES PREFERENCES ####
+read.csv("data/sp_pref_picos.csv", sep =";")%>%
+  select(species:Snw) -> pref_picos
+read.csv("data/sp_pref_villa.csv", sep =";")%>%
+  select(species:Snw) -> pref_villa
+
+rbind(pref_picos, pref_villa) -> sp_pref
+##################  LONGEVITY 2022  #########################
 ### Read data
 raw22 <-read.csv("data/2022/germination22.csv", sep =";") 
 raw22 %>%
@@ -182,7 +190,35 @@ MCMCglmm::MCMCglmm(slope ~ micro*distribution,
 summary(g3)
 #p50, Ki and slope no differences found according to micro and distribution
 
-##################  2023 ################
+### MCMC with species preferences as explanatory ####
+raw22 %>%
+  gather(scores, germinated, D7:D28) %>%
+  group_by(code, ageing, seeds) %>%
+  summarise(germinated = sum(germinated, na.rm = TRUE)) %>%
+  merge(read.csv("data/2022/species22.csv", sep =";")) %>%
+  mutate(ID = gsub(" ", "_", species), animal = ID) %>%
+  na.omit %>% 
+ 
+
+gerind22%>%
+  merge(read.csv("data/2022/species22.csv", sep =";")) %>%
+  mutate(ID = gsub(" ", "_", species), animal = ID) %>%
+  merge(sp_pref)%>% 
+  na.omit ()-> test1
+str(test1)
+
+# try out normal glm (very mixd not clear results)
+glm (grp ~ ageing*Snw, family = "gaussian", data = test1) -> test    #*FDD *GDD*Snw
+summary(test)
+
+ggplot (test1, aes(x=Snw, y= syn, color= ageing)) +
+  geom_point()+
+  geom_smooth(method = "lm", se=FALSE, level = 0.9)+
+  labs( title= "")
+#visualization show some differential patterns in grp (germination percentage) from day 30 ageing responses according to FDD/GDD/Snow
+# with mgr (mean germination rate) da0 species from more snow places go slower than other, with FDD and GDD contradictor responses
+##################  LONGEVITY 2023 ################
+
 ### Read data
 raw23 <-read.csv("data/2023/longevity23.csv", sep =";") 
 raw23 %>%
@@ -344,3 +380,24 @@ summary(grp)
 
 # load("results/mcmc.Rdata")
 summary(g1)
+
+##### PERSISTENCE 23 #####
+### Read data
+library(viridis)
+persistence %>%
+  select(species, community, retrieval_season, site_buried, microhabitat_buried, 
+         seeds_initial, seeds_identifiables, D0)%>%
+  filter (retrieval_season == "Spring_23")%>%
+  na.omit()%>%
+  group_by(community, microhabitat_buried, species)%>%
+  summarise(seeds_identifiables = sum(seeds_identifiables), 
+            germinated = sum(D0))%>%
+  mutate(germPER = (germinated/seeds_identifiables))%>%
+  filter(community =="temperate") %>%
+  ggplot(aes(microhabitat_buried, germPER, color= species)) +
+  geom_point(size =2, position = "jitter") +
+  scale_color_viridis_d() +
+  ylim (c(0,1))+
+  labs (title = "Temperate")+
+  theme_classic()
+  
