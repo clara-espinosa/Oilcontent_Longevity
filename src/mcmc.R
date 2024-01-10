@@ -1,5 +1,6 @@
-library(tidyverse)
+library(tidyverse);library (rstatix);library (stringr)
 
+library(ggpattern)
 #### SPECIES PREFERENCES ####
 read.csv("data/sp_pref_picos.csv", sep =";")%>%
   select(species:Snw) -> pref_picos
@@ -384,6 +385,46 @@ summary(g1)
 ##### PERSISTENCE 23 #####
 ### Read data
 library(viridis)
+str(persistence)
+x11()
+persistence %>%
+  filter(retrieval_season == "Spring_23" |  retrieval_season == "Autumn_23")%>%
+  select(retrieval_season, community, microhabitat_buried, species, seeds_initial, bag1:bag3)%>%
+  convert_as_factor(retrieval_season, community, microhabitat_buried, species) %>%
+  mutate(species = fct_relevel (species, "Armeria duriaei", "Dianthus langeanus", "Plantago holosteum",
+                                "Luzula caespitosa", "Phyteuma hemisphaericum", "Silene ciliata", 
+                                "Androsace villosa",  "Carex sempervirens","Gypsophila repens", 
+                                "Armeria cantabrica","Festuca glacialis","Jasione cavanillesii"))%>%
+  mutate(retrieval_season = fct_relevel (retrieval_season, "Spring_23","Autumn_23"))%>%
+  mutate(microhabitat_buried = recode_factor(microhabitat_buried, "Warm" = "Fellfield", 
+                               "Crio"="Fellfield", 
+                               "Cold" = "Snowbed", 
+                               "Snow" = "Snowbed"))%>%
+  gather(bag, germ, bag1:bag3)%>%
+  mutate(germ_per=germ/10)%>%
+  filter(species=="Armeria duriaei")%>%
+  ggplot(aes(microhabitat_buried, germ_per, pattern=retrieval_season, fill=microhabitat_buried))+
+  geom_boxplot(color="black")+
+  geom_boxplot_pattern(position = position_dodge(preserve = "single"), color = "black", 
+                       pattern_fill = "white", pattern_angle = 45, pattern_density = 0.1, 
+                       pattern_spacing = 0.05, pattern_key_scale_factor = 0.6) +
+  scale_fill_manual (values = c ("chocolate2", "deepskyblue3"), guide = "none") + #
+  labs (y= "Germination proportion", x= "Microhabitat buried")+ #title= "Field germination",
+  scale_y_continuous (limits = c(0,1), breaks = seq (0, 1, by= 0.25)) +
+  facet_wrap(~species, ncol=3)+
+  theme_classic(base_size = 14) +
+  theme(plot.title = element_text (size = 22),
+        strip.text.x = element_text( size = 14, face = "italic"),# face = "bold",
+        strip.text.y = element_text(size = 14, angle = 360),
+        legend.position = "right", #bottom
+        plot.tag.position = c(0,1),
+        panel.background = element_rect(color = "black", fill = NULL),
+        axis.text.x = element_text(size = 13, color = "black"),
+        axis.text.y = element_text(size = 12, color = "black"),
+        axis.title.y = element_text (size=15), 
+        axis.title.x = element_text (size=15))
+
+
 persistence %>%
   select(species, community, retrieval_season, site_buried, microhabitat_buried, 
          seeds_initial, seeds_identifiables, D0)%>%
