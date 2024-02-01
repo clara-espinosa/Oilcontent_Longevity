@@ -1,6 +1,6 @@
 # ANALISI 2022 LONGEVITY DATA (PAVIA) WITH SP PREFRENCES, OIL CONTENT AND SEED MASS AS EXPLANATORY VARIABLES
 
-library(tidyverse);library (rstatix);library (stringr)
+library(tidyverse);library (rstatix);library (stringr);library(viridis)
 library(ggpattern); library (vegan) ;library (ggrepel)
 
 ### analisys using raw germination data, new explicatives variables and phylogeny via MCMC GLMM ####
@@ -12,7 +12,6 @@ read.csv("data/2022/germination22.csv", sep =";") %>%
   merge(header) %>%
   mutate(ID = gsub(" ", "_", species), animal = ID) %>%
   na.omit %>% # remove species without sp_pref (Minuartia CF) and without oil content (C.ramosissimum, G.verna, G.campestris and P. pyrenaica)
-  unite("ecology",distribution:microhabitat, sep=" ", remove = FALSE) %>%
   mutate(microhabitat=factor(microhabitat)) %>% 
   mutate(microhabitat=fct_relevel(microhabitat,c("neutral","snowbed","fellfield"))) %>%
   merge(read.csv("data/2022/indices22.csv", sep =","), by = c("code", "ageing"))-> df22_new
@@ -192,3 +191,136 @@ ggplot(pcaInds, aes(x = Dim.1, y = Dim.2)) +
                                   "% variance explained)", sep = "")) + #, limits = c(-5, 5)
   scale_y_continuous(name = paste("Axis 2 (", round(pca_genstat$eig[2, 2], 0), 
                                   "% variance explained)", sep = "")) #, limits = c(-4, 4)
+
+### exploration visualization ####
+# ageing x final germ
+read.csv("data/2022/germination22.csv", sep =";") %>%
+  gather(scores, germinated, D7:D28) %>%
+  group_by(code, ageing, seeds) %>%
+  summarise(germinated = sum(germinated, na.rm = TRUE))%>%
+  merge(header) %>%
+  mutate(germPER = germinated/seeds)%>%
+  group_by(community, ageing) %>%
+  summarise(germPER)%>%
+  mutate(ageing= as.factor(ageing))%>%
+  ggplot(aes(x=ageing, y = germPER, fill= ageing), color="black")+
+  geom_boxplot()+
+  scale_fill_viridis_d()+
+  #facet_wrap(~community)+
+  theme_classic(base_size = 16) +
+  theme (plot.title = element_text (face = "bold",size = 20), #hjust = 0.5,
+         plot.tag.position = c(0,1),
+         axis.title.y = element_text (size=14),
+         axis.text.y = element_text (size = 13),
+         axis.title.x = element_blank(), 
+         axis.text.x= element_text (size = 12, color = "black"),
+         strip.text = element_text( size = 18, hjust = 0),
+         strip.background = element_blank(), 
+         panel.background = element_blank(), #element_rect(color = "black", fill = NULL), 
+         legend.title = element_text (size =14),
+         legend.text = element_text (size =14),
+         legend.position = "right", # legend.position = c(0.85, 0.5),
+         legend.box.background = element_rect(color = "black", size = 2))
+
+# germination curves facet x community 
+read.csv("data/2022/germination22.csv", sep =";") %>%
+  gather(scores, germinated, D7:D28) %>%
+  group_by(code, ageing, seeds) %>%
+  summarise(germinated = sum(germinated, na.rm = TRUE))%>%
+  merge(header) %>%
+  mutate(germPER = germinated/seeds)%>%
+  ggplot(aes(x=ageing, y = germPER, group = species, color= oilPER))+ #GDD
+  geom_smooth(method = "loess", se = FALSE, linewidth= 1.2)+
+  scale_color_viridis ()+
+  facet_wrap(~community)+
+  theme_classic(base_size = 16) +
+  theme (plot.title = element_text (face = "bold",size = 20), #hjust = 0.5,
+         plot.tag.position = c(0,1),
+         axis.title.y = element_text (size=14),
+         axis.text.y = element_text (size = 13),
+         axis.title.x = element_blank(), 
+         axis.text.x= element_text (size = 12, color = "black"),
+         strip.text = element_text( size = 18, hjust = 0),
+         strip.background = element_blank(), 
+         panel.background = element_blank(), #element_rect(color = "black", fill = NULL), 
+         legend.title = element_text (size =14),
+         legend.text = element_text (size =14),
+         legend.position = "right", # legend.position = c(0.85, 0.5),
+         legend.box.background = element_rect(color = "black", size = 2))  
+
+# germination curves all species together
+read.csv("data/2022/germination22.csv", sep =";") %>%
+  gather(scores, germinated, D7:D28) %>%
+  group_by(code, ageing, seeds) %>%
+  summarise(germinated = sum(germinated, na.rm = TRUE))%>%
+  merge(header) %>%
+  mutate(germPER = germinated/seeds)%>%
+  group_by(species, ageing )%>%
+  summarise(germPER = mean(germPER), GDD = mean(GDD), oilPER = mean(oilPER))%>%
+  ggplot(aes(x=ageing, y = germPER, group = species, color= oilPER))+ #GDD
+  geom_smooth(method = "loess", se = FALSE, linewidth= 1.2)+
+  scale_color_viridis ()+
+  theme_classic(base_size = 16) +
+  theme (plot.title = element_text (face = "bold",size = 20), #hjust = 0.5,
+         plot.tag.position = c(0,1),
+         axis.title.y = element_text (size=14),
+         axis.text.y = element_text (size = 13),
+         axis.title.x = element_blank(), 
+         axis.text.x= element_text (size = 12, color = "black"),
+         strip.text = element_text( size = 18, hjust = 0),
+         strip.background = element_blank(), 
+         panel.background = element_blank(), #element_rect(color = "black", fill = NULL), 
+         legend.title = element_text (size =14),
+         legend.text = element_text (size =14),
+         legend.position = "right", # legend.position = c(0.85, 0.5),
+         legend.box.background = element_rect(color = "black", size = 2))
+
+# p50 scatterplot (genstat) 
+read.csv("data/2022/genstat22.csv", sep =",")%>%
+  left_join(header, by = c("species", "community", "code")) %>%
+  dplyr::select(species, code, community, site, familia, microhabitat, distribution, Ki, slope, p50, GDD, oilPER)%>%
+  convert_as_factor(species, code, community, familia, microhabitat, distribution) %>%
+  ggplot(aes(x=oilPER, y=p50, fill=GDD), color="black")+
+  geom_point(size= 4, shape=21)+
+  geom_text_repel(aes(x=oilPER, y=p50,label=species))+
+  geom_smooth(method="glm")+
+  scale_fill_viridis ()+ #direction =-1
+  theme_classic(base_size = 16) +
+  theme (plot.title = element_text (face = "bold",size = 20), #hjust = 0.5,
+         plot.tag.position = c(0,1),
+         axis.title.y = element_text (size=14),
+         axis.text.y = element_text (size = 13),
+         axis.title.x = element_blank(), 
+         axis.text.x= element_text (size = 12, color = "black"),
+         strip.text = element_text( size = 18, hjust = 0),
+         strip.background = element_blank(), 
+         panel.background = element_blank(), #element_rect(color = "black", fill = NULL), 
+         legend.title = element_text (size =14),
+         legend.text = element_text (size =14),
+         legend.position = "right", # legend.position = c(0.85, 0.5),
+         legend.box.background = element_rect(color = "black", size = 2))
+
+# slope scatterplot (genstat) 
+read.csv("data/2022/genstat22.csv", sep =",")%>%
+  left_join(header, by = c("species", "community", "code")) %>%
+  dplyr::select(species, code, community, site, familia, microhabitat, distribution, Ki, slope, p50, GDD, oilPER)%>%
+  convert_as_factor(species, code, community, familia, microhabitat, distribution) %>%
+  ggplot(aes(x=oilPER, y=slope, fill=GDD), color="black")+
+  geom_point(size= 4, shape=21)+
+  geom_smooth(method="glm")+
+  geom_text(aes(x=oilPER, y=slope,label=species))+
+  scale_fill_viridis ()+
+  theme_classic(base_size = 16) +
+  theme (plot.title = element_text (face = "bold",size = 20), #hjust = 0.5,
+         plot.tag.position = c(0,1),
+         axis.title.y = element_text (size=14),
+         axis.text.y = element_text (size = 13),
+         axis.title.x = element_blank(), 
+         axis.text.x= element_text (size = 12, color = "black"),
+         strip.text = element_text( size = 18, hjust = 0),
+         strip.background = element_blank(), 
+         panel.background = element_blank(), #element_rect(color = "black", fill = NULL), 
+         legend.title = element_text (size =14),
+         legend.text = element_text (size =14),
+         legend.position = "right", # legend.position = c(0.85, 0.5),
+         legend.box.background = element_rect(color = "black", size = 2))
