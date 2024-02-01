@@ -1,21 +1,13 @@
 library(tidyverse);library (rstatix);library (stringr)
+library(ggpattern); library (vegan)
 
-library(ggpattern)
-#### SPECIES PREFERENCES ####
-read.csv("data/sp_pref_picos.csv", sep =";")%>%
-  select(species:Snw) -> pref_picos
-read.csv("data/sp_pref_villa.csv", sep =";")%>%
-  select(species:Snw) -> pref_villa
-
-rbind(pref_picos, pref_villa) -> sp_pref
 ##################  LONGEVITY 2022  #########################
 ### Read data
-raw22 <-read.csv("data/2022/germination22.csv", sep =";") 
-raw22 %>%
+read.csv("data/2022/germination22.csv", sep =";") %>%
   gather(scores, germinated, D7:D28) %>%
   group_by(code, ageing, seeds) %>%
   summarise(germinated = sum(germinated, na.rm = TRUE)) %>%
-  merge(read.csv("data/2022/species22.csv", sep =";")) %>%
+  merge(read.csv("data/2022/species22.csv", sep =",")) %>%
   mutate(ID = gsub(" ", "_", species), animal = ID) %>%
   na.omit %>% 
   unite("ecology",distribution:microhabitat, sep=" ", remove = FALSE) %>%
@@ -51,7 +43,7 @@ df22 <- df22 %>%
 ### Read tree
 
 phangorn::nnls.tree(cophenetic(ape::read.tree("results/tree22.tree")), 
-                    ape::read.tree("results/tree22.tree"), rooted = TRUE) -> 
+                    ape::read.tree("results/tree22.tree"), method = "ultrametric") -> 
   nnls_orig
 
 nnls_orig$node.label <- NULL
@@ -273,7 +265,7 @@ df23 %>%
 ### Read tree
 
 phangorn::nnls.tree(cophenetic(ape::read.tree("results/tree23.tree")), 
-                    ape::read.tree("results/tree23.tree"), rooted = TRUE) -> 
+                    ape::read.tree("results/tree23.tree"), method = "ultrametric") -> 
   nnls_orig
 
 nnls_orig$node.label <- NULL
