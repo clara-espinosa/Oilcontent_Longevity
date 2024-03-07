@@ -1,4 +1,4 @@
-# ANALISI 2022 LONGEVITY DATA (PAVIA) WITH SP PREFRENCES, OIL CONTENT AND SEED MASS AS EXPLANATORY VARIABLES
+# ANALISI 2024 LONGEVITY DATA (PAVIA) WITH SP PREFRENCES, OIL CONTENT AND SEED MASS AS EXPLANATORY VARIABLES
 
 library(tidyverse);library (rstatix);library (stringr);library(viridis)
 library(ggpattern); library (vegan) ;library (ggrepel)
@@ -12,10 +12,9 @@ read.csv("data/2022/germination22.csv", sep =";") %>%
   merge(header) %>%
   mutate(ID = gsub(" ", "_", species), animal = ID) %>%
   na.omit %>% # remove species without sp_pref (Minuartia CF) and without oil content (C.ramosissimum, G.verna, G.campestris and P. pyrenaica)
-  mutate(microhabitat=factor(microhabitat)) %>% 
-  mutate(microhabitat=fct_relevel(microhabitat,c("neutral","snowbed","fellfield"))) %>%
   merge(read.csv("data/2022/indices22.csv", sep =","), by = c("code", "ageing"))-> df22_new
 
+unique(df22_new$familia)
 ### Read tree
 
 phangorn::nnls.tree(cophenetic(ape::read.tree("results/tree22.tree")), 
@@ -45,7 +44,7 @@ priors <- list(R = list(V = 1, nu = 50),
 ### All species model
 
 MCMCglmm::MCMCglmm(cbind(germinated, seeds - germinated) ~
-                     scale(ageing)*scale(GDD) + scale(ageing) * scale(meanseedmass) + scale(ageing) * scale(oilPER) ,
+                     scale(ageing)*scale(GDD) + scale(ageing) * scale(oilPER) + scale(ageing)*scale(ratio) , #+ scale(ageing) * scale(meanseedmass) 
                    random = ~ animal + ID + community,
                    family = "multinomial2", pedigree = nnls_orig, prior = priors, data = df22_new,
                    nitt = nite, thin = nthi, burnin = nbur,
@@ -83,14 +82,15 @@ summary(m1)$Gcovariances[3, 1] %>% round(2)
 summary(m1)$Gcovariances[3, 2] %>% round(2) 
 summary(m1)$Gcovariances[3, 3] %>% round(2)
 
-### Gaussian priors
+# Gaussian model for grp, mgr and syn ####
+### Gaussian priors 
 priors <- list(R = list(V = 1, nu = 0.2),
                G = list(G1 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
                         G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
                         G3 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
                         G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
 
-# Gaussian model for grp, mgr and syn 
+
 MCMCglmm::MCMCglmm(grp ~ scale(ageing)*scale(GDD) + scale(ageing) * scale(meanseedmass) + scale(ageing) * scale(oilPER),
                    random = ~ animal + ID + community,
                    family = "gaussian", pedigree = nnls_orig, prior = priors, data = df22_new,
@@ -109,13 +109,13 @@ summary(g1)
 
 read.csv("data/2022/genstat22.csv", sep =",")%>%
   left_join(header, by = c("species", "community", "code")) %>%
-  dplyr::select(species, code, community, site, familia, microhabitat, distribution, Ki:upper95, bio1:oilPER)%>%
-  convert_as_factor(species, code, community, familia, microhabitat, distribution) %>%
+  dplyr::select(species, code, community, site, familia, distribution, Ki:upper95, bio1:oilPER, ratio)%>%
+  convert_as_factor(species, code, community, familia,  distribution) %>%
   mutate(ID = gsub(" ", "_", species), animal = ID)%>%
   na.omit()-> genstat22_new
 
 # compare p50, Ki, Slope!!
-glm (p50 ~ GDD+meanseedmass+oilPER, family = "gaussian", data = genstat22_new) -> m3
+glm (p50 ~ GDD+meanseedmass+oilPER+ratio, family = "gaussian", data = genstat22_new) -> m3
 summary(m3)
 # slope affected only by oilPER
 # Ki nothing significant
@@ -129,7 +129,7 @@ priors <- list(R = list(V = 1, nu = 0.2),
                         #G3 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
                         G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
 # correct glm? ASK EDUARDO!!!
-MCMCglmm::MCMCglmm(p50 ~ GDD + meanseedmass + oilPER,
+MCMCglmm::MCMCglmm(p50 ~ scale(GDD) + scale(oilPER),
                    random = ~ animal + ID + community,
                    family = "gaussian", pedigree = nnls_orig, prior = priors, data = genstat22_new,
                    nitt = nite, thin = nthi, burnin = nbur,
@@ -204,8 +204,9 @@ read.csv("data/2022/germination22.csv", sep =";") %>%
   summarise(germPER)%>%
   mutate(ageing= as.factor(ageing))%>%
   ggplot(aes(x=ageing, y = germPER, fill= ageing), color="black")+
-  geom_boxplot()+
+  geom_boxplot(show.legend = F)+
   scale_fill_viridis_d()+
+  labs(x= "Ageing days", y = "Final germination")+
   #facet_wrap(~community)+
   theme_classic(base_size = 16) +
   theme (plot.title = element_text (face = "bold",size = 20), #hjust = 0.5,
@@ -229,7 +230,7 @@ read.csv("data/2022/germination22.csv", sep =";") %>%
   summarise(germinated = sum(germinated, na.rm = TRUE))%>%
   merge(header) %>%
   mutate(germPER = germinated/seeds)%>%
-  ggplot(aes(x=ageing, y = germPER, group = species, color= oilPER))+ #GDD
+  ggplot(aes(x=ageing, y = germPER, group = species, color= GDD))+ #GDD
   geom_smooth(method = "loess", se = FALSE, linewidth= 1.2)+
   scale_color_viridis ()+
   facet_wrap(~community)+
@@ -259,13 +260,14 @@ read.csv("data/2022/germination22.csv", sep =";") %>%
   summarise(germPER = mean(germPER), GDD = mean(GDD), oilPER = mean(oilPER))%>%
   ggplot(aes(x=ageing, y = germPER, group = species, color= oilPER))+ #GDD
   geom_smooth(method = "loess", se = FALSE, linewidth= 1.2)+
+  labs (x= "Ageing days", y= "Final germination")+
   scale_color_viridis ()+
   theme_classic(base_size = 16) +
   theme (plot.title = element_text (face = "bold",size = 20), #hjust = 0.5,
          plot.tag.position = c(0,1),
          axis.title.y = element_text (size=14),
          axis.text.y = element_text (size = 13),
-         axis.title.x = element_blank(), 
+         axis.title.x = element_text(size = 13), 
          axis.text.x= element_text (size = 12, color = "black"),
          strip.text = element_text( size = 18, hjust = 0),
          strip.background = element_blank(), 
@@ -278,19 +280,46 @@ read.csv("data/2022/germination22.csv", sep =";") %>%
 # p50 scatterplot (genstat) 
 read.csv("data/2022/genstat22.csv", sep =",")%>%
   left_join(header, by = c("species", "community", "code")) %>%
-  dplyr::select(species, code, community, site, familia, microhabitat, distribution, Ki, slope, p50, GDD, oilPER)%>%
-  convert_as_factor(species, code, community, familia, microhabitat, distribution) %>%
+  dplyr::select(species, code, community, site, familia,  distribution, Ki, slope, p50, GDD, oilPER)%>%
+  convert_as_factor(species, code, community, familia,  distribution) %>%
   ggplot(aes(x=oilPER, y=p50, fill=GDD), color="black")+
   geom_point(size= 4, shape=21)+
-  geom_text_repel(aes(x=oilPER, y=p50,label=species))+
-  geom_smooth(method="glm")+
+  labs(x= "Oil content (%)", y = "p50 (days)")+
+  #geom_text_repel(aes(x=oilPER, y=p50,label=species))+
+  geom_smooth(method="lm")+
   scale_fill_viridis ()+ #direction =-1
   theme_classic(base_size = 16) +
   theme (plot.title = element_text (face = "bold",size = 20), #hjust = 0.5,
          plot.tag.position = c(0,1),
          axis.title.y = element_text (size=14),
          axis.text.y = element_text (size = 13),
-         axis.title.x = element_blank(), 
+         axis.title.x = element_text(size = 13), 
+         axis.text.x= element_text (size = 12, color = "black"),
+         strip.text = element_text( size = 18, hjust = 0),
+         strip.background = element_blank(), 
+         panel.background = element_blank(), #element_rect(color = "black", fill = NULL), 
+         legend.title = element_text (size =14),
+         legend.text = element_text (size =14),
+         legend.position = "right", # legend.position = c(0.85, 0.5),
+         legend.box.background = element_rect(color = "black", size = 2))
+
+# p50 scatterplot (genstat) 
+read.csv("data/2022/genstat22.csv", sep =",")%>%
+  left_join(header, by = c("species", "community", "code")) %>%
+  dplyr::select(species, code, community, site, familia,  distribution, Ki, slope, p50, GDD, oilPER)%>%
+  convert_as_factor(species, code, community, familia,  distribution) %>%
+  ggplot(aes(x=GDD, y=p50), color="black")+ #, fill=species
+  geom_point(size= 4, shape=21)+
+  labs(x= "Growing degree days (GDD)", y = "p50 (days)")+
+  #geom_text_repel(aes(x=oilPER, y=p50,label=species))+
+  geom_smooth(method="lm")+
+  scale_fill_viridis_d ()+ #direction =-1
+  theme_classic(base_size = 16) +
+  theme (plot.title = element_text (face = "bold",size = 20), #hjust = 0.5,
+         plot.tag.position = c(0,1),
+         axis.title.y = element_text (size=14),
+         axis.text.y = element_text (size = 13),
+         axis.title.x = element_text(size = 13), 
          axis.text.x= element_text (size = 12, color = "black"),
          strip.text = element_text( size = 18, hjust = 0),
          strip.background = element_blank(), 

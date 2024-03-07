@@ -41,11 +41,11 @@ oil_content %>%
   coord_flip()
 
 # merge header data
-read.csv("data/2022/species22.csv")%>%
+read.csv("data/2022/species22.csv", sep= ";")%>%
   left_join(sp_pref, by = c("species", "community"))%>%
   merge(summary_seedmass, by = c("species", "community"))%>%
   left_join(oil_content,by = c("species", "community")) %>%
-  dplyr::select(species, code, community, familia, microhabitat, distribution, bio1:Snw, mean, sd, oil_content_PER)%>%
+  dplyr::select(species, code, community, familia, distribution, bio1:Snw, mean, sd, oil_content_PER, ratio)%>%
   rename(meanseedmass = mean)%>%
   rename(sdseedmass = sd)%>%
   rename(oilPER = oil_content_PER) -> header
