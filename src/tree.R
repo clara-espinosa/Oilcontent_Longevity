@@ -2,13 +2,14 @@ library(tidyverse)
 
 ### Phylo tree 2022 #####
 
-read.csv("data/2022/species22.csv", sep =",") %>%
+read.csv("data/2022/species22.csv", sep =";") %>%
   separate(species, into = c("genus", "species"), sep = " ") %>%
   mutate(species = paste(genus, species),
          genus = genus,
          family = familia) %>%
+  #filter (community == "Mediterranean")%>%
   select(species, genus, family) %>%
-  #unique %>%
+  unique %>%
   #mutate(family() = fct_recode(family, 
   #                            "Asteraceae" = "Compositae",
   #                           "Fabaceae" = "Leguminosae",

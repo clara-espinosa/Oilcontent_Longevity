@@ -4,7 +4,7 @@ library(ggpattern); library (vegan) ;library (ggrepel)
 #### Load SPECIES PREFERENCES data####
 # based from 80 iButtons floristic relevés
 # original scripts and data in Omaña80 and Picos Github repository (respectively)
-#script name indices and glms
+#script name: indices and glms
 
 # FROM ibuttons data: in picos from 02/10/2018 to 07/08/2019; in villabandin from 12/07/2021 to 29/05/2022
 # FDD: sum of degrees (daily mean) when daily Tmean is below 0 ºC (in absolute values)

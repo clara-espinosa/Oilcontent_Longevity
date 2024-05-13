@@ -353,3 +353,246 @@ read.csv("data/2022/genstat22.csv", sep =",")%>%
          legend.text = element_text (size =14),
          legend.position = "right", # legend.position = c(0.85, 0.5),
          legend.box.background = element_rect(color = "black", size = 2))
+
+
+
+### ANALYSIS ONLY FOR MEDITERRANEAN species for IBC ####
+# merge header data
+read.csv("data/2022/species22.csv", sep= ";")%>%
+  left_join(sp_pref, by = c("species", "community"))%>%
+  merge(summary_seedmass, by = c("species", "community"))%>%
+  left_join(oil_content,by = c("species", "community")) %>%
+  dplyr::select(species, code, community, familia, distribution, bio1:Snw, mean, sd, oil_content_PER, ratio)%>%
+  rename(meanseedmass = mean)%>%
+  rename(sdseedmass = sd)%>%
+  rename(oilPER = oil_content_PER)%>%
+  filter(community == "Mediterranean")-> header_med
+
+### Read germination and germ indices data #
+read.csv("data/2022/germination22.csv", sep =";") %>%
+  gather(scores, germinated, D7:D28) %>%
+  group_by(code, ageing, seeds) %>%
+  summarise(germinated = sum(germinated, na.rm = TRUE)) %>%
+  merge(header_med) %>%
+  mutate(ID = gsub(" ", "_", species), animal = ID) %>%
+  na.omit %>% # remove species without oil content (C.ramosissimum)
+  merge(read.csv("data/2022/indices22.csv", sep =","), by = c("code", "ageing"))-> df22_med
+
+unique(df22_med$species)
+
+### Read tree
+
+phangorn::nnls.tree(cophenetic(ape::read.tree("results/tree22_med.tree")), 
+                    ape::read.tree("results/tree22_med.tree"), method = "ultrametric") -> 
+  nnls_orig
+
+nnls_orig$node.label <- NULL
+
+### Set number of iterations
+nite = 1000000
+nthi = 100
+nbur = 100000
+
+# shorter iterations
+#nite = 10000
+#nthi = 10
+#nbur = 100
+
+### Set priors for germination models
+
+priors <- list(R = list(V = 1, nu = 50), 
+               G = list(G1 = list(V = 1, nu = 1, alpha.mu = 0, alpha.V = 500), 
+                        #G2 = list(V = 1, nu = 1, alpha.mu = 0, alpha.V = 500),
+                        #G3 = list(V = 1, nu = 1, alpha.mu = 0, alpha.V = 500), 
+                        G2 = list(V = 1, nu = 1, alpha.mu = 0, alpha.V = 500)))
+
+### All species model
+
+MCMCglmm::MCMCglmm(cbind(germinated, seeds - germinated) ~
+                   scale(ageing) * scale(oilPER) + scale(ageing)*scale(ratio), #+ scale(ageing) * scale(meanseedmass) scale(ageing)*scale(GDD) +
+                   random = ~ animal + ID,
+                   family = "multinomial2", pedigree = nnls_orig, prior = priors, data = df22_med,
+                   nitt = nite, thin = nthi, burnin = nbur,
+                   verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> m1
+
+# save(m1, file = "results/mcmc.Rdata")
+x11()
+plot(m1)
+
+# load("results/mcmc.Rdata")
+summary(m1)
+
+### Random and phylo
+
+# Calculate lambda http://www.mpcm-evolution.com/practice/online-practical-material-chapter-11/chapter-11-1-simple-model-mcmcglmm
+
+lambda <- m1$VCV[,"animal"]/(m1$VCV[,"animal"] + m1$VCV[,"units"]) 
+
+mean(m1$VCV[,"animal"]/(m1$VCV[,"animal"] + m1$VCV[,"units"])) %>% round(2)
+coda::HPDinterval(m1$VCV[,"animal"]/(m1$VCV[,"animal"] + m1$VCV[,"units"]))[, 1] %>% round(2)
+coda::HPDinterval(m1$VCV[,"animal"]/(m1$VCV[,"animal"] + m1$VCV[,"units"]))[, 2] %>% round(2)
+
+# Random effects animal
+summary(m1)$Gcovariances[1, 1] %>% round(2) 
+summary(m1)$Gcovariances[1, 2] %>% round(2) 
+summary(m1)$Gcovariances[1, 3] %>% round(2)
+
+# Random effects species ID
+summary(m1)$Gcovariances[2, 1] %>% round(2)
+summary(m1)$Gcovariances[2, 2] %>% round(2) 
+summary(m1)$Gcovariances[2, 3] %>% round(2) 
+
+#### Genstat as response variables with new explicative variables 
+
+read.csv("data/2022/genstat22.csv", sep =",")%>%
+  left_join(header_med, by = c("species", "community", "code")) %>%
+  filter(community== "Mediterranean")%>%
+  dplyr::select(species, code, community, site, familia, distribution, Ki:upper95, bio1:oilPER, ratio)%>%
+  convert_as_factor(species, code, community, familia,  distribution) %>%
+  mutate(ID = gsub(" ", "_", species), animal = ID)%>%
+  na.omit()-> genstat22_med
+
+# compare p50, Ki, Slope!!
+glm (p50 ~ oilPER, family = "gaussian", data = genstat22_med) -> glm
+summary(glm)
+# Mc FAdden R2 calculation
+with(summary(glm), 1 - deviance/null.deviance)
+
+lm (p50 ~ log(oilPER), data = genstat22_med) -> lm
+summary(lm)
+summary(lm)$adj.r.squared
+
+# slope affected only by oilPER
+# Ki nothing significant
+# p50 affected only by oilPER
+
+# take into account phylogeny! 
+### Gaussian priors
+priors <- list(R = list(V = 1, nu = 0.2),
+               G = list(G1 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
+                        #G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
+                        #G3 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
+                        G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
+# correct glm? ASK EDUARDO!!!
+MCMCglmm::MCMCglmm(p50 ~ scale(oilPER) + scale(ratio),
+                   random = ~ animal + ID, 
+                   family = "gaussian", pedigree = nnls_orig, prior = priors, data = genstat22_med,
+                   nitt = nite, thin = nthi, burnin = nbur,
+                   verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g3
+x11()
+plot(g3)
+summary(g3)
+# p50 ~ oil content marginally significant
+
+# exploratory visualization
+# ageing x final germ
+read.csv("data/2022/germination22.csv", sep =";") %>%
+  gather(scores, germinated, D7:D28) %>%
+  group_by(code, ageing, seeds) %>%
+  summarise(germinated = sum(germinated, na.rm = TRUE))%>%
+  merge(header_med) %>%
+  filter(community == "Mediterranean")%>%
+  mutate(germPER = germinated/seeds)%>%
+  group_by(community, ageing) %>%
+  summarise(germPER)%>%
+  mutate(ageing= as.factor(ageing))%>%
+  ggplot(aes(x=ageing, y = germPER, fill= ageing), color="black")+
+  geom_boxplot(show.legend = F)+
+  scale_fill_viridis_d()+
+  labs(x= "Ageing days", y = "Final germination")+
+  #facet_wrap(~community)+
+  theme_classic(base_size = 16) +
+  theme (plot.title = element_text (face = "bold",size = 20), #hjust = 0.5,
+         plot.tag.position = c(0,1),
+         axis.title.y = element_text (size=14),
+         axis.text.y = element_text (size = 12),
+         axis.title.x = element_text (size=14), 
+         axis.text.x= element_text (size = 12, color = "black"),
+         strip.text = element_text( size = 18, hjust = 0),
+         strip.background = element_blank(), 
+         panel.background = element_blank(), #element_rect(color = "black", fill = NULL), 
+         legend.title = element_text (size =14),
+         legend.text = element_text (size =14),
+         legend.position = "right", # legend.position = c(0.85, 0.5),
+         legend.box.background = element_rect(color = "black", size = 2))
+
+# germination curves facet x community 
+read.csv("data/2022/germination22.csv", sep =";") %>%
+  gather(scores, germinated, D7:D28) %>%
+  group_by(code, ageing, seeds) %>%
+  summarise(germinated = sum(germinated, na.rm = TRUE))%>%
+  merge(header_med) %>%
+  filter(community == "Mediterranean")%>%
+  mutate(germPER = germinated/seeds)%>%
+  ggplot(aes(x=ageing, y = germPER, group = species, color= oilPER))+ #GDD ratio
+  geom_line( linewidth= 1.2)+
+  #geom_smooth(method = "loess", se = FALSE, linewidth= 1.2)+
+  scale_color_viridis (name = "Oil content (%)")+
+  labs(x= "Ageing days", y = "Final germination")+
+  theme_classic(base_size = 16) +
+  theme (plot.title = element_text (face = "bold",size = 20), #hjust = 0.5,
+         plot.tag.position = c(0,1),
+         axis.title.y = element_text (size=14),
+         axis.text.y = element_text (size = 12),
+         axis.title.x = element_text (size=14),
+         axis.text.x= element_text (size = 12, color = "black"),
+         strip.text = element_text( size = 18, hjust = 0),
+         strip.background = element_blank(), 
+         panel.background = element_blank(), #element_rect(color = "black", fill = NULL), 
+         legend.title = element_text (size =12, face = "bold"),
+         legend.text = element_text (size =12),
+         legend.position = "right") # legend.position = c(0.85, 0.5),
+         #legend.box.background = element_rect(color = "black", size = 2))  
+
+# p50 scatterplot (genstat) 
+read.csv("data/2022/genstat22.csv", sep =",")%>%
+  left_join(header_med, by = c("species", "community", "code")) %>%
+  filter(community == "Mediterranean")%>%
+  ggplot(aes(x=oilPER, y=p50, fill=oilPER), color="black")+
+  geom_point(size= 4, shape=21)+
+  labs(x= "Oil content (%)", y = "p50 (days)")+
+  #geom_text_repel(aes(x=oilPER, y=p50,label=species))+
+  geom_smooth(method="lm", se = F, linewidth= 1.2, color = "black")+
+  scale_fill_viridis (name = "Oil content (%)")+ #direction =-1
+  geom_text(label = "Adjusted R2= 0.14", x=15, y=40, size =5)+
+  theme_classic(base_size = 16) +
+  theme (plot.title = element_text (face = "bold",size = 20), #hjust = 0.5,
+         plot.tag.position = c(0,1),
+         axis.title.y = element_text (size=14),
+         axis.text.y = element_text (size = 13),
+         axis.title.x = element_text(size = 13), 
+         axis.text.x= element_text (size = 12, color = "black"),
+         strip.text = element_text( size = 18, hjust = 0),
+         strip.background = element_blank(), 
+         panel.background = element_blank(), #element_rect(color = "black", fill = NULL), 
+         legend.title = element_text (size =14),
+         legend.text = element_text (size =14),
+         legend.position = "right", # legend.position = c(0.85, 0.5),
+         legend.box.background = element_rect(color = "black", size = 2))
+
+# p50 scatterplot (genstat)  x species
+read.csv("data/2022/genstat22.csv", sep =",")%>%
+  left_join(header_med, by = c("species", "community", "code")) %>%
+  filter(community == "Mediterranean")%>%
+  arrange(oilPER)%>%
+  ggplot(aes(x=species, y=p50, fill=species), color="black")+
+  coord_flip()+
+  geom_col()+
+  labs(x= "Species", y = "p50 (days)")+
+  #geom_text_repel(aes(x=oilPER, y=p50,label=species))+
+  #geom_smooth(method="lm", se = F, linewidth= 1.2, color = "black")+
+  #scale_fill_viridis (name = "Oil content (%)")+ #direction =-1
+  theme_classic(base_size = 16) +
+  theme (plot.title = element_text (face = "bold",size = 20), #hjust = 0.5,
+         plot.tag.position = c(0,1),
+         axis.title.y = element_text (size=14),
+         axis.text.y = element_text (size = 12, face = "italic"),
+         axis.title.x = element_text(size = 14), 
+         axis.text.x= element_text (size = 12, color = "black"),
+         strip.text = element_text( size = 18, hjust = 0),
+         strip.background = element_blank(), 
+         panel.background = element_blank(), #element_rect(color = "black", fill = NULL), 
+         legend.title = element_text (size =14),
+         legend.text = element_text (size =14),
+         legend.position = "none", # legend.position = c(0.85, 0.5),
+         legend.box.background = element_rect(color = "black", size = 2))
