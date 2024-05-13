@@ -1,0 +1,46 @@
+oil_type,systematic_name,common_name,simple_name,saturation_type
+C4.0,Tetranoic acid,Butyric+D1+C2:C2:C44,Butyric acid,SFA
+C6.0,Hexanoic acid,Caproic acid,Caproic acid,SFA
+C8.0,Octanoic acid,Caprylic acid,Caprylic acid,SFA
+C10.0,Decanoic acid,Capric acid,Capric acid,SFA
+C11.0,Undecanoic acid,Hendecanoic acid,Hendecanoic acid,SFA
+C12.0,Dodecanoic acid,Lauric acid,Lauric acid,SFA
+C13.0,Tridecanoic acid,Tridecylic acid,Tridecylic acid,SFA
+C14.0,Tetradecanoic acid,Myristic acid,Myristic acid,SFA
+C14.1n5,cis-9-tetradecenoic acid,Myristoleic acid,Myristoleic acid,SFA
+C15.0,Pentadecanoic acid,Pentadecylic acid,Pentadecylic acid,SFA
+C15.1n5,cis-10- Pentadecenoic acid,,,SFA
+C16.0,Hexadecanoic acid,Palmitic acid,Palmitic acid,SFA
+C16.1n7,cis-9-hexadecenoic acid,Palmitoleic acid,Palmitoleic acid,UFA
+C16.2n4,"all cis- 9,12 hexadecadienoic acid",,,SFA?
+C16.3n4,"all cis 6,9,12-hexadecatrienoic acid",,,SFA?
+C17.0,Heptadecanoic acid,Margaric acid,Margaric acid,SFA
+C17.1n7,cis-10-Heptadecenoic acid,,,SFA?
+C18.0,Octadecanoic acid,Stearic acid,Stearic acid,SFA
+C18.1n9t,trans-9 octadecenoic acid,Elaidic acid,Elaidic acid,UFA
+C18.1n9c,cis-9 octadecenoic acid,Oleic acid,Oleic acid,UFA
+C18.1n7c,cis-11 octadecenoic acid,Cis-Vaccenic acid/Asclepic  ,Cis-Vaccenic acid _Asclepic  ,UFA
+C18. 2n6t,"all trans-9,12 octadecadienoic acid",Linoelaidic acid,Linoelaidic acid,UFA
+C18.2n6c,"all cis-9,12 octadecadienoic acid",Linoleic acid,Linoleic acid,UFA
+C18.3n6,"all cis-6,9,12 octadecatrienoic acid",g- Linolenic acid,g Linolenic acid,UFA
+C18.3n3,"all cis-9,12,15 octadecatrienoic acid",?-Linolenic a./Linolenic a.,Linolenic acid bis,UFA
+C18.3n4,"all cis 9,11,14 octadecatrienoic acid",,,UFA
+C18.4n3,"all cis-?6,9,12,15 ?Octadecatetraenoic acid ","Stearidonic acid, Moroctic acid ",Stearidonic_Moroctic acid ,UFA
+C20.0,Eicosanoic acid,Arachidic acid,Arachidic acid,SFA
+C20.1n9,cis-11 eicosenoic acid,,,UFA
+C20.2n6,"all cis-11,14 eicosadienoic acid",,,UFA
+C20.3n6,"all cis-8,11,14 eicosatrienoic acid",DGLA. Dihomo-?- Linolenic acid,DGLA_Linolenic acid,UFA
+C20.3n3,"all cis-11,14,17 eicosatrienoic acid",,,UFA
+C20.4n6,"all cis-5,8,11,14 eicosatetraenoic acid",Arachidonic acid,Arachidonic acid,UFA
+C20.4n3,"all cis-8,11,14,17 eicosatetraenoic acid",Juniperonic acid,Juniperonic acid,UFA
+C20.5n3,"all cis-5,8,11,14,17 eicosapentanoic acid", EPA. Timnodonic acid,EPA. Timnodonic acid,UFA
+C21.0,Heneicosanoic acid,,,SFA
+C22.0,Docosanoic acid,Behenic acid,Behenic acid,SFA
+C22.1n9,cis-13 docosenoic acid,Erucic acid,Erucic acid,UFA
+C22.2n6,"all cis-13,16 docosadienoic acid",,,UFA
+C22.4n6,"cis 7,10,13,16 docosatetraenoic acid",Adrenic acid,Adrenic acid,UFA
+C22.5n3,"all cis-7,10,13,16,19 docosapentaenoic acid",DPA. Clupanodonic acid,DPA. Clupanodonic acid,UFA
+C22.6n3,"all cis-4,7,10,13,16,19 docosahexaenoic acid",DHA. Cervonic acid,DHA. Cervonic acid,UFA
+C23.0,Tricosanoic acid,,,SFA
+C24.0,Tetracosanoic acid,Lignoceric acid,Lignoceric acid,SFA
+C24.1n9,cis-15 tetracosenoic acid,Nervonic a./Selacholeic a. a.,Nervonic_Selacholeic acid,UFA

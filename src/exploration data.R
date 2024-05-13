@@ -11,23 +11,23 @@ read.csv("data/species.csv")%>%
 
 #### 1- Total oil content (%) per seed ####
 # 1.1 oil content per sp (mg oil /g sample)
-read.csv("oil_data_long.csv")%>%
+read.csv("data/oil_data_long.csv")%>%
   group_by(Taxon, species, family) %>%
   summarise(PERoil = mean(PERoil))%>%
   ggplot(aes(x=Taxon, y= PERoil, fill=species ))+ #community
-  geom_point(size = 4, shape=21, color = "black", show.legend = F)+
-  #geom_bar(stat = "identity", show.legend = F )+ problem with Thymus and S. ciliata (2 accesions summ % oil)
+  #geom_point(size = 4, shape=21, color = "black", show.legend = F)+
+  geom_bar(stat = "identity", show.legend = F )+ #problem with Thymus and S. ciliata (2 accesions summ % oil)
   coord_flip()+
   theme_minimal(base_size=12) +
   labs(title= "Species oil content (%)", tag = "", y= "Oil content (%)")+
   theme(text = element_text(family = "sans"),
         plot.title = element_text (size= 16),
-        legend.position = "right", 
+        legend.position = "", 
         legend.title = element_blank(),
         legend.text = element_text(size = 14, color = "black"),
         panel.background = element_rect(color = "black", fill = NULL),
         axis.title = element_text(size = 14),
-        axis.text = element_text(size = 12, color = "black"))
+        axis.text = element_text(size = 10, color = "black"))
   
 # 1.2 oil content per family (mg oil /g sample)
 read.csv("data/oil_data_long.csv")%>%
@@ -140,10 +140,10 @@ read.csv("data/oil_data_long.csv")%>%
   geom_bar(position = "fill", stat = "identity",  color = "black", show.legend = T)+
   coord_flip()+
   theme_minimal(base_size=12) +
-  labs(title= "UFA vs SFA  (%)", tag = "", y= "Oil content")+
+  labs(title= "UFA vs SFA", tag = "E)", y= "Oil content (relative %)")+
   theme(text = element_text(family = "sans"),
         plot.title = element_text (size= 16),
-        legend.position = "right", 
+        legend.position = "bottom", 
         legend.title = element_blank(),
         legend.text = element_text(size = 14, color = "black"),
         panel.background = element_rect(color = "black", fill = NULL),
@@ -161,7 +161,7 @@ read.csv("data/oil_data_long.csv")%>%
   geom_bar(position = "fill", stat = "identity",  color = "black", show.legend = T)+
   coord_flip()+
   theme_minimal(base_size=12) +
-  labs(title= "UFA vs SFA  (%)", tag = "", y= "Oil content", x= "Plant family")+
+  labs(title= "Ratio UFA vs SFA  (%)", tag = "E)", y= "Oil content", x= "Plant family")+
   theme(text = element_text(family = "sans"),
         plot.title = element_text (size= 16),
         legend.position = "bottom", 
@@ -287,7 +287,7 @@ read.csv("data/oil_data_long.csv")%>%
   #geom_text_repel(aes (x = GDD, y = PERoil, label = species), show.legend = F, size =5, max.overlaps = 15) +
   #facet_grid(~community) +
   theme_minimal(base_size=12) +
-  labs(title= "Oil content (%) vs GDD", tag = "", y= "Oil content (%)", x= "Growing degree days (ºC)")+
+  labs(title= "Oil content (%) vs GDD", tag = "", y= "Oil content (%)", x= "Growing degree days (?C)")+
   theme(text = element_text(family = "sans"),
         plot.title = element_text (size= 16),
         strip.text = element_text (size = 15),
@@ -310,7 +310,7 @@ read.csv("data/oil_data_long.csv")%>%
   #geom_text_repel(aes (x = FDD, y = PERoil, label = species), show.legend = F, size =5, max.overlaps = 15) +
   #facet_grid(~community) +
   theme_minimal(base_size=12) +
-  labs(title= "Oil content (%) vs FDD", tag = "", y= "Oil content (%)", x= "Freezing degree days (ºC)")+
+  labs(title= "Oil content (%) vs FDD", tag = "", y= "Oil content (%)", x= "Freezing degree days (?C)")+
   theme(text = element_text(family = "sans"),
         plot.title = element_text (size= 16),
         strip.text = element_text (size = 15),
