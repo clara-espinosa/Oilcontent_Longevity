@@ -407,7 +407,7 @@ read.csv("data/oil_data_long.csv")%>%
 
 #### 5- explorative PCA with FAMe composition table #####
 
-read.csv("data/species.csv") -> explanatory
+read.csv("data/species_oil.csv") -> explanatory
 
 read.csv("data/oil_per_wide.csv") %>%
   dplyr::select(code, C12.0:C24.0)%>%
@@ -415,7 +415,7 @@ read.csv("data/oil_per_wide.csv") %>%
   dplyr::select(C12.0:C24.0, PERoil, ratio)-> pca.oil
 
 
-oil_all<- rda (pca.oil ~ecology+seedmass+GDD+FDD, data = explanatory, scale=TRUE)
+oil_all<- rda (pca_oil ~ecology+seedmass+GDD+FDD, data = explanatory, scale=TRUE)
 m0 <- rda(pca.oil ~ 1, data=explanatory)
 
 oil_all

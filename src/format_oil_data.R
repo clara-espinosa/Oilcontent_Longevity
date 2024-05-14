@@ -95,7 +95,7 @@ ggplot(pcaInds, aes(x = Dim.1, y = Dim.2)) +
 
 # PCA with header data ####
 oil_data_pca %>%
-  merge(read.csv("data/species.csv"))%>%
+  merge(read.csv("data/species_oil.csv"))%>%
   dplyr::select(community, Taxon, species, family, ecology,PERoil:seedmass, FDD: under_snow)%>%
   convert_as_factor(community, Taxon, species, family, ecology)%>%
   as.data.frame()-> oil_data_pca2

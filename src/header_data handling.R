@@ -18,42 +18,34 @@ library(ggpattern); library (vegan) ;library (ggrepel)
 # climatic variables weighted per coverage 
 
 read.csv("data/sp_pref_picos.csv", sep =",")%>%
-  rbind(read.csv("data/sp_pref_villa.csv", sep =",")) -> sp_pref
+  rbind(read.csv("data/sp_pref_villa.csv", sep =",")) -> sp_pref # 127 species
 
 ## read seed mass data ##
 read.csv("data/seed_mass.csv", sep = ";")%>%
   group_by(species, community)%>%
   get_summary_stats(mass_50)%>%
-  as.data.frame()-> summary_seedmass
+  dplyr::select(species, community, n, mean, sd)%>%
+  as.data.frame()-> summary_seedmass # 66 species
   
 # read oil content data
-read.csv("data/oil_data_long.csv")%>%
-  select(community, Taxon, family, oil_content_PER)%>%
+read.csv("data/species_oil.csv")%>%
+  select(community, Taxon, family, PERoil, ratio)%>%
   rename(species=Taxon) %>%
-  group_by(species, community, family)%>%
-  summarise(oil_content_PER = mean(oil_content_PER)) -> oil_content
-  
-oil_content %>%
-  convert_as_factor(species, community, family) %>%
-  arrange(oil_content_PER)%>%
-  ggplot(aes(x= species, y= oil_content_PER, fill=family)) +
-  geom_point(aes(), color= "black", shape = 21, size = 4, show.legend = T) +
-  coord_flip()
+  group_by(species, community, family) -> oil_content # 36 species
+
 
 # merge header data
 read.csv("data/2022/species22.csv", sep= ";")%>%
   left_join(sp_pref, by = c("species", "community"))%>%
   merge(summary_seedmass, by = c("species", "community"))%>%
-  left_join(oil_content,by = c("species", "community")) %>%
-  dplyr::select(species, code, community, familia, distribution, bio1:Snw, mean, sd, oil_content_PER, ratio)%>%
-  rename(meanseedmass = mean)%>%
-  rename(sdseedmass = sd)%>%
-  rename(oilPER = oil_content_PER) -> header
+  #left_join(oil_content,by = c("species", "community")) %>%
+  dplyr::select(species, code, community, familia, distribution, bio1:Snw, mean, PERoil, ratio)%>%
+  rename(meanseedmass = mean) -> header
   
 unique(sp_pref$species) 
-setdiff(sp22$species, oil_content$species)
+setdiff(oil_content$species,df22$species)
 ### Read species data ####
-read.csv("data/2022/species22.csv")%>%
+read.csv("data/2022/species22.csv", sep=";")%>%
   merge(sp_pref, by = c("species", "community"))%>%
   group_by(species, community, familia, microhabitat, distribution)%>%
   summarise(bio1 = mean(bio1),
@@ -65,8 +57,8 @@ read.csv("data/2022/species22.csv")%>%
 
 
 #### PCA and correlations (check our previous categorical classification based on DCA (fell vs Snow vs neutral)
-# when considered both communitites togheter preivous categorical classification DO NOT match
-# try dividing communities
+# when considered both communities together previous categorical classification DO NOT match
+# try dividing communities?
 header_clim[,6:11] %>%
   FactoMineR::PCA() -> pca_sp_pref
   
@@ -87,9 +79,9 @@ ggplot(pcaInds, aes(x = Dim.1, y = Dim.2)) +
   coord_fixed() +
   geom_hline(yintercept = 0, linetype = "dashed") +
   geom_vline(xintercept = 0, linetype = "dashed") +
-  #geom_segment(data = pcaVars, aes(x = 0, y = 0, xend = 3*Dim.1, yend = 3*Dim.2)) +
-  geom_point(aes(fill = microhabitat), color = "black", show.legend = T, size = 4, shape = 21) + # family
-  #geom_label(data = pcaVars, aes(x = 3*Dim.1, y = 3*Dim.2, label = Variable),  show.legend = F, size = 4) +
+  geom_segment(data = pcaVars, aes(x = 0, y = 0, xend = 3*Dim.1, yend = 3*Dim.2)) +
+  geom_point(aes(fill = microhabitat), color = "black", show.legend = T, size = 3, shape = 21) + # family
+  geom_label(data = pcaVars, aes(x = 3*Dim.1, y = 3*Dim.2, label = Variable),  show.legend = F, size = 4) +
   #geom_label_repel(data = pcaVars, aes(x = 3*Dim.1, y = 3*Dim.2, label = Variable),  show.legend = FALSE, size = 5, segment.size= 1,
                   # point.padding = 0.2, nudge_x = .15, nudge_y = .5,segment.curvature = -1e-20, segment.linetype = 1, segment.color = "red", arrow = arrow(length = unit(0.015, "npc")))+
   geom_text_repel (data = pcaInds, aes (x = Dim.1, y = Dim.2, label = species), show.legend = F, size =4) +

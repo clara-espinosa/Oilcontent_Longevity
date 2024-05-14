@@ -1,10 +1,9 @@
-library(tidyverse);library(V.PhyloMaker)
+library(tidyverse);library(V.PhyloMaker); library(scales)
 library(phylosignal);library(phylobase);library(ape);library(tidytree)
-library (tidyverse); library(scales)
 
 ### Phylo tree both communitites #####
 # always check family names with http://www.mobot.org/MOBOT/research/APweb/
-read.csv("data/species.csv", sep =",") %>%
+read.csv("data/species_oil.csv", sep =",") %>%
   select (Taxon, family) %>%
   unique %>%
   separate(Taxon, into = c("genus", "species"), sep = " ") %>%
@@ -27,13 +26,13 @@ rm(ranks1)
 x11()
 plot(tree$scenario.3)
 
-write.tree(tree$scenario.3, file = "results/tree.tree")
+write.tree(tree$scenario.3, file = "results/tree_oil.tree")
 
 # phylosignal tree graph ###
-ape::read.tree("results/tree.tree")-> tree
+ape::read.tree("results/tree_oil.tree")-> tree
 x11()
 plot(tree)
-read.csv("data/species.csv", sep =",") %>%
+read.csv("data/species_oil.csv", sep =",") %>%
   select(Taxon, PERoil, ratio, seedmass)%>%
   group_by(Taxon) %>%
   summarise(PERoil= mean(PERoil), 
@@ -45,15 +44,18 @@ read.csv("data/species.csv", sep =",") %>%
   column_to_rownames(var="label") %>% 
   select(PERoil, ratio, seedmass)-> oil_phylo 
 
+#https://www.francoiskeck.fr/phylosignal/demo_plots.html
 
 obj_oil <- phylo4d(as(tree, "phylo4"), data.frame(oil_phylo), match.data=TRUE)
 #mat.col <- ifelse(tdata(obj_oil , "tip") < 1,  "darkred","darkgrey")
-barplot.phylo4d(obj_oil, tree.ratio = 0.2,  center=T, #bar.col = mat.col,
+#mat.e <- matrix(abs(rnorm(19 * 3, 0, 0.5)), ncol = 3,
+               # dimnames = list(tipLabels(p4d), names(tdata(p4d))))
+barplot.phylo4d(obj_oil, tree.ratio = 0.2,  center=F, bar.col = rainbow(36),#bar.col = mat.col,  error.bar.sup = mat.e
                 trait.bg.col = "white", show.box = T, grid.vertical = F,
                 grid.horizontal = F, tip.labels = NULL, tree.ladderize =T) #rainbow(37)
 
 barplot(obj_oil ,tree.type = "fan", tip.cex = 0.6, tree.open.angle = 160, trait.cex = 0.6)
 dotplot.phylo4d (obj_oil , tree.type= "cladogram")
-gridplot.phylo4d (obj_oil , tree.type = "fan", tip.cex = 0.6, show.trait = FALSE)
+gridplot.phylo4d (obj_oil ,  tip.cex = 1.5, show.trait = T) #tree.type = "fan",
 phyloSignal(obj_oil )
 phyloCorrelogram (obj_oil )

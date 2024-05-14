@@ -3,7 +3,7 @@ library(ggpattern); library (vegan) ;library (ggrepel)
 library(lme4); library(glmmTMB); library (DHARMa) 
 
 # Data preparation ####
-read.csv("data/species.csv", sep =",")%>%
+read.csv("data/species_oil.csv", sep =",")%>%
   dplyr::select(Taxon, species, family, community, ecology, PERoil, seedmass, ratio, FDD, GDD, under_snow)%>%
   rename(familia = family)%>%
   convert_as_factor(Taxon, species, community, familia, ecology) %>%

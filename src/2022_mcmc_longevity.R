@@ -8,7 +8,7 @@ read.csv("data/2022/germination22.csv", sep =";") %>%
   gather(scores, germinated, D7:D28) %>%
   group_by(code, ageing, seeds) %>%
   summarise(germinated = sum(germinated, na.rm = TRUE)) %>%
-  merge(read.csv("data/2022/species22.csv", sep =",")) %>%
+  merge(read.csv("data/2022/species22.csv", sep =";")) %>%
   mutate(ID = gsub(" ", "_", species), animal = ID) %>%
   na.omit %>% 
   unite("ecology",distribution:microhabitat, sep=" ", remove = FALSE) %>%
@@ -20,8 +20,8 @@ read.csv("data/2022/germination22.csv", sep =";") %>%
 library (GerminaR)
 
 #change data structure
-dat22 <- raw22 %>% 
-  mutate(across(c(code, ageing), as.factor))
+read.csv("data/2022/germination22.csv", sep =";") %>% 
+  mutate(across(c(code, ageing), as.factor)) -> dat22  
 str(dat22)
 gerind22 <- ger_summary(SeedN = "seeds", evalName = "D", data=dat22[3:7])
 
@@ -38,7 +38,7 @@ str(gerind22)
 # write.csv (gerind22, file = "data/2022/indices22.csv")
 # add variable to the dataframe
 df22 <- df22 %>% 
-  merge(read.csv("data/2022/indices22.csv", sep =";"))
+  merge(read.csv("data/2022/indices22.csv", sep =","))
   
 
 ### Read tree
@@ -71,7 +71,7 @@ priors <- list(R = list(V = 1, nu = 50),
 
  MCMCglmm::MCMCglmm(cbind(germinated, seeds - germinated) ~
                     scale(ageing)*microhabitat + scale(ageing) * distribution,
-                   random = ~ animal + ID + bedrock + site:bedrock,
+                   random = ~ animal + ID + community + site:community,
                    family = "multinomial2", pedigree = nnls_orig, prior = priors, data = df22,
                    nitt = nite, thin = nthi, burnin = nbur,
                    verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> m1
@@ -211,167 +211,3 @@ ggplot (test1, aes(x=Snw, y= syn, color= ageing)) +
   labs( title= "")
 #visualization show some differential patterns in grp (germination percentage) from day 30 ageing responses according to FDD/GDD/Snow
 # with mgr (mean germination rate) da0 species from more snow places go slower than other, with FDD and GDD contradictor responses
-##################  LONGEVITY 2023 ################
-
-### Read data
-raw23 <-read.csv("data/2023/longevity23.csv", sep =";") 
-raw23 %>%
-  mutate(viable = seeds-empty) %>%
-  group_by(species, code, ageing) %>%
-  mutate(viable = sum(viable)) %>%
-  gather(scores, germinated, D0:D62) %>%
-  group_by(species,code,  ageing) %>%
-  summarise(germinated = sum(germinated, na.rm = TRUE), viable = first(viable)) %>%
-  merge(read.csv("data/2023/species23.csv", sep =";")) %>%
-  rename(seeds = viable)%>% 
-  mutate(ID = gsub(" ", "_", species), animal = ID)%>%
-  select(!(family))-> df23
-
-str(df23)
-
-### calculate germination indices
-library (GerminaR)
-
-#change data structure
-raw23 %>%
-  mutate(viable = seeds-empty) %>%
-  group_by(species, code, ageing) %>%
-  mutate(seeds = sum(viable)) %>%
-  mutate(ageing = factor(ageing),
-         code = factor(code),
-         species = factor(species))%>%
-  select(species, code, ageing, seeds, D0:D62) %>%
-  as.data.frame()-> dat23
-str(dat23)
-gerind23 <- ger_summary(SeedN = "seeds", evalName = "D", data=dat23[4:13])
-
-# choose germination indices 
-#              GRP - germination percentage (from 0 to 100%)
-#              MGR - mean germination rate (time units)
-#              SYN - syncronization index (from 0 to 1)
-gerind23 <- gerind23 %>% 
-  select(grp, mgr, syn)
-
-# join germination indices with dat info (code and ageing days)
-gerind23 <- bind_cols(dat23[,1:3], gerind23)
-str(gerind23)
-# write.csv (gerind23, file = "data/2023/indices23.csv")
-# add variable to the dataframe
-df23 %>% 
-  merge(read.csv("data/2023/indices23.csv", sep =";")) %>% 
-  rename(seeds = viable) ->df23
-  
-
-
-### Read tree
-
-phangorn::nnls.tree(cophenetic(ape::read.tree("results/tree23.tree")), 
-                    ape::read.tree("results/tree23.tree"), method = "ultrametric") -> 
-  nnls_orig
-
-nnls_orig$node.label <- NULL
-
-### Set number of iterations
-nite = 1000000
-nthi = 100
-nbur = 100000
-
-# shorter iterations
-#nite = 10000
-#nthi = 10
-#nbur = 100
-
-### Set priors for germination models
-
-priors <- list(R = list(V = 1, nu = 50), 
-               G = list(G1 = list(V = 1, nu = 1, alpha.mu = 0, alpha.V = 500), 
-                        G2 = list(V = 1, nu = 1, alpha.mu = 0, alpha.V = 500),
-                        G3 = list(V = 1, nu = 1, alpha.mu = 0, alpha.V = 500)))
-
-### All species model
-
-MCMCglmm::MCMCglmm(cbind(germinated, seeds - germinated) ~
-                     scale(ageing)*microhabitat_preference + scale(ageing) * community,
-                   random = ~ animal + ID + collection_site,
-                   family = "multinomial2", pedigree = nnls_orig, prior = priors, data = df23,
-                   nitt = nite, thin = nthi, burnin = nbur,
-                   verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> m1
-
-# save(m1, file = "results/mcmc.Rdata")
-x11()
-plot(m1)
-
-# load("results/mcmc.Rdata")
-summary(m1)
-
-### GLM without phylogeny
-
-glm(cbind(germinated, seeds - germinated) ~
-      ageing * microhabitat + ageing *distribution, family = "binomial", data = df23) -> m2
-summary(m2)
-
-### Overall percentages
-
-df23 %>%
-  group_by(ageing, microhabitat) %>%
-  summarise(p = sum(germinated) / sum(seeds))
-
-df23 %>%
-  group_by(ageing, distribution) %>%
-  summarise(p = sum(germinated) / sum(seeds))
-
-
-### Random and phylo
-
-# Calculate lambda http://www.mpcm-evolution.com/practice/online-practical-material-chapter-11/chapter-11-1-simple-model-mcmcglmm
-
-lambda <- m1$VCV[,"animal"]/(m1$VCV[,"animal"] + m1$VCV[,"units"]) 
-
-mean(m1$VCV[,"animal"]/(m1$VCV[,"animal"] + m1$VCV[,"units"])) %>% round(2)
-coda::HPDinterval(m1$VCV[,"animal"]/(m1$VCV[,"animal"] + m1$VCV[,"units"]))[, 1] %>% round(2)
-coda::HPDinterval(m1$VCV[,"animal"]/(m1$VCV[,"animal"] + m1$VCV[,"units"]))[, 2] %>% round(2)
-
-# Random effects animal
-summary(m1)$Gcovariances[1, 1] %>% round(2) 
-summary(m1)$Gcovariances[1, 2] %>% round(2) 
-summary(m1)$Gcovariances[1, 3] %>% round(2)
-
-# Random effects species ID
-summary(m1)$Gcovariances[2, 1] %>% round(2)
-summary(m1)$Gcovariances[2, 2] %>% round(2) 
-summary(m1)$Gcovariances[2, 3] %>% round(2) 
-
-# Random effects bedrock
-summary(m1)$Gcovariances[3, 1] %>% round(2)
-summary(m1)$Gcovariances[3, 2] %>% round(2) 
-summary(m1)$Gcovariances[3, 3] %>% round(2)
-
-# Random effects site:bedrock
-summary(m1)$Gcovariances[4, 1] %>% round(2)
-summary(m1)$Gcovariances[4, 2] %>% round(2) 
-summary(m1)$Gcovariances[4, 3] %>% round(2)
-
-
-
-### Gaussian priors
-priors <- list(R = list(V = 1, nu = 0.2),
-               G = list(G1 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        G3 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
-
-# Gaussian model
-MCMCglmm::MCMCglmm(grp ~ scale(ageing),
-                   random = ~ animal + ID + bedrock + site:bedrock,
-                   family = "gaussian", pedigree = nnls_orig, prior = priors, data = df,
-                   nitt = nite, thin = nthi, burnin = nbur,
-                   verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g1
-# save(m1, file = "results/mcmc.Rdata")
-x11()
-plot(g1)
-glm (grp ~ scale(ageing)*microhabitat*distribution, family = "gaussian", data = df) -> grp
-summary(grp)
-
-# load("results/mcmc.Rdata")
-summary(g1)
-
