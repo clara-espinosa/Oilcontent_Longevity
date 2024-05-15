@@ -4,17 +4,24 @@ library(tidyverse);library (rstatix);library (stringr);library(viridis)
 library(ggpattern); library (vegan) ;library (ggrepel)
 
 ### analisys using raw germination data, new explicatives variables and phylogeny via MCMC GLMM ####
-### Read data #
+### Read data ####
 read.csv("data/2022/germination22.csv", sep =";") %>%
   gather(scores, germinated, D7:D28) %>%
   group_by(code, ageing, seeds) %>%
   summarise(germinated = sum(germinated, na.rm = TRUE)) %>%
   merge(header) %>% # from data handling script 
   mutate(ID = gsub(" ", "_", species), animal = ID) %>%
-  na.omit %>% # remove species without sp_pref (Minuartia CF) and without oil content (C.ramosissimum, G.verna, G.campestris and P. pyrenaica)
-  merge(read.csv("data/2022/indices22.csv", sep =","), by = c("code", "ageing"))-> df22_new
+  mutate(Lseedmass = log(meanseedmass), 
+         LPERoil = log(PERoil),
+         Lratio=log(ratio),
+         LFDD = log(FDD),
+         LGDD = log(GDD))%>%
+  merge(read.csv("data/2022/indices22.csv", sep =","), by = c("code", "ageing"))%>% 
+  na.omit()-> df22_new # remove species without sp_pref (Minuartia CF) and without oil content (C.ramosissimum, G.verna, G.campestris and P. pyrenaica)
+  
 
 unique(df22_new$familia)
+### Raw germination data, MULTINOMIAL MCMCGLMM####
 ### Read tree
 
 phangorn::nnls.tree(cophenetic(ape::read.tree("results/tree22.tree")), 
@@ -37,15 +44,15 @@ nbur = 100000
 
 priors <- list(R = list(V = 1, nu = 50), 
                G = list(G1 = list(V = 1, nu = 1, alpha.mu = 0, alpha.V = 500), 
-                        G2 = list(V = 1, nu = 1, alpha.mu = 0, alpha.V = 500),
+                        #G2 = list(V = 1, nu = 1, alpha.mu = 0, alpha.V = 500),
                         #G3 = list(V = 1, nu = 1, alpha.mu = 0, alpha.V = 500), 
                         G4 = list(V = 1, nu = 1, alpha.mu = 0, alpha.V = 500)))
 
 ### All species model
 
 MCMCglmm::MCMCglmm(cbind(germinated, seeds - germinated) ~
-                     scale(ageing)*scale(GDD) + scale(ageing) * scale(PERoil) + scale(ageing)*scale(ratio) , #+ scale(ageing) * scale(meanseedmass) 
-                   random = ~ animal + ID + community,
+                   scale(ageing) * scale(Lratio), #scale(ageing) * scale(LPERoil) + scale(ageing)*scale(ratio)+ scale(ageing) * scale(meanseedmass) scale(ageing)*scale(GDD) +
+                   random = ~ animal + ID ,
                    family = "multinomial2", pedigree = nnls_orig, prior = priors, data = df22_new,
                    nitt = nite, thin = nthi, burnin = nbur,
                    verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> m1
@@ -82,29 +89,6 @@ summary(m1)$Gcovariances[3, 1] %>% round(2)
 summary(m1)$Gcovariances[3, 2] %>% round(2) 
 summary(m1)$Gcovariances[3, 3] %>% round(2)
 
-# Gaussian model for grp, mgr and syn ####
-### Gaussian priors 
-priors <- list(R = list(V = 1, nu = 0.2),
-               G = list(G1 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        G3 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
-
-
-MCMCglmm::MCMCglmm(grp ~ scale(ageing)*scale(GDD) + scale(ageing) * scale(meanseedmass) + scale(ageing) * scale(PERoil),
-                   random = ~ animal + ID + community,
-                   family = "gaussian", pedigree = nnls_orig, prior = priors, data = df22_new,
-                   nitt = nite, thin = nthi, burnin = nbur,
-                   verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g1
-# save(m1, file = "results/mcmc.Rdata")
-x11()
-plot(g1)
-glm (grp ~ scale(ageing)*microhabitat*distribution, family = "gaussian", data = df) -> grp
-summary(grp)
-
-# load("results/mcmc.Rdata")
-summary(g1)
-
 #### Genstat as response variables with new explicative variables ####
 
 read.csv("data/2022/genstat22.csv", sep =",")%>%
@@ -130,7 +114,7 @@ priors <- list(R = list(V = 1, nu = 0.2),
                         G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
 # correct glm? ASK EDUARDO!!!
 MCMCglmm::MCMCglmm(p50 ~ scale(GDD) + scale(PERoil),
-                   random = ~ animal + ID + community,
+                   random = ~ animal + ID,
                    family = "gaussian", pedigree = nnls_orig, prior = priors, data = genstat22_new,
                    nitt = nite, thin = nthi, burnin = nbur,
                    verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g3
@@ -191,6 +175,27 @@ ggplot(pcaInds, aes(x = Dim.1, y = Dim.2)) +
                                   "% variance explained)", sep = "")) + #, limits = c(-5, 5)
   scale_y_continuous(name = paste("Axis 2 (", round(pca_genstat$eig[2, 2], 0), 
                                   "% variance explained)", sep = "")) #, limits = c(-4, 4)
+
+# Gaussian model for grp, mgr and syn ####
+### Gaussian priors 
+priors <- list(R = list(V = 1, nu = 0.2),
+               G = list(G1 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
+                        #G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
+                        #G3 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
+                        G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
+
+
+MCMCglmm::MCMCglmm(mgr ~ scale(ageing) * scale(ratio), # scale(ageing) * scale(LPERoil) + scale(ageing)*scale(GDD) + scale(ageing) * scale(meanseedmass) + 
+                   random = ~ animal + ID,
+                   family = "gaussian", pedigree = nnls_orig, prior = priors, data = df22_new,
+                   nitt = nite, thin = nthi, burnin = nbur,
+                   verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g1
+# save(m1, file = "results/mcmc.Rdata")
+x11()
+plot(g1)
+
+# load("results/mcmc.Rdata")
+summary(g1)
 
 ### exploration visualization ####
 # ageing x final germ
