@@ -2,49 +2,65 @@ library(tidyverse);library(readxl);library(rstatix)
 library(ggrepel):library(vegan);library
 
 #### oil data transformation #####
-# oil data mg oil/g sample
+# oil data mg oil/g sample transformation to long format
 read.csv("data/oil_mg_wide.csv")%>%
-  dplyr:: select(Taxon:C24.0)%>%
+  #dplyr:: select(Taxon:C24.0)%>%
   mutate(species=make.cepnames(species))%>%# USEFUL!!Shorten sp names with 4 letters from genus name and 4 letter from species name 
-  gather(oil_type, oil_type_mg, 7:26)-> oil_mg # transform to long format
+  gather(oil_type, oil_type_mg, 7:26)  -> oil_mg # transform to long format
 
+# oil data mg oil/g sample to calculate total percentage of oil x species
+oil_mg%>%
+  convert_as_factor(Taxon, species, family, community)%>%
+  group_by(species) %>%
+  summarise(PERoil= (sum(oil_type_mg)/10))%>%
+  data.frame()-> PERoil_sp
+
+# to investigate descriptive statistics script
 read.csv("data/oil_mg_wide.csv")%>%
   dplyr:: select(Taxon:C24.0)%>%
   mutate(species=make.cepnames(species))%>%
   group_by (family, community)%>%
   get_summary_stats()
   
-# use total amount of oil as explanatory variable in PCA
-oil_mg%>%
-  convert_as_factor(Taxon, species, family, community)%>%
-  group_by(species, community, family) %>%
-  summarise(PERoil= (sum(oil_type_mg)/10))%>%
-  data.frame()-> PERoil_sp
 
-# percentage of dfferent types of oil
+
+# wide data with FA percentage relative to the total amount of oil transform into long format
 read.csv("data/oil_per_wide.csv")%>%
-  dplyr:: select(Taxon:C24.0)%>%
-  mutate(species=make.cepnames(species))%>%
-  merge (PERoil_sp, by = c("species", "family", "community"))-> oil_data_pca #%>%
-  #dplyr::select(species:year_analisis, C14.0:C20.0, C22.0, C22.1n9, C24.0, PERoil)-> oil_data_pca # remove correlated >0.7
-
-# trans form into long format
-read.csv("oil_per_wide.csv")%>%
   dplyr:: select(Taxon:C24.0)%>%
   mutate(species=make.cepnames(species))%>%
   gather(oil_type, oil_type_PER, 7:26) -> oil_per
 
+# descriptive stats
 read.csv("oil_per_wide.csv")%>%
   dplyr:: select(Taxon:C24.0)%>%
   mutate(species=make.cepnames(species))%>%
   group_by (family, community)%>%
   get_summary_stats()
 
-# merge mg oil and % oil into long format
+# merge FA mg oil and FA % oil into long format
 oil_mg %>%
   merge(oil_per)%>%
   merge(PERoil_sp, by= c("community", "species", "family"))%>%
   write.csv("oil_data_long.csv")
+
+# Calculate proportion of Unsaturated fatty acids and Saturated fatty acids proportion and its ratio
+read.csv("data/oil_per_wide.csv")%>%
+  dplyr:: select(Taxon:C24.0)%>%
+  mutate(species=make.cepnames(species))%>%
+  gather(oil_type, oil_type_PER, 7:26)%>%
+  merge(read.csv("data/FA_types.csv"), by = "oil_type")%>%
+  dplyr::select(species, oil_type, oil_type_PER, saturation_type)%>%
+  group_by(species, saturation_type)%>%
+  summarise(oil_proportion = sum(oil_type_PER))%>%
+  spread(saturation_type, oil_proportion)%>%
+  mutate(ratio=UFA/SFA)-> oil_saturation_sp
+  
+# JOIN FAME composition (percentages relative to the total content of oil) merge with total oil for PCA
+read.csv("data/oil_per_wide.csv")%>%
+  dplyr:: select(Taxon:C24.0)%>%
+  mutate(species=make.cepnames(species))%>%
+  merge (PERoil_sp, by = c("species"))-> oil_data_pca #%>%
+  #dplyr::select(species:year_analisis, C14.0:C20.0, C22.0, C22.1n9, C24.0, PERoil)-> oil_data_pca # remove correlated >0.7
 
 ## PCA without Teesdalia/PERoil ####
 str(oil_data_pca)

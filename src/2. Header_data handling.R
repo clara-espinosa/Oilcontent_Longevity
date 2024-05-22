@@ -1,6 +1,31 @@
 library(tidyverse);library (rstatix);library (stringr)
 library(ggpattern); library (vegan) ;library (ggrepel)
 
+### read species oil content data ####
+read.csv("data/species_oil.csv")%>%
+  merge (PERoil_sp, by = c("species"))%>% # from format_oil_data script
+  merge (oil_saturation_sp, by = c("species"))%>%# from format_oil_data script
+  select(community, Taxon, species, family, ecology, PERoil, ratio) -> oil_data # 36 species
+###################################### BIOLOGICAL TRADE-OFFS ################################################
+## read species with seed mass data ####
+read.csv("data/seed_mass.csv", sep = ",")%>%
+  group_by(Taxon, community)%>%
+  get_summary_stats(mass_50)%>%
+  dplyr::select(Taxon, community, n, mean, sd)%>%
+  as.data.frame()-> seedmass # 66 species
+### read longevity data (p50) ####
+read.csv("data/2022/genstat22.csv", sep= ",")%>%
+  dplyr::select(Taxon, species, community, slope, p50)%>%
+  group_by(Taxon, species, community)%>%
+  summarise(slope=mean(slope),
+            p50 = mean(p50))-> p50 # 28 species
+
+### read germ data (t50/cold_strat_germ) ####
+read.csv("data/germ_t50_data.csv")%>% # so far only t50 = !!
+  #na.omit()->t50  #45 species with t50 trait
+  full_join(read.csv("data/germ_drivers_data.csv"))%>% # 69 species some with NAs
+  na.omit()-> germ_traits # 58 species with complete germ traits
+###################################### ECOLOGICAL TRADE-OFFS ################################################
 #### Load SPECIES PREFERENCES data####
 # based from 80 iButtons floristic relevés
 # original scripts and data in Omaña80 and Picos Github repository (respectively)
@@ -20,42 +45,8 @@ library(ggpattern); library (vegan) ;library (ggrepel)
 read.csv("data/sp_pref_picos.csv", sep =",")%>%
   rbind(read.csv("data/sp_pref_villa.csv", sep =",")) -> sp_pref # 127 species
 
-## read seed mass data ##
-read.csv("data/seed_mass.csv", sep = ";")%>%
-  group_by(species, community)%>%
-  get_summary_stats(mass_50)%>%
-  dplyr::select(species, community, n, mean, sd)%>%
-  as.data.frame()-> summary_seedmass # 66 species
-  
-# read oil content data
-read.csv("data/species_oil.csv")%>%
-  select(community, Taxon, family, PERoil, ratio)%>%
-  rename(species=Taxon) %>%
-  group_by(species, community, family) -> oil_content # 36 species
 
-
-# merge header data
-read.csv("data/2022/species22.csv", sep= ";")%>%
-  left_join(sp_pref, by = c("species", "community"))%>%
-  merge(summary_seedmass, by = c("species", "community"))%>%
-  #left_join(oil_content,by = c("species", "community")) %>%
-  dplyr::select(species, code, community, familia, distribution, bio1:Snw, mean, PERoil, ratio)%>%
-  rename(meanseedmass = mean) -> header
-  
-unique(sp_pref$species) 
-setdiff(oil_content$species,df22$species)
-### Read species data ####
-read.csv("data/2022/species22.csv", sep=";")%>%
-  merge(sp_pref, by = c("species", "community"))%>%
-  group_by(species, community, familia, microhabitat, distribution)%>%
-  summarise(bio1 = mean(bio1),
-            bio2 = mean(bio2), 
-            bio7 = mean(bio7), 
-            FDD = mean (FDD), 
-            GDD = mean (GDD), 
-            Snw = mean (Snw))-> header_clim
-
-
+##### EXTRA ###################
 #### PCA and correlations (check our previous categorical classification based on DCA (fell vs Snow vs neutral)
 # when considered both communities together previous categorical classification DO NOT match
 # try dividing communities?

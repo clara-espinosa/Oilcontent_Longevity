@@ -3,19 +3,26 @@ library(tidyverse);library(readxl);library(rstatix)
 library(ggrepel):library(vegan);library(ggpubr)
 
 # Panel A and B : PCA variables + species 
-oil_data_pca # from format_oil_data script
+# JOIN FAME composition (percentages relative to the total content of oil) merge with total oil for PCA
+read.csv("data/oil_per_wide.csv")%>%
+  dplyr:: select(Taxon:C24.0)%>%
+  mutate(species=make.cepnames(species))%>%
+  merge (PERoil_sp, by = c("species"))-> oil_data_pca #%>%
+#dplyr::select(species:year_analisis, C14.0:C20.0, C22.0, C22.1n9, C24.0, PERoil)-> oil_data_pca # remove correlated >0.7
 
 str(oil_data_pca)
 oil_data_pca[, 7:27]%>%
   FactoMineR::PCA() -> pca_oil
 
+pca_oil$var$contrib
+pca_oil$eig
+oil_data_pca[, 7:27]%>%  cor() # remove C12:0, C20:1n9, C20:2n6 (hihgly correlated with other variables with higher contributions to axes)
+
+# PCa with only the FA with more than 3% relative proportion within 
 oil_data_pca%>%
   dplyr::select(C16.0, C18.0, C18.1n9c, C18.2n6c, C18.3n3, C18.3n6, C20.1n9, C22.1n9, PERoil)%>% #FAME >3% relative abundace explica bastante mas
   FactoMineR::PCA() -> pca_oil
 
-pca_oil$var$contrib
-pca_oil$eig
-oil_data_pca[, 7:27]%>%  cor() # remove C12:0, C20:1n9, C20:2n6 (hihgly correlated with other variables with higher contributions to axes)
 
 oil_data_pca%>%
   dplyr::select(C16.0, C18.0, C18.1n9c, C18.2n6c, C18.3n3, C18.3n6, C20.1n9, C22.1n9, PERoil)%>%

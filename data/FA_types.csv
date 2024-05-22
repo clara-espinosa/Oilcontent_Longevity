@@ -12,10 +12,10 @@ C15.0,Pentadecanoic acid,Pentadecylic acid,Pentadecylic acid,SFA
 C15.1n5,cis-10- Pentadecenoic acid,,,SFA
 C16.0,Hexadecanoic acid,Palmitic acid,Palmitic acid,SFA
 C16.1n7,cis-9-hexadecenoic acid,Palmitoleic acid,Palmitoleic acid,UFA
-C16.2n4,"all cis- 9,12 hexadecadienoic acid",,,SFA?
-C16.3n4,"all cis 6,9,12-hexadecatrienoic acid",,,SFA?
+C16.2n4,"all cis- 9,12 hexadecadienoic acid",,,UFA
+C16.3n4,"all cis 6,9,12-hexadecatrienoic acid",,,UFA
 C17.0,Heptadecanoic acid,Margaric acid,Margaric acid,SFA
-C17.1n7,cis-10-Heptadecenoic acid,,,SFA?
+C17.1n7,cis-10-Heptadecenoic acid,,,UFA
 C18.0,Octadecanoic acid,Stearic acid,Stearic acid,SFA
 C18.1n9t,trans-9 octadecenoic acid,Elaidic acid,Elaidic acid,UFA
 C18.1n9c,cis-9 octadecenoic acid,Oleic acid,Oleic acid,UFA
