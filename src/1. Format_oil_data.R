@@ -1,5 +1,5 @@
 library(tidyverse);library(readxl);library(rstatix)
-library(ggrepel):library(vegan);library
+library(ggrepel):library(vegan)
 
 #### oil data transformation #####
 # oil data mg oil/g sample transformation to long format

@@ -5,7 +5,7 @@ library(lme4); library(glmmTMB); library (DHARMa)
 ############################################ BIOLOGICAL TRADE-OFFS #################################################
 # seed mass (log transformed) #####
 oil_data%>%
-  merge(seedmass)%>%
+  merge(seedmass)%>% # n= 36
   rename(familia = family)%>%
   convert_as_factor(Taxon, species, community, familia, ecology) %>%
   mutate(ID = gsub(" ", "_", Taxon), animal = ID)%>%
@@ -235,7 +235,7 @@ summary(g3)
 ################ ECOLOGICAL TRADE_OFFS #######################
 # Ecology/distribution  ####
 str(oil_data)
-oil_data%>%
+oil_data%>% #n= 36
   rename(familia = family)%>%
   convert_as_factor(Taxon, species, community, familia, ecology) %>%
   mutate(ID = gsub(" ", "_", Taxon), animal = ID)%>%
