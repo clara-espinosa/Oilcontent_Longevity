@@ -2,11 +2,11 @@ library(tidyverse)
 
 ### Phylo tree 2022 #####
 
-read.csv("data/2022/species22.csv", sep =";") %>%
-  separate(species, into = c("genus", "species"), sep = " ") %>%
+read.csv("data/2022/species22.csv", sep =",") %>%
+  separate(Taxon, into = c("genus", "species"), sep = " ") %>%
   mutate(species = paste(genus, species),
          genus = genus,
-         family = familia) %>%
+         family = family) %>%
   #filter (community == "Mediterranean")%>%
   select(species, genus, family) %>%
   unique %>%

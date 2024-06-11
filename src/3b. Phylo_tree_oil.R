@@ -1,4 +1,4 @@
-library(tidyverse);library(V.PhyloMaker); library(scales)
+library(tidyverse);library(V.PhyloMaker); library(scales);library(V.PhyloMaker)
 library(phylosignal);library(phylobase);library(ape);library(tidytree)
 
 ### Phylo tree both communitites #####
@@ -33,11 +33,14 @@ ape::read.tree("results/tree_oil.tree")-> tree
 x11()
 plot(tree)
 read.csv("data/species_oil.csv", sep =",") %>%
-  select(Taxon, PERoil, ratio, seedmass)%>%
+  merge(PERoil_sp)%>%
+  merge(oil_saturation_sp)%>%
+  merge(seedmass)%>%
+  select(Taxon, PERoil, ratio, mean)%>%
   group_by(Taxon) %>%
   summarise(PERoil= mean(PERoil), 
             ratio= mean(ratio),
-            seedmass = mean(seedmass))%>%
+            seedmass = mean(mean))%>%
   select(Taxon, PERoil, ratio, seedmass)%>%
   mutate(label= gsub(" ","_", Taxon))%>%
   remove_rownames %>% 

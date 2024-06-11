@@ -1,10 +1,14 @@
 # figure biological tradeoffs
 library(tidyverse);library(readxl);library(rstatix)
-library(ggrepel):library(vegan);library(ggpubr)
+library(vegan);library(ggpubr);library(ggrepel)
 
 ### PANEL A)  seed mass x oil content and seed mass x ratio Ufa/Sfa #####
 # check normalities of data
 read.csv("data/species_oil.csv")%>%
+  merge (PERoil_sp)%>%
+  merge(oil_saturation_sp)%>%
+  merge(seedmass)%>%
+  full_join(p50)%>%
   dplyr:: select(Taxon, species, family, community, ecology, PERoil, seedmass, SFA:P50)%>%
   group_by(Taxon, species, family, community, ecology)%>%
   gather(trait, value, PERoil:P50)%>%

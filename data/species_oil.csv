@@ -1,37 +1,51 @@
 Taxon,species,order,family,community,code ,year_analisis,ecology,cold_strat_germ,T50
-Androsace villosa,Andrvill,Ericales,Primulaceae,Temperate,310821-11,2022,Specialist,0.003389831,
+Androsace villosa,Andrvill,Ericales,Primulaceae,Temperate,310821-11,2022,Strict alpine,0.003389831,
 Anthyllis vulneraria,Anthvuln,Fabales,Fabaceae,Temperate,310821-12,2023,Generalist,0.627659574,
-Arenaria erinacea,Arenerin,Caryophyllales,Caryophyllaceae,Temperate,300821-08,2023,Specialist,0.010714286,
-Armeria cantabrica,Armecant,Caryophyllales,Plumbaginaceae,Temperate,230822-01,2023,Specialist,0,258.1027778
-Armeria duriaei,Armeduri,Caryophyllales,Plumbaginaceae,Mediterranean,250821-01,2022,Specialist,0,11.25073161
-Carex sempervirens,Caresemp,Poales,Cyperaceae,Temperate,310821-13,2022,Specialist,0,263.877801
+Arenaria erinacea,Arenerin,Caryophyllales,Caryophyllaceae,Temperate,300821-08,2023,Strict alpine,0.010714286,
+Armeria cantabrica,Armecant,Caryophyllales,Plumbaginaceae,Temperate,230822-01,2023,Strict alpine,0,258.1027778
+Armeria duriaei,Armeduri,Caryophyllales,Plumbaginaceae,Mediterranean,250821-01,2022,Strict alpine,0,11.25073161
+Carex sempervirens,Caresemp,Poales,Cyperaceae,Temperate,310821-13,2022,Strict alpine,0,263.877801
 Conopodium majus,Conomaju,Apiales,Apiaceae,Mediterranean,240821-03,2023,Generalist,0.670498084,223.3063988
-Dianthus langeanus,Dianlang,Caryophyllales,Caryophyllaceae,Mediterranean,110821-01,2023,Specialist,0.264214047,4.548612615
-Festuca glacialis,Festglac,Poales,Poaceae,Temperate,230822-04,2023,Specialist,0,
-Festuca summilusitana,Festsumm,Poales,Poaceae,Mediterranean,250821-02,2022,Specialist,0.773399015,20.76830869
+Dianthus langeanus,Dianlang,Caryophyllales,Caryophyllaceae,Mediterranean,110821-01,2023,Strict alpine,0.264214047,4.548612615
+Festuca glacialis,Festglac,Poales,Poaceae,Temperate,230822-04,2023,Strict alpine,0,
+Festuca summilusitana,Festsumm,Poales,Poaceae,Mediterranean,250821-02,2022,Strict alpine,0.773399015,20.76830869
 Gypsophila repens,Gypsrepe,Caryophyllales,Caryophyllaceae,Temperate,310821-08,2023,Generalist,0.003333333,256.0370495
 Helianthemum canum,Helicanu,Malvales,Cistaceae,Temperate,300821-05,2023,Generalist,0.604982206,
-Helianthemum urrielense,Heliurri,Malvales,Cistaceae,Temperate,130921-05,2023,Specialist,0.052941176,
+Helianthemum urrielense,Heliurri,Malvales,Cistaceae,Temperate,130921-05,2023,Strict alpine,0.052941176,
 Helictochloa marginata,Helimarg,Poales,Poaceae,Mediterranean,040822-10,2023,Generalist,0.617886179,154.2135417
-Jurinea humilis,Jurihumi,Asterales,Asteraceae,Mediterranean,120821-03,2023,Generalist,0.80952381,128.1052083
-Kobresia myosuroides,Kobrmyos,Poales,Cyperaceae,Temperate,130921-03,2023,Specialist,0,279
-Koeleria vallesiana,Koelvall,Poales,Poaceae,Temperate,300821-02,2023,Specialist,0.580882353,14.03515625
-Luzula caespitosa,Luzucaes,Poales,Juncaceae,Mediterranean,110821-03,2023,Specialist,0.942176871,173.9503968
-Minuartia recurva,Minurecu,Caryophyllales,Caryophyllaceae,Mediterranean,110821-07,2023,Specialist,0.03187251,10.03510456
-Neoschischkinia truncatula,Neostrun,Poales,Poaceae,Mediterranean,250821-03,2023,Specialist,0.065454545,7.799165263
-Phyteuma hemisphaericum,Phythemi,Asterales,Campanulaceae,Mediterranean,240821-10,2023,Specialist,0.003571429,284.5
-Plantago alpina,Planalpi,Lamiales,Plantaginaceae,Temperate,300821-15,2022,Specialist,0.048148148,205.2879541
+Jurinea humilis,Jurihumi.1,Asterales,Asteraceae,Mediterranean,120821-03,2023,Generalist,0.80952381,128.1052083
+Kobresia myosuroides,Kobrmyos,Poales,Cyperaceae,Temperate,130921-03,2023,Strict alpine,0,279
+Koeleria vallesiana,Koelvall,Poales,Poaceae,Temperate,300821-02,2023,Strict alpine,0.580882353,14.03515625
+Luzula caespitosa,Luzucaes,Poales,Juncaceae,Mediterranean,110821-03,2023,Strict alpine,0.942176871,173.9503968
+Minuartia recurva,Minurecu,Caryophyllales,Caryophyllaceae,Mediterranean,110821-07,2023,Strict alpine,0.03187251,10.03510456
+Neoschischkinia truncatula,Neostrun,Poales,Poaceae,Mediterranean,250821-03,2023,Strict alpine,0.065454545,7.799165263
+Phyteuma hemisphaericum,Phythemi,Asterales,Campanulaceae,Mediterranean,240821-10,2023,Strict alpine,0.003571429,284.5
+Plantago alpina,Planalpi,Lamiales,Plantaginaceae,Temperate,300821-15,2022,Strict alpine,0.048148148,205.2879541
 Plantago holosteum,Planholo,Lamiales,Plantaginaceae,Mediterranean,250821-12,2023,Generalist,0.105802048,8.238729002
-Salix breviserrata,Salibrev,Malpighiales,Salicaceae,Temperate,140722-01,2023,Specialist,0,
-Saxifraga conifera,Saxiconi,Saxifragales,Saxifragaceae,Temperate,120722-01,2023,Specialist,0,195.0687672
-Saxifraga paniculata,Saxipani,Saxifragales,Saxifragaceae,Temperate,310821-14,2023,Specialist,0,252.7687149
-Sedum anglicum,Seduangl,Saxifragales,Crassulaceae,Mediterranean,240821-09,2023,Specialist,0,124.9462674
+Salix breviserrata,Salibrev,Malpighiales,Salicaceae,Temperate,140722-01,2023,Strict alpine,0,
+Saxifraga conifera,Saxiconi,Saxifragales,Saxifragaceae,Temperate,120722-01,2023,Strict alpine,0,195.0687672
+Saxifraga paniculata,Saxipani,Saxifragales,Saxifragaceae,Temperate,310821-14,2023,Strict alpine,0,252.7687149
+Sedum anglicum,Seduangl,Saxifragales,Crassulaceae,Mediterranean,240821-09,2023,Strict alpine,0,124.9462674
 Sedum brevifolium,Sedubrev,Saxifragales,Crassulaceae,Mediterranean,240821-11,2023,Generalist,0,79.97046703
-Silene acaulis,Sileacau,Caryophyllales,Caryophyllaceae,Temperate,140921-03,2023,Specialist,0.050909091,295.9583333
-Silene ciliata,Silecili,Caryophyllales,Caryophyllaceae,Temperate,300821-11,2023,Specialist,0.014234875,233.3315972
-Silene ciliata,Silecili.1,Caryophyllales,Caryophyllaceae,Mediterranean,040822-07,2023,Specialist,0.014234875,219.8236622
+Silene acaulis,Sileacau,Caryophyllales,Caryophyllaceae,Temperate,140921-03,2023,Strict alpine,0.050909091,295.9583333
+Silene ciliata,Silecili,Caryophyllales,Caryophyllaceae,Temperate,300821-11,2023,Strict alpine,0.014234875,233.3315972
+Silene ciliata,Silecili.1,Caryophyllales,Caryophyllaceae,Mediterranean,040822-07,2023,Strict alpine,0.014234875,219.8236622
 Solidago virgaurea,Solivirg,Asterales,Asteraceae,Mediterranean,240821-08,2023,Generalist,0.013071895,125.0885374
-Spergula morisonii,Spermori,Caryophyllales,Caryophyllaceae,Mediterranean,310522-01,2023,Specialist,0,101.9896786
+Spergula morisonii,Spermori,Caryophyllales,Caryophyllaceae,Mediterranean,310522-01,2023,Strict alpine,0,101.9896786
 Teesdalia conferta,Teesconf,Brassicales,Brassicaceae,Mediterranean,090822-04,2023,Generalist,1,
 Thymus praecox,Thymprae,Lamiales,Lamiaceae,Temperate,300821-07,2023,Generalist,0,198.354053
 Thymus praecox,Thymprae.1,Lamiales,Lamiaceae,Mediterranean,110821-05,2023,Generalist,0.014234875,48.59874191
+Avenella flexuosa,Avenflex,Poales,Poaceae,Mediterranean,070823-05,2024,Generalist,0.94,
+Cerastium ramosissimum,Ceraramo,Caryophyllales,Caryophyllaceae,Mediterranean,270623-01,2024,Generalist,0.2,48.4
+Dethawia splendens,Dethsple,Apiales,Apiaceae,Temperate,010923-01,2024,Strict alpine,,221.7
+Gentiana verna,Gentvern,Gentianales,Gentianaceae,Temperate,310823-09,2024,Strict alpine,,
+Iberis carnosa,Ibercarn,Brassicales,Brassicaceae,Temperate,210823-13,2024,Strict alpine,,160.6
+Jasione cavanillesii,Jasicava,Asterales,Campanulaceae,Temperate,230822-02,2024,Strict alpine,0,249.3
+Jurinea humilis,Jurihumi,Asterales,Asteraceae,Temperate,210823-09,2024,Strict alpine,,175
+Minuartia verna,Minuvern,Caryophyllales,Caryophyllaceae,Temperate,210823-01,2024,Strict alpine,0,
+Pedicularis pyrenaica,Pedipyre,Lamiales,Orobanchaceae,Temperate,010923-05,2024,Strict alpine,0.03,226.6
+Phalacrocarpum oppositifolium,Phaloppo,Asterales,Asteraceae,Mediterranean,110822-02,2024,Generalist,0.98,61.2
+Saxifraga oppositifolia,Saxioppo,Saxifragales,Saxifragaceae,Temperate,310823-17,2024,Strict alpine,0,
+Sempervivum arachnoideum,Semparac,Saxifragales,Crassulaceae,Mediterranean,230921-04,2024,Generalist,0,236.3
+Sesleria caerulea,Seslcaer,Poales,Poaceae,Temperate,010923-04,2024,Generalist,,110.3
+Veronica nummularia,Veronumm,Lamiales,Plantaginaceae,Temperate,190822-06,2024,Strict alpine,,

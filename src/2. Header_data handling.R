@@ -3,15 +3,15 @@ library(ggpattern); library (vegan) ;library (ggrepel)
 
 ### read species oil content data ####
 read.csv("data/species_oil.csv")%>%
-  merge (PERoil_sp, by = c("species"))%>% # from format_oil_data script
-  merge (oil_saturation_sp, by = c("species"))%>%# from format_oil_data script
-  select(community, Taxon, species, family, ecology, PERoil, ratio) -> oil_data # 36 species
+  merge (oil_data_full)%>% # from format_oil_data script
+  select(community, Taxon, species, family, ecology, oil.content, ratio) -> oil_data # 36 species
 ###################################### BIOLOGICAL TRADE-OFFS ################################################
 ## read species with seed mass data ####
 read.csv("data/seed_mass.csv", sep = ",")%>%
   group_by(Taxon, community)%>%
   get_summary_stats(mass_50)%>%
-  dplyr::select(Taxon, community, n, mean, sd)%>%
+  dplyr::select(Taxon, community, n, mean)%>%
+  rename(mass_50 = mean)%>%
   as.data.frame()-> seedmass # 66 species
 ### read longevity data (p50) ####
 read.csv("data/2022/genstat22.csv", sep= ",")%>%
@@ -23,8 +23,8 @@ read.csv("data/2022/genstat22.csv", sep= ",")%>%
 ### read germ data (t50/cold_strat_germ) ####
 read.csv("data/germ_t50_data.csv")%>% # so far only t50 = !!
   #na.omit()->t50  #45 species with t50 trait
-  full_join(read.csv("data/germ_drivers_data.csv"))%>% # 69 species some with NAs
-  na.omit()-> germ_traits # 58 species with complete germ traits
+  full_join(read.csv("data/germ_drivers_data.csv")) -> germ_traits # %>%  69 species some with NAs
+  # na.omit() # 58 species with complete germ traits
 ###################################### ECOLOGICAL TRADE-OFFS ################################################
 #### Load SPECIES PREFERENCES data####
 # based from 80 iButtons floristic relevés
@@ -42,8 +42,7 @@ read.csv("data/germ_t50_data.csv")%>% # so far only t50 = !!
 # consider only plots where each species has at least 10% coverage
 # climatic variables weighted per coverage 
 
-read.csv("data/sp_pref_picos.csv", sep =",")%>%
-  rbind(read.csv("data/sp_pref_villa.csv", sep =",")) -> sp_pref # 127 species
+read.csv("data/sp_pref.csv", sep =",") -> sp_pref # 127 species
 
 
 ##### EXTRA ###################

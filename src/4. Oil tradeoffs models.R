@@ -76,6 +76,7 @@ read.csv("data/2022/germination22.csv", sep =";") %>%
   na.omit()-> df22_new # remove species without sp_pref (Minuartia CF) and without oil content (C.ramosissimum, G.verna, G.campestris and P. pyrenaica)
 
 unique(df22_new$familia)
+unique(df22_new$species)
 ### Read tree
 
 phangorn::nnls.tree(cophenetic(ape::read.tree("results/tree22.tree")), 
