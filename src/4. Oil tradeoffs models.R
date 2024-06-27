@@ -21,16 +21,7 @@ hist(oil_seedmass$LPERoil) # almost normal distribution after log transformation
 hist(oil_seedmass$ratio) # almost normal distributed
 hist(oil_seedmass$Lratio)# almost normal distributed
 
-##### GLMM with dharma 
-a <- glmmTMB(LPERoil~ Lseedmass + (1| familia) ,  family = Gamma(link="log"), data= oil_seedmass) 
-a <- glmmTMB(Lratio  ~ Lseedmass + (1| familia) , family = Gamma(link="log"), data= oil_seedmass) 
-summary(a)
-residuals <- simulateResiduals (a) ; plot(residuals)
-# to compare modelsAIC(a, b)
-# Gamma(link = "log"), model plots GOOD in oil content still not good with ratio
-# oil content (log transformed) and ratio 
-
-##### MCMC 
+### MCMC 
 # take into account phylogeny! 
 phangorn::nnls.tree(cophenetic(ape::read.tree("results/tree_oil.tree")), 
                     ape::read.tree("results/tree_oil.tree"), method = "ultrametric") -> 
@@ -179,12 +170,6 @@ x11()
 plot(g3)
 summary(g3)
 
-#### P50 GLMM
-# Gamma(link="log")
-a <- glmmTMB(p50 ~ PERoil + (1| familia) ,  family = gaussian, data= genstat22_new) #LPERoil
-a <- glmmTMB(p50  ~ Lratio + (1| familia) , family = gaussian, data= genstat22_new)  #Lratio
-summary(a)
-residuals <- simulateResiduals (a) ; plot(residuals)
 
 # T50 ()####
 oil_data%>%
@@ -232,6 +217,64 @@ MCMCglmm::MCMCglmm(T50 ~ Lratio , # ratio
 x11()
 plot(g3)
 summary(g3) 
+
+# 1 model with all biological correlates #########
+oil_data%>%
+  full_join(seedmass)%>% 
+  full_join(p50)%>% 
+  full_join(t50)%>% 
+  rename(familia = family)%>%
+  convert_as_factor(Taxon, species, community, familia, ecology) %>%
+  mutate(ID = gsub(" ", "_", Taxon), animal = ID)%>%
+  mutate(Lmass_50 = log(mass_50),
+         Lp50 = log(p50),
+         Lmean_T50 = log(mean_T50),
+         L_F_T50 = log(F_T50),
+         L_S_T50 = log(S_T50),
+         Loil.content = log(oil.content),
+         Lratio=log(ratio))%>%
+  na.omit()-> oil_bio # N = 36
+
+oil_bio%>%
+  dplyr::select(species, oil.content, ratio, mass_50, p50, mean_T50, F_T50, S_T50, Lmass_50:Lratio)%>%
+  gather(trait, values, oil.content:Lratio)%>%
+  ggplot()+
+  geom_histogram(aes(values, fill = trait))+
+  facet_wrap(~trait, scales = "free")
+
+### Read tree
+
+phangorn::nnls.tree(cophenetic(ape::read.tree("results/tree_oil.tree")), 
+                    ape::read.tree("results/tree_oil.tree"), method = "ultrametric") -> 
+  nnls_orig
+
+nnls_orig$node.label <- NULL
+
+### Set number of iterations
+nite = 1000000
+nthi = 100
+nbur = 100000
+
+# shorter iterations
+#nite = 10000
+#nthi = 10
+#nbur = 100
+
+### Gaussian priors
+priors <- list(R = list(V = 1, nu = 0.2),
+               G = list(G1 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
+                        #G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
+                        #G3 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
+                        G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
+# correct glmm? ASK EDUARDO!!!
+MCMCglmm::MCMCglmm(Lratio ~  scale(Lmass_50)+scale(Lp50)+scale(Lmean_T50),
+                   random = ~ animal + ID,
+                   family = "gaussian", pedigree = nnls_orig, prior = priors, data = oil_bio,
+                   nitt = nite, thin = nthi, burnin = nbur,
+                   verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> gbio
+x11()
+plot(gbio)
+summary(gbio) # nada significativo si ponemos todo junto en Loil.content ni en Lratio!!
 
 ################ ECOLOGICAL TRADE_OFFS #######################
 # Ecology/distribution  ####
@@ -362,3 +405,41 @@ MCMCglmm::MCMCglmm(LPERoil ~ FDD*community, # ratio
 x11()
 plot(g3)
 summary(g3) 
+
+# 1 model with all ecological correlates ####
+oil_data%>% #n= 36
+  merge(sp_pref, by=c("Taxon", "community"))%>%
+  rename(familia = family)%>%
+  convert_as_factor(Taxon, species, community, familia, ecology) %>%
+  mutate(ID = gsub(" ", "_", Taxon), animal = ID)%>%
+  mutate(Loil.content = log(oil.content),
+         Lratio=log(ratio))%>%
+  na.omit()-> oil_eco #
+##### MCMC 
+# take into account phylogeny! 
+phangorn::nnls.tree(cophenetic(ape::read.tree("results/tree_oil.tree")), 
+                    ape::read.tree("results/tree_oil.tree"), method = "ultrametric") -> 
+  nnls_orig
+
+nnls_orig$node.label <- NULL
+
+### Set number of iterations
+nite = 1000000
+nthi = 100
+nbur = 100000
+
+### Gaussian priors
+priors <- list(R = list(V = 1, nu = 0.2),
+               G = list(G1 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
+                        #G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
+                        #G3 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
+                        G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
+# correct glm? ASK EDUARDO!!!
+MCMCglmm::MCMCglmm(Lratio ~ ecology*FDD + ecology*GDD, # ratio 
+                   random = ~ animal + ID,
+                   family = "gaussian", pedigree = nnls_orig, prior = priors, data = oil_eco,
+                   nitt = nite, thin = nthi, burnin = nbur,
+                   verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> geco
+x11()
+plot(geco)
+summary(geco)
