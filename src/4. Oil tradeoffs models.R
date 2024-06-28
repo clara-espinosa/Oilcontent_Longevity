@@ -4,20 +4,21 @@ library(lme4); library(glmmTMB); library (DHARMa)
 
 ############################################ BIOLOGICAL TRADE-OFFS #################################################
 # seed mass (log transformed) #####
-oil_data%>%
-  merge(seedmass)%>% # n= 36
+oil_data_full%>%
+  merge(read.csv("data/species_oil.csv"))%>%
+  merge(seedmass, by= c("Taxon", "community"))%>% # n= 36
   rename(familia = family)%>%
-  convert_as_factor(Taxon, species, community, familia, ecology) %>%
+  convert_as_factor(Taxon, species, community, familia) %>%
   mutate(ID = gsub(" ", "_", Taxon), animal = ID)%>%
-  mutate(Lseedmass = log(mean), 
-         LPERoil = log(PERoil),
+  mutate(Lseedmass = log(mass_50), 
+         Loil.content = log(oil.content ),
          Lratio=log(ratio))%>%
   na.omit()-> oil_seedmass # 
 # data distribution
-hist(oil_seedmass$seedmass) 
+hist(oil_seedmass$mass_50) 
 hist(oil_seedmass$Lseedmass)# normal distribution after log transformation
-hist(oil_seedmass$PERoil)
-hist(oil_seedmass$LPERoil) # almost normal distribution after log transformation
+hist(oil_seedmass$oil.content)
+hist(oil_seedmass$Loil.content) # almost normal distribution after log transformation
 hist(oil_seedmass$ratio) # almost normal distributed
 hist(oil_seedmass$Lratio)# almost normal distributed
 
@@ -41,7 +42,7 @@ priors <- list(R = list(V = 1, nu = 0.2),
                         #G3 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
                         G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
 # correct glm? ASK EDUARDO!!!
-MCMCglmm::MCMCglmm(Lratio ~ Lseedmass, # ratio 
+MCMCglmm::MCMCglmm(Loil.content ~ Lseedmass, # Lratio   Loil.content
                    random = ~ animal + ID,
                    family = "gaussian", pedigree = nnls_orig, prior = priors, data = oil_seedmass,
                    nitt = nite, thin = nthi, burnin = nbur,
@@ -138,21 +139,25 @@ summary(m1)$Gcovariances[3, 3] %>% round(2)
 
 #### P50 MCMC
 # read data
-oil_data %>%
-  merge(p50)%>% #23 species
+read.csv("data/2022/genstat.csv", sep =",")%>% 
+  group_by(Taxon, community)%>%
+  summarise(p50=mean(p50))%>% #32
+  merge(read.csv("data/species_oil.csv"), by=c("Taxon", "community")) %>% #30
+  merge(oil_data_full,by=c("species", "family")) %>% #26
+  dplyr::select(Taxon, species, family, p50, oil.content, ratio)%>%
   rename(familia = family)%>%
-  convert_as_factor(Taxon, species, community, familia, ecology) %>%
+  convert_as_factor(Taxon, species, familia) %>%
   mutate(ID = gsub(" ", "_", Taxon), animal = ID) %>%
-  mutate(LPERoil = log(PERoil),
+  mutate(Loil.content = log(oil.content),
          Lratio=log(ratio),
          Lp50 = log(p50))%>%
-  na.omit()-> genstat22_new
-hist(genstat22_new$p50) # normally distributed??
-hist(genstat22_new$Lp50)
-hist(genstat22_new$PERoil) #not normally distributed
-hist(genstat22_new$LPERoil)# almost normally distributed
-hist(genstat22_new$ratio) # normally distributed
-hist(genstat22_new$Lratio) # normally distributed
+  na.omit()-> oil_p50
+hist(oil_p50$p50) # normally distributed??
+hist(oil_p50$Lp50)
+hist(oil_p50$oil.content) #not normally distributed
+hist(oil_p50$Loil.content)# almost normally distributed
+hist(oil_p50$ratio) # normally distributed
+hist(oil_p50$Lratio) # normally distributed
 
 ### Gaussian priors
 priors <- list(R = list(V = 1, nu = 0.2),
@@ -161,9 +166,9 @@ priors <- list(R = list(V = 1, nu = 0.2),
                         #G3 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
                         G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
 # correct glm? ASK EDUARDO!!!
-MCMCglmm::MCMCglmm(p50 ~  scale(Lratio),
+MCMCglmm::MCMCglmm( Lp50 ~ Loil.content ,
                    random = ~ animal + ID,
-                   family = "gaussian", pedigree = nnls_orig, prior = priors, data = genstat22_new,
+                   family = "gaussian", pedigree = nnls_orig, prior = priors, data = oil_p50,
                    nitt = nite, thin = nthi, burnin = nbur,
                    verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g3
 x11()

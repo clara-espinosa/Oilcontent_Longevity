@@ -14,11 +14,11 @@ read.csv("data/seed_mass.csv", sep = ",")%>%
   rename(mass_50 = mean)%>%
   as.data.frame()-> seedmass # 66 species
 ### read longevity data (p50) ####
-read.csv("data/2022/genstat22.csv", sep= ",")%>%
+read.csv("data/2022/genstat.csv", sep= ",")%>%
   dplyr::select(Taxon, species, community, slope, p50)%>%
   group_by(Taxon, species, community)%>%
   summarise(slope=mean(slope),
-            p50 = mean(p50))-> p50 # 28 species
+            p50 = mean(p50))-> p50 # 32 species
 
 ### read germ data (t50/cold_strat_germ) ####
 read.csv("data/germ_t50_data.csv")%>% # so far only t50 = !!
