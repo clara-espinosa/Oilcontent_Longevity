@@ -4,6 +4,7 @@ library(phylosignal);library(phylobase);library(ape);library(tidytree)
 ### Phylo tree both communitites #####
 # always check family names with http://www.mobot.org/MOBOT/research/APweb/
 read.csv("data/species_oil.csv", sep =",") %>%
+  filter(!year_analisis == 2024)%>%
   select (Taxon, family) %>%
   unique %>%
   separate(Taxon, into = c("genus", "species"), sep = " ") %>%

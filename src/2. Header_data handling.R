@@ -3,8 +3,9 @@ library(ggpattern); library (vegan) ;library (ggrepel)
 
 ### read species oil content data ####
 read.csv("data/species_oil.csv")%>%
-  merge (oil_data_full)%>% # from format_oil_data script
-  select(community, Taxon, species, family, ecology, oil.content, ratio) -> oil_data # 36 species
+  full_join (oil_data_full, by=c("Taxon", "community", "family"))%>% # from format_oil_data script
+  select(community, Taxon,family, ecology, oil.content, ratio)-> oil_data # 50 species
+unique(oil_data$Taxon)
 ###################################### BIOLOGICAL TRADE-OFFS ################################################
 ## read species with seed mass data ####
 read.csv("data/seed_mass.csv", sep = ",")%>%
@@ -14,17 +15,16 @@ read.csv("data/seed_mass.csv", sep = ",")%>%
   rename(mass_50 = mean)%>%
   as.data.frame()-> seedmass # 66 species
 ### read longevity data (p50) ####
-read.csv("data/2022/genstat.csv", sep= ",")%>%
-  dplyr::select(Taxon, species, community, slope, p50)%>%
-  group_by(Taxon, species, community)%>%
-  summarise(slope=mean(slope),
-            p50 = mean(p50))-> p50 # 32 species
+read.csv("data/longevity/genstat.csv", sep= ",")%>%
+  dplyr::select(Taxon, community, p50)%>%
+  group_by(Taxon, community)%>%
+  summarise(p50 = mean(p50))-> p50 # 42 species
 
 ### read germ data (t50/cold_strat_germ) ####
 read.csv("data/germ_t50_data.csv")%>% # so far only t50 = !!
-  #na.omit()->t50  #45 species with t50 trait
-  full_join(read.csv("data/germ_drivers_data.csv")) -> germ_traits # %>%  69 species some with NAs
-  # na.omit() # 58 species with complete germ traits
+  dplyr:: select(Taxon, community, mean_T50, F_T50, S_T50)->t50  #45 species with t50 trait
+  #full_join(read.csv("data/germ_drivers_data.csv")) -> germ_traits # %>%  
+  # na.omit() # 
 ###################################### ECOLOGICAL TRADE-OFFS ################################################
 #### Load SPECIES PREFERENCES data####
 # based from 80 iButtons floristic relevés
@@ -43,6 +43,16 @@ read.csv("data/germ_t50_data.csv")%>% # so far only t50 = !!
 # climatic variables weighted per coverage 
 
 read.csv("data/sp_pref.csv", sep =",") -> sp_pref # 127 species
+
+# merge all info from species and create 1 header dataset for plotting 
+oil_data %>%
+  full_join(p50,by= c("Taxon", "community") )%>%
+  left_join(seedmass, by= c("Taxon", "community"))%>%
+  left_join(t50, by= c("Taxon", "community"))%>%
+  left_join(sp_pref, by = c("Taxon", "community"))%>%
+  dplyr::select(Taxon_full, Taxon, community, family, ecology, 
+                oil.content, ratio, mass_50, p50, mean_T50, F_T50, S_T50, GDD, FDD, Snw)%>%
+  write.csv("data/species_traits_summary.csv")
 
 
 ##### EXTRA ###################

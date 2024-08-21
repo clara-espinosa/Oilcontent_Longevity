@@ -1,0 +1,49 @@
+year,code,Taxon,species,family,community,oilcontent,ecology
+2022,300821-03,Androsace villosa,Andrvill,Primulaceae,Temperate,Yes,Strict alpine
+2022,310821-11,Androsace villosa,Andrvill.1,Primulaceae,Temperate,Yes,Strict alpine
+2022,300821-08,Arenaria erinacea,Arenerin,Caryophyllaceae,Temperate,Yes,Strict alpine
+2022,240821-01,Armeria duriaei,Armeduri,Plumbaginaceae,Mediterranean,Yes,Strict alpine
+2022,310821-13,Carex sempervirens,Caresemp,Cyperaceae,Temperate,Yes,Strict alpine
+2022,280721-02,Cerastium ramosissimum,Ceraramo,Caryophyllaceae,Mediterranean,Not yet,Generalist
+2022,110821-01,Dianthus langeanus,Dianlang,Caryophyllaceae,Mediterranean,Yes,Strict alpine
+2022,240821-02,Festuca summilusitana,Festsumm,Poaceae,Mediterranean,Yes,Strict alpine
+2022,130921-06,Gentiana verna,Gentvern,Gentianaceae,Temperate,Not yet,Strict alpine
+2022,300921-03,Gentianella campestris,Gentcamp,Gentianaceae,Temperate,No,Generalist
+2022,300821-10,Gypsophila repens,Gypsrepe,Caryophyllaceae,Temperate,Yes,Generalist
+2022,310821-08,Gypsophila repens,Gypsrepe.1,Caryophyllaceae,Temperate,Yes,Generalist
+2022,300821-05,Helianthemum canum,Helicanu,Cistaceae,Temperate,Yes,Generalist
+2022,310821-05,Helianthemum canum,Helicanu.1,Cistaceae,Temperate,Yes,Generalist
+2022,310821-09,Koeleria vallesiana,Koelvall,Poaceae,Temperate,Yes,Strict alpine
+2022,310821-10,Minuartia CF,MinuCF,Caryophyllaceae,Temperate,No,Generalist
+2022,120821-01,Minuartia recurva,Minurecu,Caryophyllaceae,Mediterranean,Yes,Strict alpine
+2022,240821-07,Neoschischkinia truncatula,Neostrun,Poaceae,Mediterranean,Yes,Generalist
+2022,130921-04,Pedicularis pyrenaica,Pedipyre,Orobanchaceae,Temperate,Not yet,Strict alpine
+2022,310821-04,Pedicularis pyrenaica,Pedipyre.1,Orobanchaceae,Temperate,Not yet,Strict alpine
+2022,240821-10,Phyteuma hemisphaericum,Phythemi,Campanulaceae,Mediterranean,Yes,Strict alpine
+2022,250821-07,Phyteuma hemisphaericum,Phythemi.1,Campanulaceae,Mediterranean,Yes,Strict alpine
+2022,300821-15,Plantago alpina,Planalpi,Plantaginaceae,Temperate,Yes,Strict alpine
+2022,240821-04,Plantago holosteum,Planholo,Plantaginaceae,Mediterranean,Yes,Generalist
+2022,240821-09,Sedum anglicum,Seduangl,Crassulaceae,Mediterranean,Yes,Strict alpine
+2022,240821-11,Sedum brevifolium,Sedubrev,Crassulaceae,Mediterranean,Yes,Generalist
+2022,130921-07,Silene acaulis,Sileacau,Caryophyllaceae,Temperate,Yes,Strict alpine
+2022,140921-03,Silene acaulis,Sileacau.1,Caryophyllaceae,Temperate,Yes,Strict alpine
+2022,230921-01,Silene ciliata,Silecili,Caryophyllaceae,Mediterranean,Yes,Strict alpine
+2022,300821-11,Silene ciliata,Silecili.1,Caryophyllaceae,Temperate,Yes,Strict alpine
+2022,240821-08,Solidago virgaurea,Solivirg,Asteraceae,Mediterranean,Yes,Generalist
+2022,150721-01,Spergula morisonii,Spermori,Caryophyllaceae,Mediterranean,Yes,Generalist
+2022,120821-06,Thymus praecox,Thymprae,Lamiaceae,Mediterranean,Yes,Generalist
+2022,300821-07,Thymus praecox,Thymprae.1,Lamiaceae,Temperate,Yes,Generalist
+2023,040822-04,Luzula caespitosa,Luzucaes,Juncaceae,Mediterranean,Yes,Strict alpine
+2023,230822-02,Jasione cavanillesii,Jasicava,Campanulaceae,Temperate,Yes,Strict alpine
+2024,070823-10,Agrostis tileni,Agrotile,Poaceae,Mediterranean,No ,Strict alpine
+2024,120722-02,Anthyllis vulneraria,Anthvuln,Fabaceae,Temperate,Yes,Generalist
+2024,230822-01,Armeria cantabrica,Armecant,Plumbaginaceae,Temperate,Yes,Strict alpine
+2024,230822-04,Festuca glacialis,Festglac,Poaceae,Temperate,Yes,Strict alpine
+2024,210823-13,Iberis carnosa,Ibercarn,Brassicaceae,Temperate,Not yet,Strict alpine
+2024,040822-08,Jasione laevis,Jasilaev,Campanulaceae,Mediterranean,No,Strict alpine
+2024,070823-09,Jurinea humilis,Jurihumi,Asteraceae,Mediterranean,Yes,Generalist
+2024,210823-01,Minuartia verna,Minuvern,Caryophyllaceae,Temperate,Not yet,Strict alpine
+2024,010923-02,Phyteuma orbiculare,Phytorbi,Campanulaceae,Temperate,No,Generalist
+2024,120722-01,Saxifraga conifera,Saxiconi,Saxifragaceae,Temperate,Yes,Strict alpine
+2024,310823-17,Saxifraga oppositifolia,Saxioppo,Saxifragaceae,Temperate,Not yet,Strict alpine
+2024,090822-04,Teesdalia conferta,Teesconf,Brassicaceae,Mediterranean,Yes ,Generalist
