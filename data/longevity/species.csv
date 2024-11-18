@@ -4,10 +4,10 @@ year,code,Taxon,species,family,community,oilcontent,ecology
 2022,300821-08,Arenaria erinacea,Arenerin,Caryophyllaceae,Temperate,Yes,Strict alpine
 2022,240821-01,Armeria duriaei,Armeduri,Plumbaginaceae,Mediterranean,Yes,Strict alpine
 2022,310821-13,Carex sempervirens,Caresemp,Cyperaceae,Temperate,Yes,Strict alpine
-2022,280721-02,Cerastium ramosissimum,Ceraramo,Caryophyllaceae,Mediterranean,Not yet,Generalist
+2022,280721-02,Cerastium ramosissimum,Ceraramo,Caryophyllaceae,Mediterranean,Yes,Generalist
 2022,110821-01,Dianthus langeanus,Dianlang,Caryophyllaceae,Mediterranean,Yes,Strict alpine
 2022,240821-02,Festuca summilusitana,Festsumm,Poaceae,Mediterranean,Yes,Strict alpine
-2022,130921-06,Gentiana verna,Gentvern,Gentianaceae,Temperate,Not yet,Strict alpine
+2022,130921-06,Gentiana verna,Gentvern,Gentianaceae,Temperate,Yes,Strict alpine
 2022,300921-03,Gentianella campestris,Gentcamp,Gentianaceae,Temperate,No,Generalist
 2022,300821-10,Gypsophila repens,Gypsrepe,Caryophyllaceae,Temperate,Yes,Generalist
 2022,310821-08,Gypsophila repens,Gypsrepe.1,Caryophyllaceae,Temperate,Yes,Generalist
@@ -17,8 +17,8 @@ year,code,Taxon,species,family,community,oilcontent,ecology
 2022,310821-10,Minuartia CF,MinuCF,Caryophyllaceae,Temperate,No,Generalist
 2022,120821-01,Minuartia recurva,Minurecu,Caryophyllaceae,Mediterranean,Yes,Strict alpine
 2022,240821-07,Neoschischkinia truncatula,Neostrun,Poaceae,Mediterranean,Yes,Generalist
-2022,130921-04,Pedicularis pyrenaica,Pedipyre,Orobanchaceae,Temperate,Not yet,Strict alpine
-2022,310821-04,Pedicularis pyrenaica,Pedipyre.1,Orobanchaceae,Temperate,Not yet,Strict alpine
+2022,130921-04,Pedicularis pyrenaica,Pedipyre,Orobanchaceae,Temperate,Yes,Strict alpine
+2022,310821-04,Pedicularis pyrenaica,Pedipyre.1,Orobanchaceae,Temperate,Yes,Strict alpine
 2022,240821-10,Phyteuma hemisphaericum,Phythemi,Campanulaceae,Mediterranean,Yes,Strict alpine
 2022,250821-07,Phyteuma hemisphaericum,Phythemi.1,Campanulaceae,Mediterranean,Yes,Strict alpine
 2022,300821-15,Plantago alpina,Planalpi,Plantaginaceae,Temperate,Yes,Strict alpine
@@ -39,11 +39,11 @@ year,code,Taxon,species,family,community,oilcontent,ecology
 2024,120722-02,Anthyllis vulneraria,Anthvuln,Fabaceae,Temperate,Yes,Generalist
 2024,230822-01,Armeria cantabrica,Armecant,Plumbaginaceae,Temperate,Yes,Strict alpine
 2024,230822-04,Festuca glacialis,Festglac,Poaceae,Temperate,Yes,Strict alpine
-2024,210823-13,Iberis carnosa,Ibercarn,Brassicaceae,Temperate,Not yet,Strict alpine
+2024,210823-13,Iberis carnosa,Ibercarn,Brassicaceae,Temperate,Yes,Strict alpine
 2024,040822-08,Jasione laevis,Jasilaev,Campanulaceae,Mediterranean,No,Strict alpine
 2024,070823-09,Jurinea humilis,Jurihumi,Asteraceae,Mediterranean,Yes,Generalist
-2024,210823-01,Minuartia verna,Minuvern,Caryophyllaceae,Temperate,Not yet,Strict alpine
+2024,210823-01,Minuartia verna,Minuvern,Caryophyllaceae,Temperate,Yes,Strict alpine
 2024,010923-02,Phyteuma orbiculare,Phytorbi,Campanulaceae,Temperate,No,Generalist
 2024,120722-01,Saxifraga conifera,Saxiconi,Saxifragaceae,Temperate,Yes,Strict alpine
-2024,310823-17,Saxifraga oppositifolia,Saxioppo,Saxifragaceae,Temperate,Not yet,Strict alpine
+2024,310823-17,Saxifraga oppositifolia,Saxioppo,Saxifragaceae,Temperate,Yes,Strict alpine
 2024,090822-04,Teesdalia conferta,Teesconf,Brassicaceae,Mediterranean,Yes ,Generalist

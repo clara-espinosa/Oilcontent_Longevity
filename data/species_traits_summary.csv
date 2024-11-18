@@ -1,56 +1,56 @@
-,Taxon_full,Taxon,community,family,ecology,oil.content,ratio,mass_50,p50,mean_T50,F_T50,S_T50,GDD,FDD,Snw
-1,Androsace villosa,Androsace villosa,Temperate,Primulaceae,Strict alpine,4.883,7.903829029,66.6,23.00666667,NA,NA,NA,1308.182273,26.57815582,86.25295858
-9,Conopodium majus subsp. marizianum,Conopodium majus,Mediterranean,Apiaceae,Generalist,3.482,8.066183137,75.499,NA,223.3,207.6,239,1933.779906,2.137096774,8.830645161
-39,Dethawia splendens subsp. cantabrica,Dethawia splendens,Temperate,Apiaceae,Strict alpine,NA,NA,133.084,NA,221.7,212.9,230.4,1162.726444,30.12056738,109.9007092
-16,Jurinea humilis,Jurinea humilis,Mediterranean,Asteraceae,Generalist,8.253,6.534287867,268.462,NA,128.1,9.7,246.5,2063.969951,10.18390805,15.96551724
-32,Solidago virgaurea subsp. virgaurea,Solidago virgaurea,Mediterranean,Asteraceae,Generalist,15.593,7.445945946,33.455,4.97,125.1,14.9,235.3,2295.02381,6.916666667,3
-6,Anthyllis vulneraria,Anthyllis vulneraria,Temperate,Fabaceae,Generalist,6.428,4.546866334,215.947,47.65,NA,NA,NA,925.3550249,52.357748,90.22550832
-7,Arenaria erinacea,Arenaria erinacea,Temperate,Caryophyllaceae,Strict alpine,2.265,6.407407407,19.087,37.66,NA,NA,NA,1379.760723,17.76017812,75.10687023
-43,Jurinea humilis,Jurinea humilis,Temperate,Asteraceae,Strict alpine,NA,NA,260.665,NA,175,119.6,230.5,1338.289793,26.25347222,90.5
-46,Phalacrocarpum oppositifolium subsp. anomalum,Phalacrocarpum oppositifolium,Mediterranean,Asteraceae,Generalist,NA,NA,113.1,NA,61.2,40.3,82.1,1733.472444,7.804509132,25.90410959
-41,Iberis carnosa,Iberis carnosa,Temperate,Brassicaceae,Strict alpine,NA,NA,75.154,19.87,160.6,9.6,311.7,880.7501677,83.19248826,116.0140845
-11,Festuca glacialis,Festuca glacialis,Temperate,Poaceae,Strict alpine,1.363,3.562043796,28.8,14.875,NA,NA,NA,649.4185714,24.74230769,102.0676923
-22,Phyteuma hemisphaericum,Phyteuma hemisphaericum,Mediterranean,Campanulaceae,Strict alpine,19.685,8.754146341,4.221,3.85,284.5,NA,284.5,1743.689293,18.98809524,27.98136646
-42,Jasione cavanillesii,Jasione cavanillesii,Temperate,Campanulaceae,Strict alpine,NA,NA,5.603,22.68,249.3,226.3,272.3,668.6060268,22.05989583,77.90625
-10,Dianthus langeanus,Dianthus langeanus,Mediterranean,Caryophyllaceae,Strict alpine,4.362,6.00280112,42.564,37.295,4.5,3.7,5.4,1957.442746,7.546358231,26.00222965
-12,Gypsophila repens,Gypsophila repens,Temperate,Caryophyllaceae,Generalist,3.587,8.672147002,24.5,25.15333333,256,230.3,281.8,1351.382358,41.29560367,92.73622047
-20,Minuartia recurva,Minuartia recurva,Mediterranean,Caryophyllaceae,Strict alpine,3.289,5.262366938,15.632,10.89,10,6,14,2045.066844,13.91718427,24.47204969
-17,Kobresia myosuroides,Kobresia myosuroides,Temperate,Cyperaceae,Strict alpine,6.124,9.12145749,41.3,NA,NA,NA,NA,1241.518398,88.37121212,85.81818182
-29,Silene acaulis,Silene acaulis,Temperate,Caryophyllaceae,Strict alpine,3.809,5.68002672,15,25.065,296,303.9,288,761.3895918,51.61478934,93.00085985
-30,Silene ciliata,Silene ciliata,Temperate,Caryophyllaceae,Strict alpine,3.202,5.548133595,17.9,24.78,233.3,210.9,255.8,890.7481445,58.06191806,134.3463687
-31,Silene ciliata,Silene ciliata,Mediterranean,Caryophyllaceae,Strict alpine,2.734,5.378826531,18.7,18.225,219.8,198.9,240.8,1506.826597,37.09015421,53.53024911
-33,Spergula morisonii,Spergula morisonii,Mediterranean,Caryophyllaceae,Strict alpine,5.602,6.137044968,9.736,34.48,102,167.8,36.2,1799.339286,0.208333333,4.5
-38,Cerastium ramosissimum,Cerastium ramosissimum,Mediterranean,Caryophyllaceae,Generalist,NA,NA,6.563,16.24,48.4,48.8,48,1722.072789,21.46666667,12.77142857
-54,Minuartia CF,Minuartia CF,Temperate,Caryophyllaceae,NA,NA,NA,4.577,21.17,227,227,NA,NA,NA,NA
-24,Salix breviserrata,Salix breviserrata,Temperate,Salicaceae,Strict alpine,5.687,2.717843866,4.14,NA,NA,NA,NA,1001.556122,169.5873016,38.66666667
-13,Helianthemum canum,Helianthemum canum,Temperate,Cistaceae,Generalist,5.21,3.916420846,28.5,33.575,279,279,NA,1249.728334,34.29973632,81.92635025
-14,Helianthemum apenninum subsp. urrielense,Helianthemum urrielense,Temperate,Cistaceae,Strict alpine,3.449,3.211878686,33.8,NA,14,13.3,14.8,885.5083474,24.34729791,113.2134423
-27,Sedum anglicum subsp. pyrenaicum,Sedum anglicum,Mediterranean,Crassulaceae,Strict alpine,16.906,8.148215919,1.107,18.67,124.9,83.7,166.2,1649.449454,23.76092896,12.67213115
-28,Sedum brevifolium,Sedum brevifolium,Mediterranean,Crassulaceae,Generalist,12.364,7.628127696,0.639,14.63,80,75,84.9,2022.407959,16.17513714,20.06679574
-48,Sempervivum arachnoideum,Sempervivum arachnoideum,Mediterranean,Crassulaceae,Generalist,NA,NA,2.615,NA,236.3,212.8,259.8,1714.835498,22.88434343,25.9030303
-3,Carex sempervirens,Carex sempervirens,Temperate,Cyperaceae,Strict alpine,15.004,9.341261634,47,7.19,263.9,244.9,282.9,1191.844089,25.45632184,92.92183908
-19,Luzula caespitosa,Luzula caespitosa,Mediterranean,Juncaceae,Strict alpine,3.372,5.909467865,97.711,48.27,174,102.4,245.5,1593.713752,40.10741365,40.47262005
-35,Thymus praecox subsp. ligusticus,Thymus praecox,Temperate,Lamiaceae,Generalist,18.307,11.72391858,5.84,15.39,198.4,121.8,275,1039.014729,38.09660523,101.4522684
-36,Thymus praecox subsp. ligusticus,Thymus praecox,Mediterranean,Lamiaceae,Generalist,18.422,11.07608696,8.528,13.45,48.6,13.8,83.4,1966.766831,8.057471264,18.77586207
-34,Teesdalia conferta,Teesdalia conferta,Mediterranean,Brassicaceae,Generalist,7.963,8.604226705,96,8.12,NA,NA,NA,1976.159184,0.047619048,8.142857143
-45,Pedicularis pyrenaica,Pedicularis pyrenaica,Temperate,Orobanchaceae,Strict alpine,NA,NA,36.273,4.86,226.6,203.7,249.5,1232.6213,75.09459459,74.05405405
-5,Plantago alpina,Plantago alpina,Temperate,Plantaginaceae,Strict alpine,10.529,8.302325581,19.3,23.11,205.3,176,234.5,996.8454369,24.46103471,87.75638507
-37,Avenella flexuosa subsp. iberica,Avenella flexuosa,Mediterranean,Poaceae,Generalist,NA,NA,49.286,NA,NA,NA,NA,1928.59421,2.127651515,6.822727273
-23,Plantago holosteum,Plantago holosteum,Mediterranean,Plantaginaceae,Generalist,8.591,7.409587889,44.045,27.925,8.2,8.1,8.4,2003.097489,30.30306799,18.65671642
-2,Armeria duriaei,Armeria duriaei,Mediterranean,Plumbaginaceae,Strict alpine,4.328,4.899705015,75.698,34.63,11.3,7.3,15.2,1850.178291,14.28031561,23.7358804
-40,Gentiana verna,Gentiana verna,Temperate,Gentianaceae,Strict alpine,NA,NA,4.986,3.83,NA,NA,NA,1191.611446,11.77409639,112.2409639
-8,Armeria cantabrica,Armeria cantabrica,Temperate,Plumbaginaceae,Strict alpine,2.959,4.293806247,90.786,18.395,258.1,238.2,278,712.851022,26.54703196,116.8986301
-4,Festuca summilusitana,Festuca summilusitana,Mediterranean,Poaceae,Strict alpine,1.48,4.10045895,82.344,11.67,20.8,18.4,23.1,1807.277031,20.15787767,21.74816965
-15,Helictochloa marginata,Helictochloa marginata,Mediterranean,Poaceae,Generalist,9.171,7.748906387,138.1,NA,154.2,142.8,165.7,2092.966415,2.186950147,4.302052786
-44,Minuartia verna,Minuartia verna,Temperate,Caryophyllaceae,Strict alpine,NA,NA,24.9,33.24,NA,NA,NA,1114.302883,50.77736928,77.57843137
-18,Koeleria vallesiana,Koeleria vallesiana,Temperate,Poaceae,Strict alpine,9.637,7.888888889,32.8,30.63,21.1,12.1,30,1146.15369,32.48618001,114.8263643
-21,Neoschischkinia truncatula subsp. durieui,Neoschischkinia truncatula,Mediterranean,Poaceae,Strict alpine,3.265,6.336757153,4.716,44.62,7.8,6.8,8.8,1946.089338,12.25312041,30.46475771
-47,Saxifraga oppositifolia,Saxifraga oppositifolia,Temperate,Saxifragaceae,Strict alpine,NA,NA,5.254,NA,NA,NA,NA,1037.807143,134.4,77.6
-49,Sesleria caerulea,Sesleria caerulea,Temperate,Poaceae,Generalist,NA,NA,40.92,NA,110.3,25.1,195.4,NA,NA,NA
-51,Agrostis tileni,Agrostis tileni,Mediterranean,Poaceae,Strict alpine,NA,NA,4.436,NA,263.6,225.5,301.7,1604.374031,37.30647841,29.31229236
-50,Veronica nummularia,Veronica nummularia,Temperate,Plantaginaceae,Strict alpine,NA,NA,10.2,NA,NA,NA,NA,770.0918367,10.98809524,156.6428571
-25,Saxifraga conifera,Saxifraga conifera,Temperate,Saxifragaceae,Strict alpine,30.123,9.162601626,2.275,5.22,195.1,62.5,327.6,1049.892839,44.33255814,81.34573643
-52,Gentianella campestris,Gentianella campestris,Temperate,Gentianaceae,Strict alpine,NA,NA,4.705,1.12,NA,NA,NA,1205.845238,2.5,67
-53,Jasione laevis,Jasione laevis,Mediterranean,Campanulaceae,Strict alpine,NA,NA,1.21,10.03,NA,NA,NA,1761.320453,14.04266212,36.10921502
-26,Saxifraga paniculata,Saxifraga paniculata,Temperate,Saxifragaceae,Strict alpine,17.18,10.14715719,3.464,NA,252.8,222,283.5,998.9583333,7.666666667,152.5
-55,Phyteuma orbiculare,Phyteuma orbiculare,Temperate,Campanulaceae,Generalist,NA,NA,5.667,2.21,NA,NA,NA,1290.375512,12.88631347,97.31788079
+"","Taxon_full","Taxon","community","family","ecology","oil.content","ratio","mass_50","p50","mean_T50","F_T50","S_T50","GDD","FDD","Snw"
+"1","Androsace villosa","Androsace villosa","Temperate","Primulaceae","Strict alpine",4.8827618363,7.90382902938557,66.6,23.0066666666667,NA,NA,NA,1308.182273,26.57815582,86.25295858
+"2","Armeria duriaei","Armeria duriaei","Mediterranean","Plumbaginaceae","Strict alpine",4.328,4.89970501474926,75.698,34.63,11.3,7.3,15.2,1850.178291,14.28031561,23.7358804
+"3","Carex sempervirens","Carex sempervirens","Temperate","Cyperaceae","Strict alpine",15.004,9.34126163391934,47,7.19,263.9,244.9,282.9,1191.844089,25.45632184,92.92183908
+"4","Festuca summilusitana","Festuca summilusitana","Mediterranean","Poaceae","Strict alpine",1.48,4.10045894951555,82.344,11.67,20.8,18.4,23.1,1807.277031,20.15787767,21.74816965
+"5","Plantago alpina","Plantago alpina","Temperate","Plantaginaceae","Strict alpine",10.529,8.30232558139535,19.3,23.11,205.3,176,234.5,996.8454369,24.46103471,87.75638507
+"6","Anthyllis vulneraria","Anthyllis vulneraria","Temperate","Fabaceae","Generalist",6.428,4.54686633388796,215.947,47.65,NA,NA,NA,925.3550249,52.357748,90.22550832
+"7","Arenaria erinacea","Arenaria erinacea","Temperate","Caryophyllaceae","Strict alpine",2.265,6.40740740740741,19.087,37.66,NA,NA,NA,1379.760723,17.76017812,75.10687023
+"8","Armeria cantabrica","Armeria cantabrica","Temperate","Plumbaginaceae","Strict alpine",2.959,4.29380624669137,90.786,18.395,258.1,238.2,278,712.851022,26.54703196,116.8986301
+"9","Conopodium majus subsp. marizianum","Conopodium majus","Mediterranean","Apiaceae","Generalist",3.482,8.06618313689937,75.499,NA,223.3,207.6,239,1933.779906,2.137096774,8.830645161
+"10","Dianthus langeanus","Dianthus langeanus","Mediterranean","Caryophyllaceae","Strict alpine",4.362,6.00280112044818,42.564,37.295,4.5,3.7,5.4,1957.442746,7.546358231,26.00222965
+"11","Festuca glacialis","Festuca glacialis","Temperate","Poaceae","Strict alpine",1.363,3.56204379562044,28.8,14.875,NA,NA,NA,649.4185714,24.74230769,102.0676923
+"12","Gypsophila repens","Gypsophila repens","Temperate","Caryophyllaceae","Generalist",3.587,8.67214700193424,24.5,25.1533333333333,256,230.3,281.8,1351.382358,41.29560367,92.73622047
+"13","Helianthemum canum","Helianthemum canum","Temperate","Cistaceae","Generalist",5.21,3.91642084562439,28.5,33.575,279,279,NA,1249.728334,34.29973632,81.92635025
+"14","Helianthemum apenninum subsp. urrielense","Helianthemum urrielense","Temperate","Cistaceae","Strict alpine",3.449,3.21187868576243,33.8,NA,14,13.3,14.8,885.5083474,24.34729791,113.2134423
+"15","Helictochloa marginata","Helictochloa marginata","Mediterranean","Poaceae","Generalist",9.171,7.74890638670166,138.1,NA,154.2,142.8,165.7,2092.966415,2.186950147,4.302052786
+"16","Jurinea humilis","Jurinea humilis","Mediterranean","Asteraceae","Generalist",8.253,6.53428786737001,268.462,37.44,128.1,9.7,246.5,2063.969951,10.18390805,15.96551724
+"17","Kobresia myosuroides","Kobresia myosuroides","Temperate","Cyperaceae","Strict alpine",6.124,9.12145748987854,41.3,NA,NA,NA,NA,1241.518398,88.37121212,85.81818182
+"18","Koeleria vallesiana","Koeleria vallesiana","Temperate","Poaceae","Strict alpine",9.637,7.88888888888889,32.8,30.63,21.1,12.1,30,1146.15369,32.48618001,114.8263643
+"19","Luzula caespitosa","Luzula caespitosa","Mediterranean","Juncaceae","Strict alpine",3.372,5.90946786454734,97.711,48.27,174,102.4,245.5,1593.713752,40.10741365,40.47262005
+"20","Minuartia recurva","Minuartia recurva","Mediterranean","Caryophyllaceae","Strict alpine",3.289,5.26236693800877,15.632,10.89,10,6,14,2045.066844,13.91718427,24.47204969
+"21","Neoschischkinia truncatula subsp. durieui","Neoschischkinia truncatula","Mediterranean","Poaceae","Strict alpine",3.265,6.33675715333823,4.716,44.62,7.8,6.8,8.8,1946.089338,12.25312041,30.46475771
+"22","Phyteuma hemisphaericum","Phyteuma hemisphaericum","Mediterranean","Campanulaceae","Strict alpine",19.685,8.75414634146341,4.221,3.85,284.5,NA,284.5,1743.689293,18.98809524,27.98136646
+"23","Plantago holosteum","Plantago holosteum","Mediterranean","Plantaginaceae","Generalist",8.591,7.40958788898234,44.045,27.925,8.2,8.1,8.4,2003.097489,30.30306799,18.65671642
+"24","Salix breviserrata","Salix breviserrata","Temperate","Salicaceae","Strict alpine",5.687,2.717843866171,4.14,NA,NA,NA,NA,1001.556122,169.5873016,38.66666667
+"25","Saxifraga conifera","Saxifraga conifera","Temperate","Saxifragaceae","Strict alpine",30.123,9.16260162601626,2.275,5.22,195.1,62.5,327.6,1049.892839,44.33255814,81.34573643
+"26","Saxifraga paniculata","Saxifraga paniculata","Temperate","Saxifragaceae","Strict alpine",17.18,10.1471571906355,3.464,NA,252.8,222,283.5,998.9583333,7.666666667,152.5
+"27","Sedum anglicum subsp. pyrenaicum","Sedum anglicum","Mediterranean","Crassulaceae","Strict alpine",16.906,8.14821591948765,1.107,18.67,124.9,83.7,166.2,1649.449454,23.76092896,12.67213115
+"28","Sedum brevifolium","Sedum brevifolium","Mediterranean","Crassulaceae","Generalist",12.364,7.6281276962899,0.639,14.63,80,75,84.9,2022.407959,16.17513714,20.06679574
+"29","Silene acaulis","Silene acaulis","Temperate","Caryophyllaceae","Strict alpine",3.809,5.68002672010688,15,25.065,296,303.9,288,761.3895918,51.61478934,93.00085985
+"30","Silene ciliata","Silene ciliata","Temperate","Caryophyllaceae","Strict alpine",3.202,5.54813359528487,17.9,24.78,233.3,210.9,255.8,890.7481445,58.06191806,134.3463687
+"31","Silene ciliata","Silene ciliata","Mediterranean","Caryophyllaceae","Strict alpine",2.734,5.37882653061224,18.7,18.225,219.8,198.9,240.8,1506.826597,37.09015421,53.53024911
+"32","Solidago virgaurea subsp. virgaurea","Solidago virgaurea","Mediterranean","Asteraceae","Generalist",15.593,7.44594594594595,33.455,4.97,125.1,14.9,235.3,2295.02381,6.916666667,3
+"33","Spergula morisonii","Spergula morisonii","Mediterranean","Caryophyllaceae","Strict alpine",5.602,6.13704496788009,9.736,34.48,102,167.8,36.2,1799.339286,0.208333333,4.5
+"34","Teesdalia conferta","Teesdalia conferta","Mediterranean","Brassicaceae","Generalist",7.963,8.60422670509126,96,8.12,NA,NA,NA,1976.159184,0.047619048,8.142857143
+"35","Thymus praecox subsp. ligusticus","Thymus praecox","Temperate","Lamiaceae","Generalist",18.307,11.7239185750636,5.84,15.39,198.4,121.8,275,1039.014729,38.09660523,101.4522684
+"36","Thymus praecox subsp. ligusticus","Thymus praecox","Mediterranean","Lamiaceae","Generalist",18.422,11.0760869565217,8.528,13.45,48.6,13.8,83.4,1966.766831,8.057471264,18.77586207
+"37","Avenella flexuosa subsp. iberica","Avenella flexuosa","Mediterranean","Poaceae","Generalist",1.192,1.24517287831163,49.286,NA,NA,NA,NA,1928.59421,2.127651515,6.822727273
+"38","Cerastium ramosissimum","Cerastium ramosissimum","Mediterranean","Caryophyllaceae","Generalist",3.201,5.14505224339275,6.563,16.24,48.4,48.8,48,1722.072789,21.46666667,12.77142857
+"39","Dethawia splendens subsp. cantabrica","Dethawia splendens","Temperate","Apiaceae","Strict alpine",17.466,12.2802124833997,133.084,NA,221.7,212.9,230.4,1162.726444,30.12056738,109.9007092
+"40","Gentiana verna","Gentiana verna","Temperate","Gentianaceae","Strict alpine",31.188,7.71839581517001,4.986,3.83,NA,NA,NA,1191.611446,11.77409639,112.2409639
+"41","Iberis carnosa","Iberis carnosa","Temperate","Brassicaceae","Strict alpine",18.226,20.0991561181435,75.154,19.87,160.6,9.6,311.7,880.7501677,83.19248826,116.0140845
+"42","Jasione cavanillesii","Jasione cavanillesii","Temperate","Campanulaceae","Strict alpine",34.198,9.12348178137652,5.603,22.68,249.3,226.3,272.3,668.6060268,22.05989583,77.90625
+"43","Jurinea humilis","Jurinea humilis","Temperate","Asteraceae","Strict alpine",19.323,8.11668185961714,260.665,NA,175,119.6,230.5,1338.289793,26.25347222,90.5
+"44","Minuartia verna","Minuartia verna","Temperate","Caryophyllaceae","Strict alpine",5.144,5.57462195923734,24.9,33.24,NA,NA,NA,1114.302883,50.77736928,77.57843137
+"45","Pedicularis pyrenaica","Pedicularis pyrenaica","Temperate","Orobanchaceae","Strict alpine",18.196,5.98324022346369,36.273,4.86,226.6,203.7,249.5,1232.6213,75.09459459,74.05405405
+"46","Phalacrocarpum oppositifolium subsp. anomalum","Phalacrocarpum oppositifolium","Mediterranean","Asteraceae","Generalist",24.644,5.5666447800394,113.1,NA,61.2,40.3,82.1,1733.472444,7.804509132,25.90410959
+"47","Saxifraga oppositifolia","Saxifraga oppositifolia","Temperate","Saxifragaceae","Strict alpine",32.646,12.2100396301189,5.254,4.758,NA,NA,NA,1037.807143,134.4,77.6
+"48","Sempervivum arachnoideum","Sempervivum arachnoideum","Mediterranean","Crassulaceae","Generalist",24.046,8.09090909090909,2.615,NA,236.3,212.8,259.8,1714.835498,22.88434343,25.9030303
+"49",NA,"Sesleria caerulea","Temperate","Poaceae","Generalist",1.299,2.45219192267863,40.92,NA,110.3,25.1,195.4,NA,NA,NA
+"50","Veronica nummularia","Veronica nummularia","Temperate","Plantaginaceae","Strict alpine",32.834,11.7213740458015,10.2,NA,NA,NA,NA,770.0918367,10.98809524,156.6428571
+"51","Agrostis tileni","Agrostis tileni","Mediterranean",NA,NA,NA,NA,4.436,NA,263.6,225.5,301.7,1604.374031,37.30647841,29.31229236
+"52","Gentianella campestris","Gentianella campestris","Temperate",NA,NA,NA,NA,4.705,1.12,NA,NA,NA,1205.845238,2.5,67
+"53","Jasione laevis","Jasione laevis","Mediterranean",NA,NA,NA,NA,1.21,10.03,NA,NA,NA,1761.320453,14.04266212,36.10921502
+"54",NA,"Minuartia CF","Temperate",NA,NA,NA,NA,4.577,21.17,227,227,NA,NA,NA,NA
+"55","Phyteuma orbiculare","Phyteuma orbiculare","Temperate",NA,NA,NA,NA,5.667,2.21,NA,NA,NA,1290.375512,12.88631347,97.31788079
