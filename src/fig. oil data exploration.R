@@ -47,6 +47,7 @@ read.csv("data/species_oil.csv")%>%
   theme(text = element_text(family = "sans"),
         plot.title = element_text (size= 14),
         legend.position = "", 
+        plot.background = element_blank(),
         plot.margin = unit(c(0, 0.2,0,0), "cm"),
         legend.title = element_blank(),
         legend.text = element_text(size = 10, color = "black"),
@@ -207,7 +208,7 @@ ggplot(pcaInds, aes(x = Dim.1, y = Dim.2)) +
   geom_hline(yintercept = 0, linetype = "dashed") +
   geom_vline(xintercept = 0, linetype = "dashed") +
   geom_point(aes(fill = family), color = "black", show.legend = T, size = 4, shape = 21) + # family
-  geom_text_repel (data = pcaInds, aes (x = Dim.1, y = Dim.2, label = species), show.legend = F, size =4, max.overlaps = 5) +
+  #geom_text_repel (data = pcaInds, aes (x = Dim.1, y = Dim.2, label = species), show.legend = F, size =4, max.overlaps = 5) +
   ggthemes::theme_tufte(base_size=12) + 
   scale_fill_manual(values=col)+
   guides(fill=guide_legend(ncol=1, keywidth=0.1,keyheight=0.1,default.unit="cm")) +
@@ -233,9 +234,9 @@ ggplot(pcaInds, aes(x = Dim.1, y = Dim.2)) +
   geom_vline(xintercept = 0, linetype = "dashed") +
   geom_segment(data = pcaVars, aes(x = 0, y = 0, xend = 3*Dim.1, yend = 3*Dim.2), arrow = arrow()) +
   #geom_label(data = pcaVars, aes(x = 3*Dim.1, y = 3*Dim.2, label = Variable),  show.legend = F, size = 4) +
-  #geom_label_repel(data = pcaVars, aes(x = 3*Dim.1, y = 3*Dim.2, label = Variable),  show.legend = F, size = 3) +
-  geom_label_repel(data = pcaVars, aes(x = 3*Dim.1, y = 3*Dim.2, label = Variable),  show.legend = FALSE, size = 4, segment.size= 1,
-   point.padding = 0.2, nudge_x = .15, nudge_y = .5,segment.curvature = -1e-20, segment.linetype = 1, segment.color = "red", arrow = arrow(length = unit(0.015, "npc")))+
+  geom_label_repel(data = pcaVars, aes(x = 3*Dim.1, y = 3*Dim.2, label = Variable),  show.legend = F, size = 3) +
+  #geom_label_repel(data = pcaVars, aes(x = 3*Dim.1, y = 3*Dim.2, label = Variable),  show.legend = FALSE, size = 4, segment.size= 1,
+   #point.padding = 0.2, nudge_x = .15, nudge_y = .5,segment.curvature = -1e-20, segment.linetype = 1, segment.color = "red", arrow = arrow(length = unit(0.015, "npc")))+
   ggthemes::theme_tufte(base_size=12) + 
   labs( tag = "E)")+#title= "PCA variables",
   theme(text = element_text(family = "sans"),

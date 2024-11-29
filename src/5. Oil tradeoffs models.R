@@ -2,24 +2,20 @@ library(tidyverse);library (rstatix);library (stringr);library(viridis)
 library(ggpattern); library (vegan) ;library (ggrepel)
 library(lme4); library(glmmTMB); library (DHARMa) 
 
-
+read.csv("data/species_traits_summary.csv")%>%# from script header data handling
+  
 ############################################ BIOLOGICAL TRADE-OFFS #################################################
 # seed mass (log transformed) #####
-read.csv("data/seed_mass.csv")%>%
-  merge(oil_data, by= c("Taxon", "community"))%>%
+read.csv("data/species_traits_summary.csv")%>%# from script header data handling
   dplyr::select(Taxon, community, family, oil.content, ratio, mass_50)%>%
-  na.omit()%>%
-  group_by(Taxon, family)%>%
-  summarise(mass_50 = mean(mass_50), oil.content= mean(oil.content), ratio=mean(ratio))%>%
   rename(familia = family)%>%
   convert_as_factor(Taxon, familia) %>%
   mutate(ID = gsub(" ", "_", Taxon), animal = ID)%>%
   mutate(Lseedmass = log(mass_50), 
          Loil.content = log(oil.content),
          Lratio=log(ratio))%>%
-  na.omit()%>%
-  as.data.frame()-> oil_seedmass # 47 species 
-unique(oil_seedmass$animal)
+  as.data.frame()-> oil_seedmass # 47 species 49 accessions
+
 # data distribution
 hist(oil_seedmass$mass_50) 
 hist(oil_seedmass$Lseedmass)# normal distribution after log transformation
@@ -45,25 +41,24 @@ nbur = 100000
 ### Gaussian priors
 priors <- list(R = list(V = 1, nu = 0.2),
                G = list(G1 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        #G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        #G3 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
+                        G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
+
 # mcmc glmm
-MCMCglmm::MCMCglmm(Loil.content  ~ Lseedmass, #  Loil.content   Lratio 
+MCMCglmm::MCMCglmm(Lratio  ~ Lseedmass, #  Loil.content   Lratio 
                    random = ~ animal + ID,
                    family = "gaussian", pedigree = nnls_orig, prior = priors, data = oil_seedmass,
                    nitt = nite, thin = nthi, burnin = nbur,
-                   verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g1
-g1 # Loil.content ~ Lseedmass
-g2 # Lratio ~ Lseedmass
+                   verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g4
+g3 # Loil.content ~ Lseedmass
+g4 # Lratio ~ Lseedmass
 
 # None show a significant relationship although negative trends
 
 x11()
-plot(g1)   
-summary(g1)  
+plot(g4)   
+summary(g4)  
 
-# longevity (raw germination curves and p50) in 2024 longevity analysis script more options####
+# longevity (raw germination curves and p50 (square root transformed)) in 2024 longevity analysis script more options####
 read.csv("data/longevity/species.csv", sep =",")-> longevity_sp
 setdiff(oil_data$Taxon,longevity_sp$Taxon)
 setdiff(longevity_sp$Taxon,oil_data$Taxon)
@@ -82,19 +77,17 @@ read.csv("data/longevity/germination.csv", sep =",") %>%
   mutate(ID = gsub(" ", "_", Taxon), animal = ID) %>%
   mutate(Loil.content = log(oil.content),
          Lratio=log(ratio))%>%
-  na.omit()%>%# remove species without sp_pref (Minuartia CF) and without oil content (C.ramosissimum, G.verna, G.campestris and P. pyrenaica)
+  na.omit()%>%
   as.data.frame()-> df24 
 
-unique(df24$familia)
+unique(df24$familia) # 16 families
 unique(df24$Taxon) #31 species
-setdiff(oil_data$Taxon,df24$Taxon)
-setdiff(longevity_sp$Taxon,df24$Taxon)
-setdiff(df22_new$Taxon,oil_data$Taxon)
+
 # data distribution
-hist(df24 $oil.content)
-hist(df24 $Loil.content) # almost normal distribution after log transformation
-hist(df24 $ratio) # almost  normal distributed
-hist(df24 $Lratio)# normal distributed
+hist(df24$oil.content)
+hist(df24$Loil.content) # almost normal distribution after log transformation
+hist(df24$ratio) # almost  normal distributed
+hist(df24$Lratio)# normal distributed
 
 
 ### Read tree
@@ -118,10 +111,8 @@ nbur = 100000
 ### Set priors for germination models
 
 priors <- list(R = list(V = 1, nu = 50), 
-               G = list(G1 = list(V = 1, nu = 1, alpha.mu = 0, alpha.V = 500), 
-                        #G2 = list(V = 1, nu = 1, alpha.mu = 0, alpha.V = 500),
-                        #G3 = list(V = 1, nu = 1, alpha.mu = 0, alpha.V = 500), 
-                        G4 = list(V = 1, nu = 1, alpha.mu = 0, alpha.V = 500)))
+               G = list(G1 = list(V = 1, nu = 1, alpha.mu = 0, alpha.V = 500),
+                        G2 = list(V = 1, nu = 1, alpha.mu = 0, alpha.V = 500)))
 
 ### All species model
 
@@ -137,7 +128,7 @@ m1 # germ ~ ageing * Loil.content
 m2 # germ ~ ageing * Lratio
 
 x11()
-plot(m1)
+plot(m2)
 
 # load("results/mcmc.Rdata")
 summary(m2)
@@ -172,74 +163,67 @@ summary(m1)$Gcovariances[3, 3] %>% round(2)
 # read data
 read.csv("data/species_traits_summary.csv", sep =",")%>% 
   dplyr::select(Taxon,  family, community, p50, oil.content, ratio)%>%
-  group_by(Taxon, community, family)%>%
-  summarise(p50 = mean(p50), oil.content= mean (oil.content), ratio = mean(ratio))%>%
-  na.omit() %>% # 
   rename(familia = family)%>%
   convert_as_factor(Taxon, familia) %>%
   mutate(ID = gsub(" ", "_", Taxon), animal = ID) %>%
   mutate(Loil.content = log(oil.content),
          Lratio=log(ratio),
-         Lp50 = log(p50))%>%
+         Lp50 = log(p50), 
+         SRp50 = sqrt(p50), )%>%
   na.omit()%>%
-  as.data.frame()-> oil_p50 #n=29
+  as.data.frame()-> oil_p50 #n=33
 
-unique(oil_p50$familia)
-unique(oil_p50$Taxon) #27 levels (silene ciliata and thymus in both communities)
+unique(oil_p50$familia) # 16 families
+unique(oil_p50$Taxon) #33 levels (silene ciliata and thymus in both communities)
 setdiff(oil_data$Taxon,oil_p50$Taxon)
 setdiff(longevity_sp$Taxon,oil_p50$Taxon)
 setdiff(oil_p50$Taxon,oil_data$Taxon)
 
-hist(oil_p50$p50) # normally distributed
+hist(oil_p50$p50) # normally distributed?
 hist(oil_p50$Lp50)
+hist(oil_p50$SRp50) # normally distributed'
 hist(oil_p50$oil.content) #not normally distributed
 hist(oil_p50$Loil.content)# almost normally distributed
-hist(oil_p50$ratio) # normally distributed
-hist(oil_p50$Lratio) 
+hist(oil_p50$ratio) # not normally distributed
+hist(oil_p50$Lratio) # almost normally distributed
 
 ### Gaussian priors
 priors <- list(R = list(V = 1, nu = 0.2),
                G = list(G1 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        #G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        #G3 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
+                        G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
 # model
-MCMCglmm::MCMCglmm( p50 ~ Loil.content , # Loil.content  Lraio
+MCMCglmm::MCMCglmm( SRp50 ~ Lratio , # Loil.content  Lratio
                    random = ~ animal + ID,
                    family = "gaussian", pedigree = nnls_orig, prior = priors, data = oil_p50,
                    nitt = nite, thin = nthi, burnin = nbur,
-                   verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g4
-g3 # p50 ~ Loil.content
-g4 # p50 ~ Lratio
+                   verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g6
+g5 # square root p50 ~ Loil.content
+g6 # square root p50 ~ Lratio
 
 x11()
-plot(g4)
-summary(g4)
+plot(g6)
+summary(g6)
 
 
-# T50 ()####
+# T50/EHS (from germination phenology experiment) ####
 read.csv("data/species_traits_summary.csv", sep =",")%>% 
-  dplyr::select(Taxon, family, community, mean_T50, F_T50, S_T50, oil.content, ratio)%>%
-  na.omit() %>%# 47 species
-  group_by(Taxon, family)%>%
-  summarise(mean_T50 = mean(mean_T50), F_T50 = mean(F_T50), S_T50 = mean(S_T50), 
-            oil.content= mean (oil.content), ratio = mean(ratio))%>%
+  dplyr::select(Taxon, family, community, T50_mean, 
+                EHS_mean ,oil.content, ratio)%>%
+  na.omit() %>%# 
+  group_by(Taxon, community, family)%>%
   rename(familia = family)%>%
   convert_as_factor(Taxon, familia) %>%
   mutate(ID = gsub(" ", "_", Taxon), animal = ID)%>%
   mutate(Loil.content = log(oil.content),
          Lratio=log(ratio),
-         LS_T50 = log(S_T50),
-         LF_T50 = log(F_T50),
-         Lmean_T50 = log(mean_T50))%>%
-  na.omit()%>%
-  as.data.frame()-> oil_t50 # 33 species
-hist(oil_t50$mean_T50) # not normally dsitributed
-hist(oil_t50$Lmean_T50)
-hist(oil_t50$F_T50)
-hist(oil_t50$LF_T50)
-hist(oil_t50$S_T50)
-hist(oil_t50$ LS_T50)
+         LEHS_mean = log (EHS_mean),
+         LT50_mean = log(T50_mean))%>%
+  as.data.frame()-> oil_t50 # 36 species
+unique(oil_t50$Taxon)
+hist(oil_t50$T50_mean) # not normally dsitributed
+hist(oil_t50$LT50_mean)
+hist(oil_t50$EHS_mean) # not normally dsitributed
+hist(oil_t50$LEHS_mean)  # normally dsitributed
 hist(oil_p50$oil.content) #not normally distributed
 hist(oil_p50$Loil.content)# almost normally distributed
 hist(oil_p50$ratio) # almost normally distributed
@@ -261,107 +245,35 @@ nbur = 100000
 ### Gaussian priors
 priors <- list(R = list(V = 1, nu = 0.2),
                G = list(G1 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        #G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        #G3 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
+                        G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
 # model
-MCMCglmm::MCMCglmm(mean_T50 ~ Lratio , # Lratio  Loil.content
+MCMCglmm::MCMCglmm(LEHS_mean~ Lratio , # Lratio  Loil.content
                    random = ~ animal + ID,
                    family = "gaussian", pedigree = nnls_orig, prior = priors, data = oil_t50,
                    nitt = nite, thin = nthi, burnin = nbur,
-                   verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g6
+                   verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g10
 
-g5 # mean_T50 ~ Loil.content
-g6 # mean_T50 ~ Lratio
-g7 # F_T50 ~ Loil.content not updated
-g8 # F_T50 ~ Lratio  not updated
-g9 # S_T50 ~ Loil.content not updated
-g10 # S_T50 ~ Lratio not updated
+g7 # T50_mean ~ Loil.content
+g8 # T50_mean ~ Lratio
+g9 # LEHS_mean ~ Loil.content 
+g10 # LEHS_mean~ Lratio  
+
 
 x11()
-plot(g6)
-summary(g6) 
-
-# 1 model with all biological correlates too many explanatory variables for n= 25 remove?? #########
-read.csv("data/species_traits_summary.csv", sep =",")%>% 
-  dplyr::select(Taxon,community , family, ecology, oil.content, ratio, mass_50, p50, mean_T50, F_T50, S_T50)%>% 
-  na.omit()%>%
-  group_by(Taxon, family)%>%
-  summarise(mean_T50 = mean(mean_T50), F_T50 = mean(F_T50), S_T50 = mean(S_T50), 
-            oil.content= mean (oil.content), ratio = mean(ratio),
-            p50 = mean(p50), mass_50 = mean(mass_50))%>%
-  rename(familia = family)%>%
-  convert_as_factor(Taxon, familia) %>%
-  mutate(ID = gsub(" ", "_", Taxon), animal = ID)%>%
-  mutate(Lmass_50 = log(mass_50),
-         Lp50 = log(p50),
-         Lmean_T50 = log(mean_T50),
-         LF_T50 = log(F_T50),
-         LS_T50 = log(S_T50),
-         Loil.content = log(oil.content),
-         Lratio=log(ratio))%>%
-  na.omit()-> oil_bio # N = 25
-
-oil_bio%>%
-  dplyr::select(oil.content, ratio, mass_50, p50, mean_T50, F_T50, S_T50, Lmass_50:Lratio)%>%
-  gather(trait, values, oil.content:Lratio)%>%
-  ggplot()+
-  geom_histogram(aes(values, fill = trait))+
-  facet_wrap(~trait, scales = "free")
-
-### Read tree
-
-phangorn::nnls.tree(cophenetic(ape::read.tree("results/tree_oil.tree")), 
-                    ape::read.tree("results/tree_oil.tree"), method = "ultrametric") -> 
-  nnls_orig
-
-nnls_orig$node.label <- NULL
-
-### Set number of iterations
-nite = 1000000
-nthi = 100
-nbur = 100000
-
-# shorter iterations
-#nite = 10000
-#nthi = 10
-#nbur = 100
-
-### Gaussian priors
-priors <- list(R = list(V = 1, nu = 0.2),
-               G = list(G1 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        #G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        #G3 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
-# correct glmm? ASK EDUARDO!!!
-MCMCglmm::MCMCglmm(ratio ~  scale(Lmass_50)+scale(Lp50)+scale(LS_T50),
-                   random = ~ animal + ID,
-                   family = "gaussian", pedigree = nnls_orig, prior = priors, data = oil_bio,
-                   nitt = nite, thin = nthi, burnin = nbur,
-                   verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> gbio_ratio
-gbio_oil # Loil.content ~  scale(Lmass_50)+scale(Lp50)+scale(LS_T50)
-gbio_ratio # ratio ~  scale(Lmass_50)+scale(Lp50)+scale(LS_T50)
-x11()
-plot(gbio_oil)
-summary(gbio_ratio) # nada significativo si ponemos todo junto en Loil.content ni en Lratio!!
-rm(ratio)
-rm(gbioratio)
+plot(g10)
+summary(g10) 
 
 ########################### ECOLOGICAL TRADE_OFFS KEEP working on!!!####################### 
-# Ecology/distribution ####
-read.csv()
-str(oil_data)
-oil_data%>% #n= 50
-  group_by(Taxon, family, ecology)%>%
-  summarise(oil.content = mean(oil.content), ratio = mean(ratio))%>%
+# Ecology####
+read.csv("data/species_traits_summary.csv")%>% #n= 49
   rename(familia = family)%>%
   convert_as_factor(Taxon, familia, ecology) %>%
   mutate(ID = gsub(" ", "_", Taxon), animal = ID)%>%
   mutate(Loil.content = log(oil.content),
          Lratio=log(ratio))%>%
   na.omit()-> oil_ecology # 48 species
-setdiff(oil_ecology$Taxon, oil_seedmass$Taxon)
-setdiff(oil_seedmass$Taxon,oil_ecology$Taxon)
+setdiff(oil_ecology$Taxon, oil_data$Taxon)
+setdiff(oil_data$Taxon,oil_ecology$Taxon)
 unique(oil_ecology$Taxon)
 
 hist(oil_ecology$oil.content) # not normally dsitributed
@@ -385,42 +297,47 @@ nbur = 100000
 ### Gaussian priors
 priors <- list(R = list(V = 1, nu = 0.2),
                G = list(G1 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        #G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        #G3 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
+                        G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
 # correct glm? ASK EDUARDO!!!
-MCMCglmm::MCMCglmm(Loil.content ~ ecology, # Lratio 
+MCMCglmm::MCMCglmm(Lratio ~ ecology, # Lratio Loil.content
                    random = ~ animal + ID,
                    family = "gaussian", pedigree = nnls_orig, prior = priors, data = oil_ecology,
                    nitt = nite, thin = nthi, burnin = nbur,
-                   verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g11
+                   verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g12
 
 g11 #Loil.content ~ ecology
 g12 # Lratio ~ ecology
 x11()
-plot(g3)
-summary(g3) 
+plot(g12)
+summary(g12) 
 # GDD ####
 # try quadratic explanatory variables
 read.csv("data/species_traits_summary.csv")%>%
+  dplyr::select(Taxon, community, family, oil.content, ratio, GDD, FDD, Snw)%>%
   na.omit () %>% # 36 species
   rename(familia = family)%>%
-  convert_as_factor(Taxon, community, familia, ecology) %>%
+  convert_as_factor(Taxon, community, familia) %>%
   mutate(ID = gsub(" ", "_", Taxon), animal = ID)%>%
   mutate(Loil.content = log(oil.content),
-         Lratio=log(ratio))%>%
-  na.omit()-> oil_sp_pref #
+         Lratio=log(ratio),
+         LFDD=log(FDD),
+         LGDD=log(GDD),
+         LSnw=log(Snw))%>%
+  as.data.frame()-> oil_sp_pref #46
+unique(oil_sp_pref$Taxon)
 
-
-# Gamma(link="log")
-a <- glmmTMB(Loil.content ~ GDD^2 + (1| familia) ,  family = gaussian, data= oil_sp_pref) 
-a <- glmmTMB(Lratio  ~ GDD^2  + (1| familia) , family = Gamma(link="log"), data= oil_sp_pref) 
-summary(a)
-residuals <- simulateResiduals (a) ; plot(residuals)
-# to compare modelsAIC(a, b)
+hist(oil_sp_pref$oil.content) # not normally dsitributed
+hist(oil_sp_pref$Loil.content) # normally distributed
+hist(oil_sp_pref$ratio)
+hist(oil_sp_pref$Lratio) # clearly normally distributed
+hist(oil_sp_pref$FDD)
+hist(oil_sp_pref$LFDD)# somewhat normally distributed
+hist(oil_sp_pref$GDD) # bimodal (one for each community most likely)
+hist(oil_sp_pref$LGDD) # still not normally distributed
+hist(oil_sp_pref$Snw)
+hist(oil_sp_pref$LSnw) # somewhat normally distributed?
 
 ##### MCMC 
-# take into account phylogeny! 
 phangorn::nnls.tree(cophenetic(ape::read.tree("results/tree_oil.tree")), 
                     ape::read.tree("results/tree_oil.tree"), method = "ultrametric") -> 
   nnls_orig
@@ -435,95 +352,23 @@ nbur = 100000
 ### Gaussian priors
 priors <- list(R = list(V = 1, nu = 0.2),
                G = list(G1 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        #G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        #G3 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
+                        G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
+
 # correct glm? ASK EDUARDO!!!
-MCMCglmm::MCMCglmm(Lratio ~ GDD, # ratio Loil.content
-                   random = ~ animal + ID,
-                   family = "gaussian", pedigree = nnls_orig, prior = priors, data = oil_sp_pref,
-                   nitt = nite, thin = nthi, burnin = nbur,
-                   verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g14
-g13 #Lratio ~ GDD
-g14 #Loil.content ~ GDD
-x11()
-plot(g13)
-summary(g14) 
-# FDD ####
-str(oil_sp_pref)
-# Gamma(link="log")
-a <- glmmTMB(Loil.content ~ FDD*community + (1| familia) ,  family = Gamma(link="log"), data= oil_sp_pref) 
-a <- glmmTMB(Lratio  ~ FDD*community  + (1| familia) , family = Gamma(link="log"), data= oil_sp_pref) 
-summary(a)
-residuals <- simulateResiduals (a) ; plot(residuals)
-# to compare modelsAIC(a, b)
-
-##### MCMC 
-# take into account phylogeny! 
-phangorn::nnls.tree(cophenetic(ape::read.tree("results/tree_oil.tree")), 
-                    ape::read.tree("results/tree_oil.tree"), method = "ultrametric") -> 
-  nnls_orig
-
-nnls_orig$node.label <- NULL
-
-### Set number of iterations
-nite = 1000000
-nthi = 100
-nbur = 100000
-
-### Gaussian priors
-priors <- list(R = list(V = 1, nu = 0.2),
-               G = list(G1 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        #G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        #G3 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
-# correct glm? ASK EDUARDO!!!
-MCMCglmm::MCMCglmm(Loil.content ~ FDD, # Lratio 
+MCMCglmm::MCMCglmm(Loil.content~ FDD, # Lratio Loil.content
                    random = ~ animal + ID,
                    family = "gaussian", pedigree = nnls_orig, prior = priors, data = oil_sp_pref,
                    nitt = nite, thin = nthi, burnin = nbur,
                    verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g15
 
-g15 #Loil.content ~ FDD
-g16 #Lratio ~ FDD
+g13 # Loil.content ~ GDD
+g14 # Lratio ~ GDD
+g15 # Loil.content ~ FDD
+g16 # Lratio ~ FDD
+g17 # Loil.content ~ Snow
+g18 # Lratio ~ Snow
+
 x11()
-plot(g15)
+plot(g13)
 summary(g15) 
 
-# 1 model with all ecological correlates ####
-oil_data%>% #n= 36
-  merge(sp_pref, by=c("Taxon", "community"))%>%
-  rename(familia = family)%>%
-  convert_as_factor(Taxon, species, community, familia, ecology) %>%
-  mutate(ID = gsub(" ", "_", Taxon), animal = ID)%>%
-  mutate(Loil.content = log(oil.content),
-         Lratio=log(ratio))%>%
-  na.omit()-> oil_eco #
-##### MCMC 
-# take into account phylogeny! 
-phangorn::nnls.tree(cophenetic(ape::read.tree("results/tree_oil.tree")), 
-                    ape::read.tree("results/tree_oil.tree"), method = "ultrametric") -> 
-  nnls_orig
-
-nnls_orig$node.label <- NULL
-
-### Set number of iterations
-nite = 1000000
-nthi = 100
-nbur = 100000
-
-### Gaussian priors
-priors <- list(R = list(V = 1, nu = 0.2),
-               G = list(G1 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        #G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        #G3 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
-# correct glm? ASK EDUARDO!!!
-MCMCglmm::MCMCglmm(Lratio ~ ecology*FDD + ecology*GDD, # ratio 
-                   random = ~ animal + ID,
-                   family = "gaussian", pedigree = nnls_orig, prior = priors, data = oil_eco,
-                   nitt = nite, thin = nthi, burnin = nbur,
-                   verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> geco
-x11()
-plot(geco)
-summary(geco)

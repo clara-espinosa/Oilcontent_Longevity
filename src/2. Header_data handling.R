@@ -15,9 +15,10 @@ read.csv("data/seed_mass.csv", sep = ",")%>%
   as.data.frame()-> seedmass # 66 species
 ### read longevity data (p50) ####
 read.csv("data/longevity/genstat.csv", sep= ",")%>%
+  filter(!year == "2023") %>%
   dplyr::select(Taxon, community, p50)%>%
   group_by(Taxon, community)%>%
-  summarise(p50 = mean(p50))-> p50 # 42 species
+  summarise(p50 = mean(p50))-> p50 # 40 species
 
 ### read germ data (t50/EHS) ####
 read.csv("data/t50_EHS_data.csv", sep= ";")->t50  #45 species with t50 trait
@@ -42,12 +43,15 @@ read.csv("data/t50_EHS_data.csv", sep= ";")->t50  #45 species with t50 trait
 
 read.csv("data/sp_pref.csv", sep =",") -> sp_pref # 127 species
 
-# merge all info from species and create 1 header dataset for plotting 
+# merge all traits from species and create 1 header dataset ######
 oil_data %>%
   left_join(p50,by= c("Taxon", "community") )%>%
   left_join(seedmass, by= c("Taxon", "community"))%>%
   left_join(t50, by= c("Taxon", "community", "family"))%>%
   left_join(sp_pref, by = c("Taxon", "community"))%>%
   dplyr::select(Taxon, community, family, ecology, 
-                oil.content, ratio, mass_50, p50, T50_F, T50_S,EHS_F, EHS_S , GDD, FDD, Snw)%>%
+                oil.content, ratio, 
+                mass_50, p50, 
+                T50_F, T50_S,T50_mean, EHS_F, EHS_S, EHS_mean,
+                GDD, FDD, Snw)%>%
   write.csv("results/species_traits_summary.csv")
