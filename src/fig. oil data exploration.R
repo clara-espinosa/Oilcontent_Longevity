@@ -282,5 +282,5 @@ ggpubr::ggarrange(fig3A, fig3B, fig3C,ncol =3, nrow= 1,common.legend = FALSE, wi
 ggpubr::ggarrange(fig3ABC, fig3DE,ncol =1, nrow= 2,common.legend = FALSE,heights = c(1.5,1), align = "h")->fig3;fig3
 
 
-ggsave(filename = "oil exploration updated.png", plot =fig3 , path = "results/figures", 
+ggsave(filename = "oil exploration.png", plot =fig3 , path = "results/figures", 
        device = "png", dpi = 600)

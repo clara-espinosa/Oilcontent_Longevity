@@ -2,6 +2,10 @@
 library(tidyverse);library(readxl);library(rstatix)
 library(vegan);library(ggpubr);library(ggrepel);library(viridis)
 
+read.csv("data/species_traits_summary.csv")-> summary_table
+summary_table%>%
+  get_summary_stats(T50_mean)
+
 #order like family fct relevel
 poales <- c("#78E208", "#45A747", "#396F3E")
 rosids <- c("#F2F9AA",  "#f3ec70","#f6e528","#Fad220","#fcb622", "darkgoldenrod3", "#f68b08","#ff7125" ,"#c87107",  "#8E5005") #, 
@@ -17,7 +21,6 @@ read.csv("data/species_traits_summary.csv")%>% # from script 2 header data handl
   na.omit()%>%
   group_by(Taxon, family)%>%
   summarise(mass_50 = mean(mass_50), oil.content= mean(oil.content), ratio=mean(ratio))%>%
-  #print(n=34)
   #mutate(trait = recode(trait, "oil.content"= "Oil content (%)", "ratio"= "Ratio UFA/SFA"))%>%
   mutate(family = as.factor(family))%>%
   mutate(family = fct_relevel(family,"Asteraceae","Campanulaceae",  "Apiaceae","Lamiaceae", "Orobanchaceae" ,
@@ -35,12 +38,13 @@ read.csv("data/species_traits_summary.csv")%>% # from script 2 header data handl
   #facet_grid(~trait, scales= "free")+
   #geom_text_repel (aes (y = log(mass_50), x = oil.content, label = Taxon), show.legend = F, size =5, max.overlaps = 15) +
   ggthemes::theme_tufte(base_size=12) + 
-  labs( title= "A) Seed mass", x= "Oil content (%)", y= "50 Seeds mass (log)")+ #tag = "A)",
-  annotate("text", label="Post mean: - 0.15\n pMCMC: 0.17", x=5.5, y=-0.5)+ # with log x = 5 , without log x= 200
+  labs( title= "A) Seed mass", x= "Oil content (%)", y= "Seed mass (log)")+ #tag = "A)",
+  annotate("text", label="Post mean: - 0.15\n pMCMC: 0.16", x=5.5, y=-0.5)+ # with log x = 5 , without log x= 200
   theme(text = element_text(family = "sans"),
         plot.title= element_text( size= 14, face = "bold"), #hjust = 0.5,
         strip.text = element_text (family = "sans",size= 12, face = "bold"),
         plot.tag.position =c(0.01,1), 
+        plot.margin = unit(c(0, 0,0,0), "cm"),
         legend.position = "none", 
         legend.title = element_blank(),
         legend.text = element_text(size = 10, color = "black"),
@@ -70,9 +74,10 @@ read.csv("data/species_traits_summary.csv")%>%
   #geom_text_repel (aes (x = seedmass, y = oil.content, label = species), show.legend = F, size =5, max.overlaps = 15) +
   ggthemes::theme_tufte(base_size=12) + 
   labs(tag = "", title= "", x= "Ratio UFA/SFA")+ #, y= "50 Seeds mass (log)"
-  annotate("text", label ="Post mean: - 0.03\n pMCMC: 0.562", x=4,y= -0.5)+
+  annotate("text", label ="Post mean: - 0.03\n pMCMC: 0.52", x=4,y= -0.5)+
   theme(text = element_text(family = "sans"),
         plot.title= element_text(hjust = 0.5, size= 14, face = "bold"),
+        plot.margin = unit(c(0, 0,0,0), "cm"),
         strip.text = element_text (family = "sans",size= 12, face = "bold"),
         plot.tag.position =c(0.01,1), 
         legend.position = "none", 
@@ -126,9 +131,9 @@ read.csv("data/species_traits_summary.csv")%>%
         axis.title.x = element_text(size = 12),
         axis.text = element_text(size = 10, color = "black"))  #-> fig4A_grid;fig4A_grid
 
-### PANEL B) viability loss x oil content and ratio Ufa/Sfa #####
-# germination curves and p50 OIL CONTENT
+### PANEL B) viability loss x oil content and ratio UFA/SFA #####
 # germination curves all species together
+library(viridis)
 read.csv("data/longevity/germination.csv", sep =",") %>%
   gather(scores, germinated, D7:D28) %>%
   group_by(code, ageing, seeds) %>%
@@ -141,27 +146,29 @@ read.csv("data/longevity/germination.csv", sep =",") %>%
   group_by(Taxon, ageing )%>%
   summarise(germPER = mean(germPER),  oil.content = mean(oil.content), ratio = mean(ratio))%>%
   ggplot(aes(x=ageing, y = germPER, group = Taxon, color= oil.content))+ #GDD
-  geom_smooth(method = "loess", se = FALSE, linewidth= 0.75)+
+  geom_line(linewidth=1)+
+  #geom_smooth(method = "loess", se = FALSE, linewidth= 0.75)+
   labs (x= "Ageing time", y= "Final germination")+
-  scale_color_viridis ()+
+  scale_color_viridis(name = "Oil content (%)")+
   ggthemes::theme_tufte(base_size=12) + 
   theme (text = element_text(family = "sans"),
          plot.title = element_text (face = "bold",size = 14), #hjust = 0.5,
          plot.tag.position = c(0,1),
          plot.margin = unit(c(0, 0,0,0), "cm"),
          axis.title.y = element_text (size=10),
-         axis.text.y = element_text (size = 10, color = "black"),
+         axis.text.y = element_text (size = 9, color = "black"),
          axis.title.x = element_text(size = 10), 
-         axis.text.x= element_text (size = 10, color = "black"),
+         axis.text.x= element_text (size = 9, color = "black"),
          strip.text = element_text( size = 10, hjust = 0),
-         legend.margin = margin(0, 0, 0, 0),
+         legend.margin = margin(-10, 0, 0, 0),
          strip.background = element_blank(), 
          panel.background = element_rect(color = "black", fill = NULL),
-         legend.title = element_text (size =10),
-         legend.text = element_text (size =10),
-         legend.position = "none", 
+         legend.title = element_text (size =10, vjust = 0.8),
+         legend.text = element_text (size =9),
+         legend.position = "bottom", 
+         legend.key.size = unit(0.3, "cm"),
          # legend.position = c(0.85, 0.5),
-         legend.box.background = element_rect(color = "black", size = 2))-> fig4B_oilcurves;fig4B_oilcurves
+         legend.box.background = element_blank())-> fig4B_oilcurves;fig4B_oilcurves
 
 # p50 scatterplot (genstat) OILCONTENT
 poales <- c("#78E208", "#45A747", "#396F3E")
@@ -189,7 +196,7 @@ read.csv("data/longevity/genstat.csv")%>%
   labs(title= "B) Seed longevity", y= "p50 (days)", x = "Oil content (%)")+ #, tag= "B)"
   #geom_text_repel(aes(x=oil.content, y=p50,label=Taxon))+
   geom_smooth(aes(y=p50, x=oil.content),method="lm", color= "black", se = F)+
-  annotate("text", label ="Post mean: - 5.526\n pMCMC: 0.15", y=3,x= 5)+
+  annotate("text", label ="Post mean: - 0.47\n pMCMC<0.001", y=1,x= 5)+
   scale_fill_manual (values=col2)+ #direction =-1
   scale_y_continuous (limits = c(0,50))+
   ggthemes::theme_tufte(base_size=12) + 
@@ -215,7 +222,8 @@ read.csv("data/longevity/genstat.csv")%>%
 # combine oil content vs longevity
 # combine
 library(patchwork)
-fig4B_oilp50+inset_element(fig4B_oilcurves, left=0.55, bottom =0.5, right=1, top=1)->fig4Boil;fig4Boil
+fig4B_oilp50+inset_element(fig4B_oilcurves, left=0.4, bottom =0.40, right=1, top=1)->fig4Boil;fig4Boil
+fig4B_oilcurves+inset_element(fig4B_oilp50, left=0.55, bottom =0.5, right=1, top=1)
 #fig4B_oilp50 + fig4B_ratiop50  + 
   #plot_layout(guides = 'auto')-> fig4B_p50;fig4B_p50
 
@@ -234,26 +242,28 @@ read.csv("data/longevity/germination.csv", sep =",") %>%
   group_by(Taxon, ageing )%>%
   summarise(germPER = mean(germPER),  oil.content = mean(oil.content), ratio = mean(ratio))%>%
   ggplot(aes(x=ageing, y = germPER, group = Taxon, color= ratio))+ #GDD
-  geom_smooth(method = "loess", se = FALSE, linewidth= 0.75)+
+  geom_line(linewidth =1)+
+  #geom_smooth(method = "loess", se = FALSE, linewidth= 0.75)+
   labs (x= "Ageing time", y= "Final germination")+
-  scale_color_viridis ()+
+  scale_color_viridis (name = "Ratio UFA/SFA", breaks = c(5,10,15))+
   ggthemes::theme_tufte(base_size=12) + 
   theme (text = element_text(family = "sans"),
          plot.title = element_text (face = "bold",size = 14), #hjust = 0.5,
          plot.tag.position = c(0,1),
          plot.margin = unit(c(0, 0,0,0), "cm"),
          axis.title.y = element_text (size=10),
-         axis.text.y = element_text (size = 10, color = "black"),
+         axis.text.y = element_text (size = 9, color = "black"),
          axis.title.x = element_text(size = 10), 
-         axis.text.x= element_text (size = 10, color = "black"),
+         axis.text.x= element_text (size = 9, color = "black"),
          strip.text = element_text( size = 10, hjust = 0),
          strip.background = element_blank(), 
          panel.background = element_rect(color = "black", fill = NULL),
-         legend.title = element_text (size =10),
-         legend.margin = margin(0, 0, 0, 0),
-         legend.text = element_text (size =10),
-         legend.position = "none", # legend.position = c(0.85, 0.5),
-         legend.box.background = element_rect(color = "black", size = 2))-> fig4B_ratiocurves;fig4B_ratiocurves
+         legend.title = element_text (size =10, vjust= 0.8),
+         legend.margin = margin(-10, 0, 0, 0),
+         legend.text = element_text (size =9),
+         legend.key.size = unit(0.3, "cm"),
+         legend.position = "bottom", # legend.position = c(0.85, 0.5),
+         legend.box.background = element_blank())-> fig4B_ratiocurves;fig4B_ratiocurves
 
 # p50 scatterplot (genstat) ratio
 read.csv("data/longevity/genstat.csv")%>%
@@ -274,7 +284,7 @@ read.csv("data/longevity/genstat.csv")%>%
   labs(title= "", y= "p50 (days)", x = "Ratio UFA/SFA", tag= "")+
   #geom_text_repel(aes(x=ratio, y=p50,label=Taxon))+
   geom_smooth(aes(y=p50, x=ratio),method="lm", color= "black", se = F)+
-  annotate("text", label ="Post mean: - 11.781\n pMCMC: 0.23", y=3.5,x= 5)+
+  annotate("text", label ="Post mean: - 0.28\n pMCMC: 0.055", y=1,x= 5.5)+
   scale_y_continuous (limits = c(0,50))+
   scale_fill_manual (values=col2)+ #direction =-1
   ggthemes::theme_tufte(base_size=12) + 
@@ -297,7 +307,8 @@ read.csv("data/longevity/genstat.csv")%>%
 
 # combine ratio vs longevity
 library(patchwork)
-fig4B_ratiop50+inset_element(fig4B_ratiocurves, left=0.55, bottom =0.5, right=1, top=1)->fig4Bratio;fig4Bratio
+fig4B_ratiop50+inset_element(fig4B_ratiocurves, left=0.4, bottom =0.4, right=1, top=1)->fig4Bratio;fig4Bratio
+
 fig4Boil + fig4Bratio+ 
   plot_layout(guides = 'auto')->fig4B;fig4B
 # combine oil + ratio
@@ -314,8 +325,8 @@ col3 <- c("#F2F9AA",  "#f3ec70","#f6e528","#Fad220", "#fcb622", "darkgoldenrod3"
 x11()
 # oil content
 read.csv("data/species_traits_summary.csv")%>%
-  dplyr::select(community, Taxon, family, mean_T50, oil.content, ratio)%>%
-  group_by(community, Taxon, family, mean_T50)%>%
+  dplyr::select(community, Taxon, family, T50_mean, oil.content, ratio)%>%
+  group_by(community, Taxon, family, T50_mean)%>%
   #gather(trait, value, oil.content:ratio)%>%
   #mutate(trait = as.factor(trait))%>%
   #mutate(trait = recode(trait, "oil.content"= "Oil content (%)", "ratio"= "Ratio UFA/SFA"))%>%
@@ -326,13 +337,13 @@ read.csv("data/species_traits_summary.csv")%>%
                                 "Poaceae",  "Cyperaceae", "Juncaceae"))%>% #"Primulaceae", "Fabaceae","Salicaceae",
   na.omit()%>%
   #data.frame()
-  ggplot(aes(y=(mean_T50/10), x = oil.content))+ #, fill = family
+  ggplot(aes(y=(T50_mean/10), x = oil.content))+ #, fill = family
   geom_point(aes(fill =as.factor(family)),shape = 21, size = 4, color = "black", show.legend = T)+
   geom_smooth(method= "lm", color= "black", se= F)+
   #facet_grid(~trait, scales= "free")+
   scale_fill_manual (values=col3)+
-  annotate("text", label ="Post mean: 25.1\n pMCMC: 0.348", x=30,y= 2.5)+
-  #geom_text_repel (aes (x = log(value), y = mean_T50, label = Taxon), show.legend = F, max.overlaps = 15) +
+  annotate("text", label ="Post mean: 31.7\n pMCMC: 0.13", x=30,y= 2.5)+
+  #geom_text_repel (aes (x = log(value), y = T50_mean, label = Taxon), show.legend = F, max.overlaps = 15) +
   ggthemes::theme_tufte(base_size=12) + 
   labs( title= "C) T50 (days)", x= "Oil content (%)", y= "T50 (days * 10)")+
   theme(text = element_text(family = "sans"),
@@ -340,7 +351,7 @@ read.csv("data/species_traits_summary.csv")%>%
         plot.title= element_text( size= 14, face = "bold"),
         plot.margin = unit(c(0,0,0,0),'cm'),
         strip.text = element_text (family = "sans",size= 12, face = "bold"),
-        legend.position = "none", 
+        legend.position = "bottom", 
         legend.title = element_blank(),
         legend.text = element_text(size = 10, color = "black"),
         panel.background = element_rect(color = "black", fill = NULL),
@@ -348,8 +359,8 @@ read.csv("data/species_traits_summary.csv")%>%
         axis.text = element_text(size = 10, color = "black"))-> fig4C_oil;fig4C_oil
 # ratio
 read.csv("data/species_traits_summary.csv")%>%
-  dplyr::select(community, Taxon, family, mean_T50, oil.content, ratio)%>%
-  group_by(community, Taxon, family, mean_T50)%>%
+  dplyr::select(community, Taxon, family, T50_mean, oil.content, ratio)%>%
+  group_by(community, Taxon, family, T50_mean)%>%
   #gather(trait, value, oil.content:ratio)%>%
   #mutate(trait = as.factor(trait))%>%
   #mutate(trait = recode(trait, "oil.content"= "Oil content (%)", "ratio"= "Ratio UFA/SFA"))%>%
@@ -360,13 +371,13 @@ read.csv("data/species_traits_summary.csv")%>%
                               "Poaceae",  "Cyperaceae", "Juncaceae"))%>% #"Primulaceae", "Fabaceae","Salicaceae",
   na.omit()%>%
   #data.frame()
-  ggplot(aes(y=(mean_T50/10), x = ratio))+ #, fill = family
+  ggplot(aes(y=(T50_mean/10), x = ratio))+ #, fill = family
   geom_point(aes(fill =as.factor(family)),shape = 21, size = 4, color = "black", show.legend = T)+
   geom_smooth(method= "lm", color= "black", se= F)+
   #facet_grid(~trait, scales= "free")+
   scale_fill_manual (values=col3)+
-  annotate("text", label ="Post mean: 125.6\n pMCMC: 0.073", x=18,y= 2.5)+
-  #geom_text_repel (aes (x = log(value), y = mean_T50, label = Taxon), show.legend = F, max.overlaps = 15) +
+  annotate("text", label ="Post mean: 79\n pMCMC: 0.1", x=18,y= 2.5)+
+  #geom_text_repel (aes (x = log(value), y = T50_mean, label = Taxon), show.legend = F, max.overlaps = 15) +
   ggthemes::theme_tufte(base_size=12) + 
   labs(x= "Ratio UFA/SFA" )+
   theme(text = element_text(family = "sans"),
@@ -374,7 +385,7 @@ read.csv("data/species_traits_summary.csv")%>%
         plot.title= element_text( size= 14, face = "bold"),
         plot.margin = unit(c(0,0,0,0),'cm'),
         strip.text = element_text (family = "sans",size= 12, face = "bold"),
-        legend.position = "none", 
+        legend.position = "bottom", 
         legend.title = element_blank(),
         legend.text = element_text(size = 10, color = "black"),
         panel.background = element_rect(color = "black", fill = NULL),
@@ -385,10 +396,13 @@ read.csv("data/species_traits_summary.csv")%>%
 #combine
 library(patchwork)
 fig4C_oil + fig4C_ratio+ 
-  plot_layout(guides = 'auto')-> fig4C;fig4C
-#combine all panels
-ggpubr::ggarrange(fig4A, fig4B, fig4C,ncol =1, nrow= 3,common.legend = FALSE, heights = c(1,1,1),align = "hv")->fig4;fig4
+  plot_layout(guides = 'collect') & theme(legend.position = "bottom")-> fig4C;fig4C
+
 x11()
 library(patchwork)
 fig4A / fig4B /fig4C +
-  plot_layout(heights = c(1,1.5,1))
+  plot_layout(heights = c(1,1.5,1))->fig4;fig4
+
+# save plots
+ggsave(filename = "fig 4 biological tradeoffs.png", plot =fig4 , path = "results/figures", 
+       device = "png", dpi = 600)
