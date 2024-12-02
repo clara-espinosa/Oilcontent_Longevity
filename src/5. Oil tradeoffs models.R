@@ -311,7 +311,6 @@ x11()
 plot(g12)
 summary(g12) 
 # GDD ####
-# try quadratic explanatory variables
 read.csv("data/species_traits_summary.csv")%>%
   dplyr::select(Taxon, community, family, oil.content, ratio, GDD, FDD, Snw)%>%
   na.omit () %>% # 36 species
@@ -355,11 +354,11 @@ priors <- list(R = list(V = 1, nu = 0.2),
                         G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
 
 # correct glm? ASK EDUARDO!!!
-MCMCglmm::MCMCglmm(Loil.content~ FDD, # Lratio Loil.content
+MCMCglmm::MCMCglmm(Lratio~ Snw, # Lratio Loil.content
                    random = ~ animal + ID,
                    family = "gaussian", pedigree = nnls_orig, prior = priors, data = oil_sp_pref,
                    nitt = nite, thin = nthi, burnin = nbur,
-                   verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g15
+                   verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g18
 
 g13 # Loil.content ~ GDD
 g14 # Lratio ~ GDD
@@ -369,6 +368,6 @@ g17 # Loil.content ~ Snow
 g18 # Lratio ~ Snow
 
 x11()
-plot(g13)
-summary(g15) 
+plot(g18)
+summary(g18) 
 
