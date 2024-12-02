@@ -35,8 +35,6 @@ read.csv("data/species_traits_summary.csv")%>% # from script 2 header data handl
   geom_smooth(method= "lm", color= "black", se=F)+
   scale_fill_manual (values=col)+
   scale_y_continuous (limits = c(-0.75, 6))+
-  #facet_grid(~trait, scales= "free")+
-  #geom_text_repel (aes (y = log(mass_50), x = oil.content, label = Taxon), show.legend = F, size =5, max.overlaps = 15) +
   ggthemes::theme_tufte(base_size=12) + 
   labs( title= "A) Seed mass", x= "Oil content (%)", y= "Seed mass (log)")+ #tag = "A)",
   annotate("text", label="Post mean: - 0.15\n pMCMC: 0.16", x=5.5, y=-0.5)+ # with log x = 5 , without log x= 200
@@ -327,21 +325,17 @@ x11()
 read.csv("data/species_traits_summary.csv")%>%
   dplyr::select(community, Taxon, family, T50_mean, oil.content, ratio)%>%
   group_by(community, Taxon, family, T50_mean)%>%
-  #gather(trait, value, oil.content:ratio)%>%
-  #mutate(trait = as.factor(trait))%>%
-  #mutate(trait = recode(trait, "oil.content"= "Oil content (%)", "ratio"= "Ratio UFA/SFA"))%>%
   mutate(family = as.factor(family))%>%
-  mutate(family = fct_relevel(family,"Asteraceae","Campanulaceae","Apiaceae","Lamiaceae", "Orobanchaceae" ,
-                              "Plantaginaceae", "Caryophyllaceae", "Plumbaginaceae",  
-                               "Brassicaceae","Cistaceae", "Crassulaceae","Saxifragaceae",  
-                                "Poaceae",  "Cyperaceae", "Juncaceae"))%>% #"Primulaceae", "Fabaceae","Salicaceae",
-  na.omit()%>%
-  #data.frame()
+  mutate(family = fct_relevel(family,"Asteraceae","Campanulaceae",  "Apiaceae","Lamiaceae", "Orobanchaceae" ,
+                              "Plantaginaceae","Gentianaceae" ,"Primulaceae","Caryophyllaceae", "Plumbaginaceae",  
+                              "Fabaceae","Salicaceae","Brassicaceae", "Cistaceae", 
+                              "Crassulaceae", "Saxifragaceae", "Poaceae", 
+                              "Cyperaceae", "Juncaceae"))%>%
   ggplot(aes(y=(T50_mean/10), x = oil.content))+ #, fill = family
   geom_point(aes(fill =as.factor(family)),shape = 21, size = 4, color = "black", show.legend = T)+
   geom_smooth(method= "lm", color= "black", se= F)+
   #facet_grid(~trait, scales= "free")+
-  scale_fill_manual (values=col3)+
+  scale_fill_manual (values=col,guide = guide_legend(nrow = 3) )+
   annotate("text", label ="Post mean: 31.7\n pMCMC: 0.13", x=30,y= 2.5)+
   #geom_text_repel (aes (x = log(value), y = T50_mean, label = Taxon), show.legend = F, max.overlaps = 15) +
   ggthemes::theme_tufte(base_size=12) + 
@@ -361,21 +355,17 @@ read.csv("data/species_traits_summary.csv")%>%
 read.csv("data/species_traits_summary.csv")%>%
   dplyr::select(community, Taxon, family, T50_mean, oil.content, ratio)%>%
   group_by(community, Taxon, family, T50_mean)%>%
-  #gather(trait, value, oil.content:ratio)%>%
-  #mutate(trait = as.factor(trait))%>%
-  #mutate(trait = recode(trait, "oil.content"= "Oil content (%)", "ratio"= "Ratio UFA/SFA"))%>%
   mutate(family = as.factor(family))%>%
-  mutate(family = fct_relevel(family,"Asteraceae","Campanulaceae","Apiaceae","Lamiaceae", "Orobanchaceae" ,
-                              "Plantaginaceae", "Caryophyllaceae", "Plumbaginaceae",  
-                              "Brassicaceae","Cistaceae", "Crassulaceae","Saxifragaceae",  
-                              "Poaceae",  "Cyperaceae", "Juncaceae"))%>% #"Primulaceae", "Fabaceae","Salicaceae",
-  na.omit()%>%
-  #data.frame()
+  mutate(family = fct_relevel(family,"Asteraceae","Campanulaceae",  "Apiaceae","Lamiaceae", "Orobanchaceae" ,
+                              "Plantaginaceae","Gentianaceae" ,"Primulaceae","Caryophyllaceae", "Plumbaginaceae",  
+                              "Fabaceae","Salicaceae","Brassicaceae", "Cistaceae", 
+                              "Crassulaceae", "Saxifragaceae", "Poaceae", 
+                              "Cyperaceae", "Juncaceae"))%>%
   ggplot(aes(y=(T50_mean/10), x = ratio))+ #, fill = family
   geom_point(aes(fill =as.factor(family)),shape = 21, size = 4, color = "black", show.legend = T)+
   geom_smooth(method= "lm", color= "black", se= F)+
   #facet_grid(~trait, scales= "free")+
-  scale_fill_manual (values=col3)+
+  scale_fill_manual (values=col,guide = guide_legend(nrow = 3))+
   annotate("text", label ="Post mean: 79\n pMCMC: 0.1", x=18,y= 2.5)+
   #geom_text_repel (aes (x = log(value), y = T50_mean, label = Taxon), show.legend = F, max.overlaps = 15) +
   ggthemes::theme_tufte(base_size=12) + 
@@ -396,7 +386,7 @@ read.csv("data/species_traits_summary.csv")%>%
 #combine
 library(patchwork)
 fig4C_oil + fig4C_ratio+ 
-  plot_layout(guides = 'collect') & theme(legend.position = "bottom")-> fig4C;fig4C
+  plot_layout(guides = 'collect')&theme(legend.position = "bottom") -> fig4C;fig4C
 
 x11()
 library(patchwork)
