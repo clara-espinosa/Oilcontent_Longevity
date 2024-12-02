@@ -2,6 +2,10 @@
 library(tidyverse);library(readxl);library(rstatix)
 library(ggrepel):library(vegan);library(ggpubr)
 
+# descriptive statistics
+View (oil_data_full)
+oil_data_full%>%
+
 #### PANEL A) Total oil content (%) per species ####
 #order like family fct relevel
 poales <- c("#78E208", "#45A747", "#396F3E")
@@ -58,10 +62,14 @@ read.csv("data/species_oil.csv")%>%
 
 #### PANEL B) oil types percentatges per sp (% specific oil /total oil ID) ####
 library(viridis)
+library(scales)
+
+show_col(viridis_pal()(6))
+
 read.csv("data/species_oil.csv")%>%
   merge(oil_data_full)%>%
-  dplyr::select(Taxon, family, C12.0:C24.1n9)%>%
-  gather(oil_type, oil_PER, C12.0:C24.1n9)%>%
+  dplyr::select(Taxon, family, C16.0, C18.2n6c, C18.1n9c, C18.3n3, C22.1n9, C18.3n6)%>%
+  gather(oil_type, oil_PER, C16.0:C18.3n6)%>%
   group_by(Taxon, family, oil_type)%>%
   summarise(oil_PER = mean(oil_PER)) %>%
   mutate(Taxon = as.factor(Taxon))%>%
@@ -81,11 +89,19 @@ read.csv("data/species_oil.csv")%>%
                              "Conopodium majus", "Dethawia splendens", "Jasione cavanillesii", 
                              "Phyteuma hemisphaericum", "Jurinea humilis", "Solidago virgaurea", 
                              "Phalacrocarpum oppositifolium"))%>% 
-  filter (oil_PER>3) %>% # if filter above 3% change geom_bar position = fill
+  group_by(Taxon)%>%
+  mutate(other= (100-sum(oil_PER)))%>%
+  spread(oil_type, oil_PER)%>%
+  gather(oil_type, oil_PER, other:C22.1n9)%>%
+  #filter (oil_PER>10) %>% # if filter above 3% change geom_bar position = fill
+  #mutate(oil_type= ifelse(oil_mean<10, "other",oil_type ))%>%
+  #group_by(Taxon, oil_type)%>%
+  #summarise(oil_PER= sum(oil_PER))%>%
   ggplot(aes(x=Taxon, y= oil_PER, fill= oil_type))+
-  geom_bar(position = "fill", stat = "identity",  color = "black", show.legend = T)+ #position = "stack", 
+  geom_bar(position = position_stack(reverse=T), stat = "identity",  color = "black", show.legend = T)+ #position = "stack", 
   coord_flip()+
-  scale_fill_viridis_d (name= "", guide = guide_legend (title.position = "top",direction = "horizontal")) +
+  scale_fill_manual(name= "", values = c("#440154FF", "#414497FF", "#2A788EFF", "#22A884FF", "#7AD151FF", "#FDE725FF", "lightgrey"), 
+                    guide = guide_legend (title.position = "top",direction = "horizontal")) +
   ggthemes::theme_tufte(base_size=12) + 
   labs(tag = "B)", y= "Oil content (relative %)")+# title= "FA types  (>3%)", 
   theme(text = element_text(family = "sans"),
