@@ -31,6 +31,26 @@ read.csv("data/oil_data.csv", sep= ";")%>%
   dplyr::select(Taxon,  family, community, year_analisis, ecology, oil.content, ratio, UFA, SFA, C12.0:C24.1n9)-> oil_data_full
 
 
+# descriptive statistics
+read.csv("data/oil_data.csv", sep= ";")%>%  
+  filter(units == "percentage")%>%
+  gather(oil_type, oil_PER, 7:32)%>%
+  group_by (oil_type)%>%
+  get_summary_stats(oil_PER)%>%
+  write.csv("results/supplementary/FA types summary.csv")
+
+read.csv("data/oil_data.csv", sep= ";")%>%  
+  filter(units == "percentage")%>%
+   dplyr:: select (Taxon,C18.2n6c, C18.1n9c, C18.3n3, C16.0)%>%
+  gather(oil_type, oil_PER, 2:5)%>%
+  group_by(Taxon)%>%
+  summarise(oil_PER= sum(oil_PER))%>%
+  get_summary_stats()
+
+oil_data_full%>%
+  dplyr::select(Taxon, family, ratio, UFA, SFA)%>%
+  group_by(family)%>%
+  get_summary_stats(ratio)
 #### PCA EXPLORATION ####
 # check correlation of FAMEs with <3% relative proportion
 oil_data_full%>%

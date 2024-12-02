@@ -25,6 +25,12 @@ read.csv("data/oil_fulldataset.csv", sep = ";")%>%
   na.omit()%>%
   as.data.frame()-> full_oil_analysis
 
+# descriptive statistics
+full_oil_analysis%>% 
+  dplyr::select(Taxon, ecology, oil_content, seed_mass)%>%
+  #group_by(ecology)%>%
+  get_summary_stats(seed_mass)
+
 hist(full_oil_analysis$Loil_content) # normally distributed
 hist(full_oil_analysis$Lseed_mass)# normally distributed
 
@@ -58,28 +64,30 @@ MCMCglmm::MCMCglmm(Loil_content ~ ecology,
 
 plot(g1)
 summary(g1) 
-
+x11()
 read.csv("data/oil_fulldataset.csv", sep = ";")%>%
   convert_as_factor(family, ecology)%>%
   mutate(ecology= fct_relevel(ecology, "Strict lowland", "Generalist", "Strict alpine"))%>%
   ggplot()+
   geom_boxplot(aes(x=ecology, y=oil_content, fill=ecology), color= "black")+
   geom_point(aes(x=ecology, y=oil_content, fill=ecology), color= "black", alpha = 0.5, position = "jitter", shape = 21, size= 4, show.legend = F)+
-  scale_fill_manual (name= "Ecology distribution", values = c("orange3", "darkcyan", "orchid4"))+
+  scale_fill_manual (name= "Ecology distribution", values = c("orange3", "darkcyan", "orchid4"), 
+                     guide = guide_legend (title.position = "top",direction = "horizontal"))+
   ggthemes::theme_tufte(base_size=12) + 
-  labs( title= "Species oil content (%)", y= "Oil content (%)")+ #tag = "A)",
+  labs( title= "A) Species oil content (%)", y= "Oil content (%)")+ #",
   theme(text = element_text(family = "sans"),
         plot.title = element_text (size= 14),
-        legend.position = "bottom", 
-        plot.margin = unit(c(0, 0,0,0), "cm"),
-        legend.title = element_text(size = 12, color = "black"),
+        legend.position = c(0.5,-0.06), 
+        plot.margin = unit(c(0, 0,0.2,0.1), "cm"),
+        legend.title = element_text(size = 12, color = "black", hjust = 0.5),
         legend.text = element_text(size = 10, color = "black"),
         legend.key = element_rect(fill = NA, color = NA),
+        legend.box.margin = unit(c(0, 0,0,0), "cm"),
         panel.background = element_rect(color = "black", fill = NULL),
         axis.title = element_text(size = 12),
         axis.title.x = element_blank(),
         axis.text.x = element_blank(),
-        axis.text.y = element_text(size = 10, color = "black"))
+        axis.text.y = element_text(size = 10, color = "black"))-> fig2A;fig2A
   
 # 2. Relationship between oil content and seed mass (trend but not significant, too much variation) ####
 str(full_oil_analysis)
@@ -111,14 +119,22 @@ read.csv("data/oil_fulldataset.csv", sep = ";")%>%
   #geom_smooth(aes(x=seed_mass, y=oil_content),method = "glm", color = "black")+
   scale_fill_manual (name= "Families", values=col)+
   ggthemes::theme_tufte(base_size=12) + 
-  labs( title = "Oil content seed mass relationship", y= "Oil content (%)", x= "Seed mass (mg)")+ 
+  labs( title = "B) Oil content vs seed mass relationship", y= "Oil content (%)", x= "Seed mass (mg)")+ 
   theme(text = element_text(family = "sans"),
         plot.title = element_text (size= 14),
         legend.position = "right", 
-        plot.margin = unit(c(0, 0,0,0), "cm"),
+        plot.margin = unit(c(0, 0,0.2,0.1), "cm"),
         legend.title = element_text(size = 12, color = "black", face = "bold"),
         legend.text = element_text(size = 10, color = "black"),
         panel.background = element_rect(color = "black", fill = NULL),
         axis.title = element_text(size = 12),
         axis.text.x = element_text(size = 10, color = "black"),
-        axis.text.y = element_text(size = 10, color = "black"))
+        axis.text.y = element_text(size = 10, color = "black"))-> fig2B;fig2B
+
+# combine plots
+library(patchwork)
+fig2A + fig2B + plot_layout(widths= c(0.45, 0.55))-> fig2;fig2
+
+# save plots
+ggsave(filename = "regional patterns.png", plot =fig2 , path = "results/figures", 
+        device = "png", dpi = 600) #scale = 1, height = 150, width = 180, units = "mm",
