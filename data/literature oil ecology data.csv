@@ -7,15 +7,14 @@ Anthyllis vulneraria;Anthvuln;Fabales;Fabaceae;Generalist;6.428;215.94;own_data
 Arenaria erinacea;Arenerin;Caryophyllales;Caryophyllaceae;Strict alpine;2.265;19.087;own_data
 Armeria cantabrica;Armecant;Caryophyllales;Plumbaginaceae;Strict alpine;2.959;90.78571429;own_data
 Armeria duriaei;Armeduri;Caryophyllales;Plumbaginaceae;Strict alpine;4.328;75.698;own_data
-Avenella flexuosa;Avenflex;Poales;Poaceae;Generalist;;49.28571429;own_data
+Avenella flexuosa;Avenflex;Poales;Poaceae;Generalist;1.192;49.28571429;own_data
 Carex rostrata;Carerost;Poales;Cyperaceae;Generalist;16.7;15.5;SID
 Carex sempervirens;Caresemp;Poales;Cyperaceae;Strict alpine;15.004;47;own_data
 Carex vesicaria ;Carevesi;Poales;Cyperaceae;Strict lowland;8.5;90.5;SID
 Cerastium perfoliatum;Ceraperf;Caryophyllales;Caryophyllaceae;Strict lowland;3.8;13.5;SID
-Cerastium ramosissimum;Ceraramo;Caryophyllales;Caryophyllaceae;Generalist;;6.563;own_data
-Cerastium ramosissimum;Ceraramo;Caryophyllales;Caryophyllaceae;Generalist;4.1;31.5;SID
+Cerastium ramosissimum;Ceraramo;Caryophyllales;Caryophyllaceae;Generalist;3.201;6.563;own_data
 Conopodium majus;Conomaju;Apiales;Apiaceae;Generalist;3.482;75.499;own_data
-Dethawia splendens;Dethsple;Apiales;Apiaceae;Strict alpine;;132.3155556;own_data
+Dethawia splendens;Dethsple;Apiales;Apiaceae;Strict alpine;17.466;132.3155556;own_data
 Dianthus barbatus;Dianbarb;Caryophyllales;Caryophyllaceae;Generalist;6.1;49.5;SID
 Dianthus langeanus;Dianlang;Caryophyllales;Caryophyllaceae;Strict alpine;4.362;42.564;own_data
 Festuca arundinacea;Festarun ;Poales;Poaceae;Generalist;1.75;118.5;SID
@@ -33,7 +32,6 @@ Iberis carnosa;Ibercarn;Brassicales;Brassicaceae;Strict alpine;18.226;75.154;own
 Jasione cavanillesii;Jasicava;Asterales;Campanulaceae;Strict alpine;34.198;5.603;own_data
 Jurinea anatolica ;Jurianat;Asterales;Asteraceae;Strict lowland;24;185;SID
 Jurinea humilis;Jurihumi;Asterales;Asteraceae;Generalist;8.253;267.422;own_data
-Jurinea humilis;Jurihumi.1;Asterales;Asteraceae;Generalist;19.323;267.422;own_data
 Kobresia myosuroides;Kobrmyos;Poales;Cyperaceae;Strict alpine;6.124;41.3;own_data
 Koeleria glaucovirens;Koelglau;Poales;Poaceae;Generalist;5.6;55;SID
 Koeleria vallesiana;Koelvall;Poales;Poaceae;Generalist;9.637;32.8;own_data
