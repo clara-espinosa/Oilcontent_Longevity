@@ -18,8 +18,8 @@ read.csv("data/longevity/genstat.csv", sep= ",")%>%
   filter(!year == "2023") %>%
   dplyr::select(Taxon, community, p50)%>%
   group_by(Taxon, community)%>%
-  summarise(p50 = mean(p50))-> p50 # 40 species
-
+  summarise(p50 = mean(p50))-> p50 # 37 species
+unique(p50$Taxon)
 ### read germ data (t50/EHS) ####
 read.csv("data/t50_EHS_data.csv", sep= ";")->t50  #45 species with t50 trait
   #full_join(read.csv("data/germ_drivers_data.csv")) -> germ_traits # %>%  
@@ -41,8 +41,8 @@ read.csv("data/t50_EHS_data.csv", sep= ";")->t50  #45 species with t50 trait
 # consider only plots where each species has at least 10% coverage
 # climatic variables weighted per coverage 
 
-read.csv("data/sp_pref.csv", sep =",") -> sp_pref # 127 species
-
+read.csv("data/sp_pref.csv", sep =";") -> sp_pref # 113 species
+unique(sp_pref$Taxon)
 # merge all traits from species and create 1 header dataset ######
 oil_data %>%
   left_join(p50,by= c("Taxon", "community") )%>%

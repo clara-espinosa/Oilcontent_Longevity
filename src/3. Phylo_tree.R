@@ -29,7 +29,7 @@ plot(tree$scenario.3)
 
 write.tree(tree$scenario.3, file = "results/tree_oil_fulldataset.tree")
 
-# phylosignal tree graph 
+# phylosignal tree graph  (remove??)
 ape::read.tree("results/tree_oil_fulldataset.tree")-> tree
 x11()
 plot(tree)
@@ -87,7 +87,7 @@ plot(tree$scenario.3)
 
 write.tree(tree$scenario.3, file = "results/tree_oil.tree")
 
-# phylosignal tree graph ###
+# phylosignal tree graph ### (remove??)
 ape::read.tree("results/tree_oil.tree")-> tree
 x11()
 plot(tree)
@@ -119,7 +119,7 @@ gridplot.phylo4d (obj_oil2 ,  tip.cex = 1.5, show.trait = T) #tree.type = "fan",
 phyloSignal(obj_oil2 )
 phyloCorrelogram (obj_oil2 )
 
-### Phylo tree only species with longevity data #####
+### Phylo tree only species with longevity data  Remove??#####
 
 read.csv("data/longevity/species.csv", sep =",") %>%
   separate(Taxon, into = c("genus", "species"), sep = " ") %>%

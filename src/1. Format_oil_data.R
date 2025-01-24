@@ -37,7 +37,7 @@ read.csv("data/oil_data.csv", sep= ";")%>%
   gather(oil_type, oil_PER, 7:32)%>%
   group_by (oil_type)%>%
   get_summary_stats(oil_PER)%>%
-  write.csv("results/supplementary/FA types summary.csv")
+  write.csv("results/supplementary/Table S2. FA types summary.csv")
 
 read.csv("data/oil_data.csv", sep= ";")%>%  
   filter(units == "percentage")%>%

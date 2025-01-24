@@ -2,8 +2,6 @@ library(tidyverse);library (rstatix);library (stringr);library(viridis)
 library(ggpattern); library (vegan) ;library (ggrepel)
 library(lme4); library(glmmTMB); library (DHARMa) 
 
-read.csv("data/species_traits_summary.csv")%>%# from script header data handling
-  
 ############################################ BIOLOGICAL TRADE-OFFS #################################################
 # seed mass (log transformed) #####
 read.csv("data/species_traits_summary.csv")%>%# from script header data handling
@@ -81,7 +79,7 @@ read.csv("data/longevity/germination.csv", sep =",") %>%
   as.data.frame()-> df24 
 
 unique(df24$familia) # 16 families
-unique(df24$Taxon) #31 species
+unique(df24$Taxon) 
 
 # data distribution
 hist(df24$oil.content)
