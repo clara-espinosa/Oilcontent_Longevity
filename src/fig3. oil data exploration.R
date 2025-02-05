@@ -207,7 +207,7 @@ pca_oil$var$coord[, 1:2] %>%
 poales <- c("#78E208", "#45A747", "#396F3E")
 rosids <- c("#F2F9AA",  "#f3ec70","#f6e528","#Fad220","#fcb622", "darkgoldenrod3",  "#f68b08","#ff7125" ,"#c87107",  "#8E5005") #, 
 asterids <- c("#08f9dd", "#16cacb", "#21a8be", "#2d7faf", "#275381", "#42346f")
-col <- c("#F2F9AA",  "#f3ec70","#f6e528","#Fad220","#fcb622", "darkgoldenrod3", "#f68b08", "#ff7125" ,,"#c87107",  "#8E5005",
+col <- c("#F2F9AA",  "#f3ec70","#f6e528","#Fad220","#fcb622", "darkgoldenrod3", "#f68b08", "#ff7125","#c87107",  "#8E5005",
          "#08f9dd", "#16cacb", "#21a8be", "#2d7faf", "#275381", "#42346f",
          "#78E208", "#45A747", "#396F3E")
 x11()
