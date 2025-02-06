@@ -1,0 +1,83 @@
+Taxon,species,order,family,ecology,oil_content,50seed_mass_mg,source
+Androsace maxima,Andrmaxi,Ericales,Primulaceae,Strict lowland,8.9,59,SID
+Androsace villosa,Andrvill,Ericales,Primulaceae,Strict alpine,4.883,66.6,own_data
+Anthyllis cornicina,Anthcorn,Fabales,Fabaceae,Strict lowland,9,76,SID
+Anthyllis lotoides,Anthloto,Fabales,Fabaceae,Strict lowland,7.3,53.5,SID
+Anthyllis vulneraria,Anthvuln,Fabales,Fabaceae,Generalist,6.428,215.94,own_data
+Arenaria erinacea,Arenerin,Caryophyllales,Caryophyllaceae,Strict alpine,2.265,19.087,own_data
+Armeria cantabrica,Armecant,Caryophyllales,Plumbaginaceae,Strict alpine,2.959,90.78571429,own_data
+Armeria duriaei,Armeduri,Caryophyllales,Plumbaginaceae,Strict alpine,4.328,75.698,own_data
+Avenella flexuosa,Avenflex,Poales,Poaceae,Generalist,1.192,49.28571429,own_data
+Carex rostrata,Carerost,Poales,Cyperaceae,Generalist,16.7,15.5,SID
+Carex sempervirens,Caresemp,Poales,Cyperaceae,Strict alpine,15.004,47,own_data
+Carex vesicaria,Carevesi,Poales,Cyperaceae,Strict lowland,8.5,90.5,SID
+Cerastium perfoliatum,Ceraperf,Caryophyllales,Caryophyllaceae,Strict lowland,3.8,13.5,SID
+Cerastium ramosissimum,Ceraramo,Caryophyllales,Caryophyllaceae,Generalist,3.201,6.563,own_data
+Conopodium majus,Conomaju,Apiales,Apiaceae,Generalist,3.482,75.499,own_data
+Dethawia splendens,Dethsple,Apiales,Apiaceae,Strict alpine,17.466,132.3155556,own_data
+Dianthus barbatus,Dianbarb,Caryophyllales,Caryophyllaceae,Generalist,6.1,49.5,SID
+Dianthus langeanus,Dianlang,Caryophyllales,Caryophyllaceae,Strict alpine,4.362,42.564,own_data
+Festuca arundinacea,Festarun ,Poales,Poaceae,Generalist,1.75,118.5,SID
+Festuca elatior,Festelat,Poales,Poaceae,Strict lowland,1.6,80,SID
+Festuca glacialis,Festglac,Poales,Poaceae,Strict alpine,1.363,28.8,own_data
+Festuca ovina,Festovin,Poales,Poaceae,Generalist,2.2,32,SID
+Festuca summilusitana,Festsumm,Poales,Poaceae,Strict alpine,1.48,82.3439,own_data
+Gentiana lutea,Gentlute,Gentianales,Gentianaceae,Generalist,26,74.5,SID
+Gentiana verna,Gentvern,Gentianales,Gentianaceae,Strict alpine,31.118,4.986,own_data
+Gypsophila repens,Gypsrepe,Caryophyllales,Caryophyllaceae,Strict alpine,3.587,24.5,own_data
+Helianthemum canum,Helicanu,Malvales,Cistaceae,Generalist,5.21,28.5,own_data
+Helianthemum urrielense,Heliurri,Malvales,Cistaceae,Strict alpine,9.171,33.8,own_data
+Helictochloa marginata,Helimarg,Poales,Poaceae,Generalist,3.449,138.1,own_data
+Iberis carnosa,Ibercarn,Brassicales,Brassicaceae,Strict alpine,18.226,75.154,own_data
+Jasione cavanillesii,Jasicava,Asterales,Campanulaceae,Strict alpine,34.198,5.603,own_data
+Jurinea anatolica,Jurianat,Asterales,Asteraceae,Strict lowland,24,185,SID
+Jurinea humilis,Jurihumi,Asterales,Asteraceae,Generalist,8.253,267.422,own_data
+Kobresia myosuroides,Kobrmyos,Poales,Cyperaceae,Strict alpine,6.124,41.3,own_data
+Koeleria glaucovirens,Koelglau,Poales,Poaceae,Generalist,5.6,55,SID
+Koeleria vallesiana,Koelvall,Poales,Poaceae,Generalist,9.637,32.8,own_data
+Luzula caespitosa,Luzucaes,Poales,Juncaceae,Strict alpine,3.372,97.71071429,own_data
+Minuartia recurva,Minurecu,Caryophyllales,Caryophyllaceae,Strict alpine,3.289,15.632,own_data
+Minuartia verna,Minuvern,Caryophyllales,Caryophyllaceae,Strict alpine,5.144,24.9,own_data
+Neoschischkinia truncatula,Neostrun,Poales,Poaceae,Generalist,3.265,4.716,own_data
+Pedicularis pyrenaica,Pedipyre,Lamiales,Orobanchaceae,Strict alpine,18.196,36.27272727,own_data
+Phalacrocarpum oppositifolium,Phaloppo,Asterales,Asteraceae,Generalist,24.644,113.1,own_data
+Phyteuma hemisphaericum,Phythemi,Asterales,Campanulaceae,Strict alpine,19.685,4.221,own_data
+Plantago albicans,Planalbi,Lamiales,Plantaginaceae,Strict lowland,6.4,49,SID
+Plantago alpina,Planalpi,Lamiales,Plantaginaceae,Strict alpine,10.529,19.3,own_data
+Plantago aristata,Planaris,Lamiales,Plantaginaceae,Strict lowland,6.2,75.5,SID
+Plantago holosteum,Planholo,Lamiales,Plantaginaceae,Generalist,8.591,44.045,own_data
+Plantago lagopus,Planlago,Lamiales,Plantaginaceae,Strict lowland,7.1,17.5,SID
+Plantago lanceolata,Planlanc,Lamiales,Plantaginaceae,Generalist,6.73,67.5,SID
+Plantago major,Planmajo,Lamiales,Plantaginaceae,Generalist,15.5,9.5,SID
+Salix breviserrata,Salibrev,Malpighiales,Salicaceae,Strict alpine,5.687,4.14,own_data
+Saxifraga conifera,Saxiconi,Saxifragales,Saxifragaceae,Strict alpine,30.123,2.275,own_data
+Saxifraga oppositifolia,Saxioppo,Saxifragales,Saxifragaceae,Strict alpine,32.646,5.254,own_data
+Saxifraga paniculata,Saxipani,Saxifragales,Saxifragaceae,Strict alpine,17.18,3.464166667,own_data
+Sedum anglicum,Seduangl,Saxifragales,Crassulaceae,Generalist,16.906,1.107,own_data
+Sedum brevifolium,Sedubrev,Saxifragales,Crassulaceae,Generalist,12.364,0.639,own_data
+Sempervivum arachnoideum,Semparac,Saxifragales,Crassulaceae,Generalist,24.046,2.615,own_data
+Sesleria caerulea,Seslcaer,Poales,Poaceae,Generalist,1.299,40.92,own_data
+Silene acaulis,Sileacau,Caryophyllales,Caryophyllaceae,Strict alpine,3.809,15,own_data
+Silene chalcedonica,Silechal,Caryophyllales,Caryophyllaceae,Strict lowland,6.5,335,SID
+Silene ciliata,Silecili.1,Caryophyllales,Caryophyllaceae,Strict alpine,3.202,18.3,own_data
+Silene ciliata,Silecili,Caryophyllales,Caryophyllaceae,Strict alpine,2.734,18.3,own_data
+Silene compacta,Silecomp,Caryophyllales,Caryophyllaceae,Strict lowland,5.6,5,SID
+Silene conoidea,Silecono,Caryophyllales,Caryophyllaceae,Generalist,4.8,49.04761905,SID
+Silene densiflora,Siledens,Caryophyllales,Caryophyllaceae,Strict lowland,7,21.81818182,SID
+Silene dichotoma,Siledich,Caryophyllales,Caryophyllaceae,Strict lowland,4.8,58,SID
+Silene supina,Silesupi,Caryophyllales,Caryophyllaceae,Strict lowland,4.9,25,SID
+Silene vulgaris,Silevulg,Caryophyllales,Caryophyllaceae,Generalist,2.7,61,SID
+Solidago virgaurea,Solivirg,Asterales,Asteraceae,Generalist,15.593,33.455,own_data
+Spergula arvensis,Sperarve,Caryophyllales,Caryophyllaceae,Strict lowland,14.35,18,SID
+Spergula morisonii,Spermori,Caryophyllales,Caryophyllaceae,Generalist,5.602,9.736,own_data
+Teesdalia conferta,Teesconf,Brassicales,Brassicaceae,Strict alpine,7.963,96,own_data
+Thymus capitatus,Thymcapi,Lamiales,Lamiaceae,Strict lowland,21.15,90,SID
+Thymus chaubardii,Thymchau,Lamiales,Lamiaceae,Generalist,38,11.5,SID
+Thymus praecox,Thymprae.1,Lamiales,Lamiaceae,Generalist,18.307,5.84,own_data
+Thymus praecox,Thymprae,Lamiales,Lamiaceae,Generalist,18.422,8.528,own_data
+Thymus vulgaris,Thymvulg,Lamiales,Lamiaceae,Generalist,37.7,69,SID
+Thymus zygis,Thymzygi,Lamiales,Lamiaceae,Strict lowland,20,10,SID
+Veronica longifolia,Verolong,Lamiales,Plantaginaceae,Strict lowland,18.5,4,SID
+Veronica nummularia,Veronumm,Lamiales,Plantaginaceae,Strict alpine,32.834,10.2,own_data
+Veronica salina,Verosali,Lamiales,Plantaginaceae,Strict lowland,15.8,1,SID
+Veronica spicata,Verospic,Lamiales,Plantaginaceae,Generalist,31,8.5,SID
