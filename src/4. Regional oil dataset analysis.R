@@ -1,18 +1,9 @@
-library(tidyverse);library(readxl);library(rstatix)
-library(vegan);library(glmmTMB);library(DHARMa)
-library(phylosignal);library(phylobase);library(ape);library(tidytree)
+library(tidyverse);library(rstatix)
+library(vegan);library(MCMCglmm);library(ape)
 
-# oil content data (own + literature)
-read.csv("data/oil_fulldataset.csv", sep = ";")%>% rename(seed_mass= X50seed_mass_mg)-> oil_fulldataset # 80 species
-unique(oil_fulldataset$family) # 19 families
-
-# data exploration and visualization
-hist(oil_fulldataset$oil_content) # clearly not normal
-hist(oil_fulldataset$seed_mass)# clearly not normal
 
 # Data format preparation for mcmc###
-
-read.csv("data/oil_fulldataset.csv", sep = ";")%>%
+read.csv("data/oil_regionaldata.csv", sep = ",")%>%
   rename(seed_mass= X50seed_mass_mg)%>%
   group_by(Taxon, family, ecology)%>%
   summarise(oil_content = mean(oil_content), seed_mass = mean(seed_mass))%>%
@@ -23,24 +14,28 @@ read.csv("data/oil_fulldataset.csv", sep = ";")%>%
   mutate(Loil_content = log(oil_content),
          Lseed_mass=log(seed_mass))%>%
   na.omit()%>%
-  as.data.frame()-> full_oil_analysis
+  as.data.frame()-> regional_oil_analysis
+
+# data exploration and visualization
+hist(regional_oil_analysis$oil_content) # clearly not normal
+hist(regional_oil_analysis$seed_mass)# clearly not normal
+hist(regional_oil_analysis$Loil_content) # normally distributed
+hist(regional_oil_analysis$Lseed_mass)# normally distributed
+qqnorm(regional_oil_analysis$oil_content)
 
 # descriptive statistics
-full_oil_analysis%>% 
+regional_oil_analysis%>% 
   dplyr::select(Taxon, ecology, oil_content, seed_mass)%>%
   #group_by(ecology)%>%
   get_summary_stats(seed_mass)
 
-hist(full_oil_analysis$Loil_content) # normally distributed
-hist(full_oil_analysis$Lseed_mass)# normally distributed
-
 ##### USE MCMC to take into account phylogeny! 
-phangorn::nnls.tree(cophenetic(ape::read.tree("results/tree_oil_fulldataset.tree")), 
-                    ape::read.tree("results/tree_oil_fulldataset.tree"), method = "ultrametric") -> 
+phangorn::nnls.tree(cophenetic(ape::read.tree("results/tree_regionaldata.tree")), 
+                    ape::read.tree("results/tree_regionaldata.tree"), method = "ultrametric") -> 
   nnls_orig
 
 nnls_orig$node.label <- NULL
-plot(ape::read.tree("results/tree_oil_fulldataset.tree"))
+plot(ape::read.tree("results/tree_regionaldata.tree"))
 ### Set number of iterations
 nite = 1000000
 nthi = 100
@@ -48,30 +43,60 @@ nbur = 100000
 
 ### Gaussian priors
 priors <- list(R = list(V = 1, nu = 0.2),
-               G = list(G1 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
+               G = list(G1 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
+                        #G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)
                         #G3 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
                         #G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)
 
-# 1. COMPARISON between altitudinal preferences, NO DIFFERENCES RELATED TO altitude #####
-# correct glm? ASK EDUARDO!!!
-str(full_oil_analysis)
+# 1. COMPARISON between altitudinal preferences#####
+str(regional_oil_analysis)
 MCMCglmm::MCMCglmm(Loil_content ~ ecology, 
-                   random = ~ animal + ID,
-                   family = "gaussian", pedigree = nnls_orig, prior = priors, data = full_oil_analysis,
+                   random = ~ animal,
+                   family = "gaussian", pedigree = nnls_orig, prior = priors, data = regional_oil_analysis,
                    nitt = nite, thin = nthi, burnin = nbur,
                    verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g1
 
 plot(g1)
 summary(g1) 
   
+### Random and phylo
+
+# Calculate lambda http://www.mpcm-evolution.com/practice/online-practical-material-chapter-11/chapter-11-1-simple-model-mcmcglmm
+
+lambda <- g1$VCV[,"animal"]/(g1$VCV[,"animal"] + g1$VCV[,"units"]) 
+
+mean(g1$VCV[,"animal"]/(g1$VCV[,"animal"] + g1$VCV[,"units"])) %>% round(2)
+coda::HPDinterval(g1$VCV[,"animal"]/(g1$VCV[,"animal"] + g1$VCV[,"units"]))[, 1] %>% round(2)
+coda::HPDinterval(g1$VCV[,"animal"]/(g1$VCV[,"animal"] + g1$VCV[,"units"]))[, 2] %>% round(2)
+
+# Random effects animal
+summary(g1)$Gcovariances[1, 1] %>% round(2) 
+summary(g1)$Gcovariances[1, 2] %>% round(2) 
+summary(g1)$Gcovariances[1, 3] %>% round(2)
+
+
 # 2. Relationship between oil content and seed mass (trend but not significant, too much variation) ####
-str(full_oil_analysis)
-MCMCglmm::MCMCglmm(Loil_content ~ Lseed_mass, 
-                   random = ~ animal + ID,
-                   family = "gaussian", pedigree = nnls_orig, prior = priors, data = full_oil_analysis,
+str(regional_oil_analysis)
+MCMCglmm::MCMCglmm(Lseed_mass ~oil_content, 
+                   random = ~ animal,
+                   family = "gaussian", pedigree = nnls_orig, prior = priors, data = regional_oil_analysis,
                    nitt = nite, thin = nthi, burnin = nbur,
                    verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g2
 
 plot(g2)
-summary(g2) # no significant effect of seed mass in oil content (or viceversa)
+summary(g2) # no significant effect of oil content in seed mass (or viceversa)
+
+### Random and phylo
+
+# Calculate lambda http://www.mpcm-evolution.com/practice/online-practical-material-chapter-11/chapter-11-1-simple-model-mcmcglmm
+
+lambda <- g2$VCV[,"animal"]/(g2$VCV[,"animal"] + g2$VCV[,"units"]) 
+
+mean(g2$VCV[,"animal"]/(g2$VCV[,"animal"] + g2$VCV[,"units"])) %>% round(2)
+coda::HPDinterval(g2$VCV[,"animal"]/(g2$VCV[,"animal"] + g2$VCV[,"units"]))[, 1] %>% round(2)
+coda::HPDinterval(g2$VCV[,"animal"]/(g2$VCV[,"animal"] + g2$VCV[,"units"]))[, 2] %>% round(2)
+
+# Random effects animal
+summary(g2)$Gcovariances[1, 1] %>% round(2) 
+summary(g2)$Gcovariances[1, 2] %>% round(2) 
+summary(g2)$Gcovariances[1, 3] %>% round(2)

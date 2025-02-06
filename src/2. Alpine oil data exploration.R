@@ -1,21 +1,48 @@
-# Figure 1 oil data exploration
 library(tidyverse);library(readxl);library(rstatix)
 library(ggrepel):library(vegan);library(ggpubr)
+library(patchwork)
 
 # descriptive statistics
-View (oil_data_full)
-oil_data_full%>%
+View (oil_alpine_data) # from script 1 format_oil_data
+
+read.csv("data/oil_alpinedata.csv", sep= ",")%>%  
+  filter(units == "percentage")%>%
+  gather(oil_type, oil_PER, 7:30)%>%
+  group_by (oil_type)%>%
+  get_summary_stats(oil_PER)%>%
+  dplyr::select(oil_type, min, max, mean, se)%>%
+  rename(Fa_types = oil_type)%>%
+  write.csv("results/supplementary/Table S2. FA types summary.csv", row.names = F)
+
+read.csv("data/oil_alpinedata.csv", sep= ",")%>%  
+  filter(units == "percentage")%>%
+  dplyr:: select (Taxon,C18.2n6c, C18.1n9c, C18.3n3, C16.0)%>%
+  gather(oil_type, oil_PER, 2:5)%>%
+  group_by(Taxon)%>%
+  summarise(oil_PER= sum(oil_PER))%>%
+  get_summary_stats()
+
+oil_alpine_data%>%
+  dplyr::select(Taxon, family, ratio, UFA, SFA)%>%
+  group_by(family)%>%
+  get_summary_stats(ratio)
+
 
 #### PANEL A) Total oil content (%) per species ####
 #order like family fct relevel
 poales <- c("#78E208", "#45A747", "#396F3E")
-rosids <- c("#F2F9AA",  "#f3ec70","#f6e528","#Fad220","#fcb622", "darkgoldenrod3", "#f68b08","#ff7125" ,"#c87107",  "#8E5005") #, 
+rosids <- c("#F2F9AA",  "#f3ec70","#f6e528","#Fad220","#fcb622", "#f68b08","#ff7125" ,"darkgoldenrod3", "#c87107",  "#8E5005") #, 
 asterids <- c("#08f9dd", "#16cacb", "#21a8be", "#2d7faf", "#275381", "#42346f")
-col <- c("#F2F9AA",  "#f3ec70","#f6e528","#Fad220", "#fcb622","darkgoldenrod3", "#f68b08", "#ff7125" ,"#c87107",  "#8E5005",
+col <- c("#F2F9AA",  "#f3ec70","#f6e528","#Fad220", "#fcb622", "#f68b08", "#ff7125" ,"darkgoldenrod3","#c87107",  "#8E5005",
          "#08f9dd", "#16cacb", "#21a8be", "#2d7faf", "#275381", "#42346f",
          "#78E208", "#45A747", "#396F3E")
-read.csv("data/species_oil.csv")%>%
-  merge (oil_data_full)%>%
+# order like order fct relevel 
+col_order <- c( "#8E5005","darkgoldenrod3", "gold1", "orange","darkorange2", "orangered1" ,
+         "#08f9dd", "#21a8be", "#2d7faf", "#275381", "#42346f",
+         "#78E208")
+x11()
+read.csv("data/species_header.csv")%>%
+  merge (oil_alpine_data )%>%
   mutate(Taxon = as.factor(Taxon))%>%
   mutate(Taxon = fct_relevel(Taxon,"Luzula caespitosa" , "Kobresia myosuroides", "Carex sempervirens",
                              "Koeleria vallesiana","Sesleria caerulea","Helictochloa marginata", "Festuca glacialis",  
@@ -39,14 +66,19 @@ read.csv("data/species_oil.csv")%>%
   "Fabaceae","Salicaceae","Brassicaceae", "Cistaceae", 
     "Crassulaceae", "Saxifragaceae", "Poaceae", 
    "Cyperaceae", "Juncaceae"))%>% 
-  group_by(Taxon, family)%>%
+  mutate(order = as.factor(order))%>%
+  mutate(order = fct_relevel(order,"Asterales", "Apiales","Lamiales",
+                              "Gentianales" ,"Ericales","Caryophyllales",  
+                              "Fabales","Malpighiales","Brassicales", "Malvales", 
+                              "Saxifragales", "Poales"))%>% 
+  group_by(Taxon, family, order)%>%
   summarise(oil.content = mean(oil.content))%>%
-  ggplot(aes(x=Taxon, y= oil.content, fill=family ) )+ #family
+  ggplot(aes(x=Taxon, y= oil.content, fill=order) )+ #family
   #geom_point(size = 4, shape=21, color = "black", show.legend = F)+
   geom_bar(stat = "identity", show.legend = F, color="black")+ #problem with Thymus and S. ciliata (2 accesions summ % oil)
   coord_flip()+
-  scale_fill_manual (values=col)+
-  ggthemes::theme_tufte(base_size=12) + 
+  scale_fill_manual (values=col_order)+
+  theme_classic(base_size=12) + 
   labs( tag = "A)", y= "Oil content (%)")+ #title= "Species oil content (%)",
   theme(text = element_text(family = "sans"),
         plot.title = element_text (size= 14),
@@ -58,7 +90,7 @@ read.csv("data/species_oil.csv")%>%
         panel.background = element_rect(color = "black", fill = NULL),
         axis.title = element_text(size = 10),
         axis.text.x = element_text(size = 10, color = "black"),
-        axis.text.y = element_text(size = 10, color = "black"))->fig3A;fig3A
+        axis.text.y = element_text(size = 10, color = "black", face= "italic"))->fig2A;fig2A
 
 #### PANEL B) oil types percentatges per sp (% specific oil /total oil ID) ####
 library(viridis)
@@ -66,8 +98,8 @@ library(scales)
 
 show_col(viridis_pal()(6))
 
-read.csv("data/species_oil.csv")%>%
-  merge(oil_data_full)%>%
+read.csv("data/species_header.csv")%>%
+  merge(oil_alpine_data)%>%
   dplyr::select(Taxon, family, C16.0, C18.2n6c, C18.1n9c, C18.3n3, C22.1n9, C18.3n6)%>%
   gather(oil_type, oil_PER, C16.0:C18.3n6)%>%
   group_by(Taxon, family, oil_type)%>%
@@ -93,10 +125,6 @@ read.csv("data/species_oil.csv")%>%
   mutate(other= (100-sum(oil_PER)))%>%
   spread(oil_type, oil_PER)%>%
   gather(oil_type, oil_PER, other:C22.1n9)%>%
-  #filter (oil_PER>10) %>% # if filter above 3% change geom_bar position = fill
-  #mutate(oil_type= ifelse(oil_mean<10, "other",oil_type ))%>%
-  #group_by(Taxon, oil_type)%>%
-  #summarise(oil_PER= sum(oil_PER))%>%
   ggplot(aes(x=Taxon, y= oil_PER, fill= oil_type))+
   geom_bar(position = position_stack(reverse=T), stat = "identity",  color = "black", show.legend = T)+ #position = "stack", 
   coord_flip()+
@@ -109,7 +137,8 @@ read.csv("data/species_oil.csv")%>%
         legend.position = "bottom", 
         legend.title = element_blank(),
         legend.key.size = unit(1,"line"),
-        legend.text = element_text(size = 10, color = "black"),
+        legend.spacing.x = unit(0.1, "lines"),
+        legend.text = element_text(size = 9, color = "black"),
         legend.margin = margin(t = 0, unit='cm'),
         legend.box.margin = unit(c(0, 0,0,0), "cm"),
         plot.margin = unit(c(0, 0.2,0,0), "cm"),
@@ -117,11 +146,11 @@ read.csv("data/species_oil.csv")%>%
         axis.title.y = element_blank(),
         axis.text.y = element_blank(),
         axis.title.x = element_text(size = 10),
-        axis.text.x = element_text(size = 10, color = "black")) -> fig3B;fig3B
+        axis.text.x = element_text(size = 10, color = "black")) -> fig2B;fig2B
 
 ### PANEL C) unsaturated vs saturated fatty acids composition per species ####
-read.csv("data/species_oil.csv")%>%
-  merge(oil_data_full)%>%
+read.csv("data/species_header.csv")%>%
+  merge(oil_alpine_data )%>%
   dplyr::select(Taxon, family, UFA, SFA)%>%
   gather(saturation_type, oil_PER, UFA:SFA)%>%
   group_by(Taxon, family, saturation_type)%>%
@@ -146,46 +175,48 @@ read.csv("data/species_oil.csv")%>%
   ggplot(aes(x=Taxon, y= oil_PER, fill= saturation_type))+
   geom_bar(position = "fill", stat = "identity",  color = "black", show.legend = T)+
   scale_fill_manual (name= "FA types", values = c("brown1", "brown4"),
-                        guide = guide_legend (title.position = "top",direction = "horizontal", reverse = T)) +
+                        guide = guide_legend (title.position = "top",direction = "horizontal", nrow =2, reverse = T)) +
   coord_flip()+
   ggthemes::theme_tufte(base_size=12) + 
   labs( tag = "C)", y= "Oil content (relative %)")+ #title= "UFA vs SFA",
   theme(text = element_text(family = "sans"),
         plot.title = element_text (size= 14),
         legend.position = "bottom", 
+        legend.key.size = unit(1,"line"),
         legend.margin = margin(t = 0, unit='cm'),
         legend.box.margin = unit(c(0, 0,0,0), "cm"),
         legend.title = element_blank(),
-        legend.text = element_text(size = 10, color = "black"),
+        legend.text = element_text(size = 9, color = "black"),
         panel.background = element_rect(color = "black", fill = NULL),
         axis.title.y = element_blank(),
         plot.margin = unit(c(0, 0,0,0), "cm"),
         axis.text.y = element_blank(),
         axis.title.x = element_text(size = 10),
-        axis.text.x = element_text(size = 10, color = "black"))-> fig3C;fig3C
+        axis.text.x = element_text(size = 10, color = "black"))-> fig2C;fig2C
 
 # PCA for Panel D and E : PCA variables + species #####
 # JOIN FAME composition (percentages relative to the total content of oil) merge with total oil for PCA
-str(oil_data_full)
-oil_data_full[, 4:33]%>%
+
+str(oil_alpine_data)
+oil_alpine_data [, 7:36]%>%
   FactoMineR::PCA() -> pca_oil
 
 pca_oil$var$contrib
 pca_oil$eig
-oil_data_full[, 4:33]%>%  cor() # remove C12:0, C20:1n9, C20:2n6 (hihgly correlated with other variables with higher contributions to axes)
+oil_alpine_data [, 7:36]%>%  cor() # remove C12:0, C20:1n9, C20:2n6 (hihgly correlated with other variables with higher contributions to axes)
 
 # PCa with only the FA with more than 3% relative proportion 
-oil_data_full%>%
+oil_alpine_data %>%
   dplyr::select(C16.0, C18.0, C18.1n7c, C18.1n9c, C18.2n6c, C18.3n3, 
-                C18.3n6, C20.1n9,C20.3n6, C20.4n6, C22.1n9, C24.1n9,
+                C18.3n6, C20.1n9, C20.4n6, C22.1n9, 
                 oil.content, ratio)%>% #FAME >3% relative proportion
   FactoMineR::PCA() -> pca_oil
 x11()
 pca_oil$var$contrib
 pca_oil$eig
-oil_data_full%>%
+oil_alpine_data %>%
   dplyr::select(C16.0, C18.0, C18.1n7c, C18.1n9c, C18.2n6c, C18.3n3, 
-                C18.3n6, C20.1n9,C20.3n6, C20.4n6, C22.1n9, C24.1n9,
+                C18.3n6, C20.1n9, C20.4n6, C22.1n9, 
                 oil.content, ratio) %>% cor()
 
 # looks like 2 groups of variables highly correlated
@@ -193,8 +224,9 @@ oil_data_full%>%
 # 2. C22.1n9, C24.1n9  >0.8
  
 
-cbind(oil_data_full, data.frame(pca_oil$ind$coord[, 1:2])) %>%
+cbind(oil_alpine_data, data.frame(pca_oil$ind$coord[, 1:2])) %>%
   mutate(species = factor(Taxon))%>%
+  mutate(order= factor(order))%>%
   mutate(family = factor(family))-> pcaInds
 
 pca_oil$var$coord[, 1:2] %>%
@@ -205,11 +237,15 @@ pca_oil$var$coord[, 1:2] %>%
 ### PANEL D) Plot PCA species#########
 #order like family fct relevel
 poales <- c("#78E208", "#45A747", "#396F3E")
-rosids <- c("#F2F9AA",  "#f3ec70","#f6e528","#Fad220","#fcb622", "darkgoldenrod3",  "#f68b08","#ff7125" ,"#c87107",  "#8E5005") #, 
+rosids <- c("#F2F9AA",  "#f3ec70","#f6e528","#Fad220","#fcb622", "#f68b08","#ff7125" ,"darkgoldenrod3", "#c87107",  "#8E5005") #, 
 asterids <- c("#08f9dd", "#16cacb", "#21a8be", "#2d7faf", "#275381", "#42346f")
-col <- c("#F2F9AA",  "#f3ec70","#f6e528","#Fad220","#fcb622", "darkgoldenrod3", "#f68b08", "#ff7125","#c87107",  "#8E5005",
+col <- c("#F2F9AA",  "#f3ec70","#f6e528","#Fad220", "#fcb622", "#f68b08", "#ff7125" ,"darkgoldenrod3","#c87107",  "#8E5005",
          "#08f9dd", "#16cacb", "#21a8be", "#2d7faf", "#275381", "#42346f",
          "#78E208", "#45A747", "#396F3E")
+
+col_order <- c( "#8E5005","darkgoldenrod3", "gold1", "orange","darkorange2", "orangered1" ,
+                "#08f9dd", "#21a8be", "#2d7faf", "#275381", "#42346f",
+                "#78E208")
 x11()
 pcaInds%>%
   as.data.frame()%>%
@@ -218,15 +254,19 @@ pcaInds%>%
                               "Plantaginaceae","Gentianaceae" ,"Primulaceae","Caryophyllaceae", "Plumbaginaceae",  
                               "Fabaceae","Salicaceae","Brassicaceae", "Cistaceae", 
                               "Crassulaceae", "Saxifragaceae", "Poaceae", 
-                              "Cyperaceae", "Juncaceae"))->pcaInds 
+                              "Cyperaceae", "Juncaceae"))%>%  mutate(order = as.factor(order))%>%
+  mutate(order = fct_relevel(order,"Asterales", "Apiales","Lamiales",
+                             "Gentianales" ,"Ericales","Caryophyllales",  
+                             "Fabales","Malpighiales","Brassicales", "Malvales", 
+                             "Saxifragales", "Poales")) ->pcaInds 
 ggplot(pcaInds, aes(x = Dim.1, y = Dim.2)) +
   #coord_fixed() +
   geom_hline(yintercept = 0, linetype = "dashed") +
   geom_vline(xintercept = 0, linetype = "dashed") +
-  geom_point(aes(fill = family), color = "black", show.legend = T, size = 4, shape = 21) + # family
+  geom_point(aes(fill = order), color = "black", show.legend = T, size = 4, shape = 21) + # family
   #geom_text_repel (data = pcaInds, aes (x = Dim.1, y = Dim.2, label = species), show.legend = F, size =4, max.overlaps = 5) +
   ggthemes::theme_tufte(base_size=12) + 
-  scale_fill_manual(values=col)+
+  scale_fill_manual(values=col_order)+
   guides(fill=guide_legend(ncol=1, keywidth=0.1,keyheight=0.1,default.unit="cm")) +
   labs( tag = "D)")+#title= "PCA species",
   theme(text = element_text(family = "sans"),
@@ -237,11 +277,12 @@ ggplot(pcaInds, aes(x = Dim.1, y = Dim.2)) +
         panel.background = element_rect(color = "black", fill = NULL),
         axis.title = element_text(size = 10),
         axis.text = element_text(size = 10, color = "black"),
-        plot.margin = unit(c(0, 0.2,0,0), "cm")) +
+        plot.margin = unit(c(0, 0,0,0), "cm")) +
   scale_x_continuous(name = paste("Axis 1 (", round(pca_oil$eig[1, 2], 0),
                                   "% variance explained)", sep = "") ) + #,limits = c(-5, 5)
   scale_y_continuous(name = paste("Axis 2 (", round(pca_oil$eig[2, 2], 0), 
-                                  "% variance explained)", sep = "")) -> fig3D;fig3D#, limits = c(-4, 4)
+                                  "% variance explained)", sep = "")) -> fig2D;fig2D#, limits = c(-4, 4)
+
 ### PANEL E) Plot PCA variables#########
 x11()
 ggplot(pcaInds, aes(x = Dim.1, y = Dim.2)) +
@@ -260,27 +301,31 @@ ggplot(pcaInds, aes(x = Dim.1, y = Dim.2)) +
         legend.position = "bottom", 
         legend.title = element_blank(),
         legend.text = element_text(size = 10, color = "black"),
-        plot.margin = unit(c(0, 0,0.2,0), "cm"),
+        plot.margin = unit(c(0, 0,0,0), "cm"),
         panel.background = element_rect(color = "black", fill = NULL),
         axis.title = element_text(size = 10),
         axis.text = element_text(size = 10, color = "black"))+
   scale_x_continuous(name = paste("Axis 1 (", round(pca_oil$eig[1, 2], 0),
                                   "% variance explained)", sep = "") ) + #,limits = c(-5, 5)
   scale_y_continuous(name = paste("Axis 2 (", round(pca_oil$eig[2, 2], 0), 
-                                  "% variance explained)", sep = ""))-> fig3E;fig3E #, limits = c(-4, 4)
+                                  "% variance explained)", sep = ""))-> fig2E;fig2E #, limits = c(-4, 4)
 
-# combine D + E panels ###
-library(patchwork)
-fig3D + fig3E + 
-  plot_layout(guides = 'auto')-> fig3DE;fig3DE
+
+
 
 
 # combine panels ####
 
-ggpubr::ggarrange(fig3A, fig3B, fig3C,ncol =3, nrow= 1,common.legend = FALSE, widths = c(1.5,1,1),align = "h")->fig3ABC;fig3ABC
+# combine A+B+C panels ###
+fig2A + fig2B + fig2C+
+  plot_layout(widths = c(1.5,1,1))->fig2ABC;fig2ABC
 
-ggpubr::ggarrange(fig3ABC, fig3DE,ncol =1, nrow= 2,common.legend = FALSE,heights = c(1.5,1), align = "h")->fig3;fig3
+# combine D + E panels ###
 
+fig2D + fig2E + 
+  plot_layout()-> fig2DE;fig2DE
 
-ggsave(filename = "oil exploration.png", plot =fig3 , path = "results/figures", 
+ggpubr::ggarrange(fig2ABC, fig2DE,ncol =1, nrow= 2,common.legend = FALSE,heights = c(1.8,1))->fig2;fig2
+
+ggsave(filename = "fig2. oil exploration.png", plot =fig2 , path = "results/figures", 
        device = "png", dpi = 600)

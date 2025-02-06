@@ -1,32 +1,44 @@
 Taxon,order,family,community,code ,year_analisis,ecology
 Androsace villosa,Ericales,Primulaceae,Temperate,310821-11,2022,Strict alpine
-Armeria duriaei,Caryophyllales,Plumbaginaceae,Mediterranean,250821-01,2022,Strict alpine
-Carex sempervirens,Poales,Cyperaceae,Temperate,310821-13,2022,Strict alpine
-Festuca summilusitana,Poales,Poaceae,Mediterranean,250821-02,2022,Strict alpine
-Plantago alpina,Lamiales,Plantaginaceae,Temperate,300821-15,2022,Strict alpine
 Anthyllis vulneraria,Fabales,Fabaceae,Temperate,310821-12,2023,Generalist
 Arenaria erinacea,Caryophyllales,Caryophyllaceae,Temperate,300821-08,2023,Strict alpine
 Armeria cantabrica,Caryophyllales,Plumbaginaceae,Temperate,230822-01,2023,Strict alpine
+Armeria duriaei,Caryophyllales,Plumbaginaceae,Mediterranean,250821-01,2022,Strict alpine
+Avenella flexuosa,Poales,Poaceae,Mediterranean,070823-05,2024,Generalist
+Carex sempervirens,Poales,Cyperaceae,Temperate,310821-13,2022,Strict alpine
+Cerastium ramosissimum,Caryophyllales,Caryophyllaceae,Mediterranean,270623-01,2024,Generalist
 Conopodium majus,Apiales,Apiaceae,Mediterranean,240821-03,2023,Generalist
+Dethawia splendens,Apiales,Apiaceae,Temperate,010923-01,2024,Strict alpine
 Dianthus langeanus,Caryophyllales,Caryophyllaceae,Mediterranean,110821-01,2023,Strict alpine
 Festuca glacialis,Poales,Poaceae,Temperate,230822-04,2023,Strict alpine
+Festuca summilusitana,Poales,Poaceae,Mediterranean,250821-02,2022,Strict alpine
+Gentiana verna,Gentianales,Gentianaceae,Temperate,310823-09,2024,Strict alpine
 Gypsophila repens,Caryophyllales,Caryophyllaceae,Temperate,310821-08,2023,Generalist
 Helianthemum canum,Malvales,Cistaceae,Temperate,300821-05,2023,Generalist
 Helianthemum urrielense,Malvales,Cistaceae,Temperate,130921-05,2023,Strict alpine
 Helictochloa marginata,Poales,Poaceae,Mediterranean,040822-10,2023,Generalist
+Iberis carnosa,Brassicales,Brassicaceae,Temperate,210823-13,2024,Strict alpine
+Jasione cavanillesii,Asterales,Campanulaceae,Temperate,230822-02,2024,Strict alpine
 Jurinea humilis,Asterales,Asteraceae,Mediterranean,120821-03,2023,Generalist
 Kobresia myosuroides,Poales,Cyperaceae,Temperate,130921-03,2023,Strict alpine
 Koeleria vallesiana,Poales,Poaceae,Temperate,300821-02,2023,Strict alpine
 Luzula caespitosa,Poales,Juncaceae,Mediterranean,110821-03,2023,Strict alpine
 Minuartia recurva,Caryophyllales,Caryophyllaceae,Mediterranean,110821-07,2023,Strict alpine
+Minuartia verna,Caryophyllales,Caryophyllaceae,Temperate,210823-01,2024,Strict alpine
 Neoschischkinia truncatula,Poales,Poaceae,Mediterranean,250821-03,2023,Strict alpine
+Pedicularis pyrenaica,Lamiales,Orobanchaceae,Temperate,010923-05,2024,Strict alpine
+Phalacrocarpum oppositifolium,Asterales,Asteraceae,Mediterranean,110822-02,2024,Generalist
 Phyteuma hemisphaericum,Asterales,Campanulaceae,Mediterranean,240821-10,2023,Strict alpine
+Plantago alpina,Lamiales,Plantaginaceae,Temperate,300821-15,2022,Strict alpine
 Plantago holosteum,Lamiales,Plantaginaceae,Mediterranean,250821-12,2023,Generalist
 Salix breviserrata,Malpighiales,Salicaceae,Temperate,140722-01,2023,Strict alpine
 Saxifraga conifera,Saxifragales,Saxifragaceae,Temperate,120722-01,2023,Strict alpine
+Saxifraga oppositifolia,Saxifragales,Saxifragaceae,Temperate,310823-17,2024,Strict alpine
 Saxifraga paniculata,Saxifragales,Saxifragaceae,Temperate,310821-14,2023,Strict alpine
 Sedum anglicum,Saxifragales,Crassulaceae,Mediterranean,240821-09,2023,Strict alpine
 Sedum brevifolium,Saxifragales,Crassulaceae,Mediterranean,240821-11,2023,Generalist
+Sempervivum arachnoideum,Saxifragales,Crassulaceae,Mediterranean,230921-04,2024,Generalist
+Sesleria caerulea,Poales,Poaceae,Temperate,010923-04,2024,Generalist
 Silene acaulis,Caryophyllales,Caryophyllaceae,Temperate,140921-03,2023,Strict alpine
 Silene ciliata,Caryophyllales,Caryophyllaceae,Temperate,300821-11,2023,Strict alpine
 Silene ciliata,Caryophyllales,Caryophyllaceae,Mediterranean,040822-07,2023,Strict alpine
@@ -35,16 +47,4 @@ Spergula morisonii,Caryophyllales,Caryophyllaceae,Mediterranean,310522-01,2023,S
 Teesdalia conferta,Brassicales,Brassicaceae,Mediterranean,090822-04,2023,Generalist
 Thymus praecox,Lamiales,Lamiaceae,Temperate,300821-07,2023,Generalist
 Thymus praecox,Lamiales,Lamiaceae,Mediterranean,110821-05,2023,Generalist
-Avenella flexuosa,Poales,Poaceae,Mediterranean,070823-05,2024,Generalist
-Cerastium ramosissimum,Caryophyllales,Caryophyllaceae,Mediterranean,270623-01,2024,Generalist
-Dethawia splendens,Apiales,Apiaceae,Temperate,010923-01,2024,Strict alpine
-Gentiana verna,Gentianales,Gentianaceae,Temperate,310823-09,2024,Strict alpine
-Iberis carnosa,Brassicales,Brassicaceae,Temperate,210823-13,2024,Strict alpine
-Jasione cavanillesii,Asterales,Campanulaceae,Temperate,230822-02,2024,Strict alpine
-Minuartia verna,Caryophyllales,Caryophyllaceae,Temperate,210823-01,2024,Strict alpine
-Pedicularis pyrenaica,Lamiales,Orobanchaceae,Temperate,010923-05,2024,Strict alpine
-Phalacrocarpum oppositifolium,Asterales,Asteraceae,Mediterranean,110822-02,2024,Generalist
-Saxifraga oppositifolia,Saxifragales,Saxifragaceae,Temperate,310823-17,2024,Strict alpine
-Sempervivum arachnoideum,Saxifragales,Crassulaceae,Mediterranean,230921-04,2024,Generalist
-Sesleria caerulea,Poales,Poaceae,Temperate,010923-04,2024,Generalist
 Veronica nummularia,Lamiales,Plantaginaceae,Temperate,190822-06,2024,Strict alpine
