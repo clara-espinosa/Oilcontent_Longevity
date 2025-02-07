@@ -2,7 +2,7 @@
 library(tidyverse);library(readxl);library(rstatix)
 library(ggrepel):library(vegan);library(ggpubr);library (viridis)
 
-read.csv("data/species_traits_summary.csv")-> summary_table
+read.csv("data/species_traits.csv")-> summary_table
 summary_table%>%
   get_summary_stats(Snw)
 
@@ -15,7 +15,7 @@ sig.label%>%
          y= as.numeric(y))->sig.label
 str(sig.label)
 
-read.csv("data/species_traits_summary.csv")%>%
+read.csv("data/species_traits.csv")%>%
   mutate(family = as.factor(family))%>%
   mutate(family = fct_relevel(family,"Asteraceae","Campanulaceae",  "Apiaceae","Lamiaceae", "Orobanchaceae" ,
                               "Plantaginaceae","Gentianaceae" ,"Primulaceae","Caryophyllaceae", "Plumbaginaceae",  
@@ -62,7 +62,7 @@ sig.label2%>%
          y= as.numeric(y))->sig.label2
 str(sig.label2)
 
-read.csv("data/species_traits_summary.csv")%>%
+read.csv("data/species_traits.csv")%>%
   mutate(family = as.factor(family))%>%
   mutate(family = fct_relevel(family,"Asteraceae","Campanulaceae",  "Apiaceae","Lamiaceae", "Orobanchaceae" ,
                               "Plantaginaceae","Gentianaceae" ,"Primulaceae","Caryophyllaceae", "Plumbaginaceae",  
@@ -106,7 +106,7 @@ sig.label3%>%
   mutate(x= as.numeric(x),
          y= as.numeric(y))->sig.label3
 str(sig.label3)
-read.csv("data/species_traits_summary.csv")%>%
+read.csv("data/species_traits.csv")%>%
   mutate(family = as.factor(family))%>%
   mutate(family = fct_relevel(family,"Asteraceae","Campanulaceae",  "Apiaceae","Lamiaceae", "Orobanchaceae" ,
                               "Plantaginaceae","Gentianaceae" ,"Primulaceae","Caryophyllaceae", "Plumbaginaceae",  
