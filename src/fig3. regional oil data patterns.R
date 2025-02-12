@@ -53,12 +53,12 @@ read.csv("data/oil_regionaldata.csv", sep = ",")%>%
   rename(seed_mass= X50seed_mass_mg)%>%
   #filter(source == "own_data")%>%
   ggplot()+
-  geom_point(aes(x=seed_mass, y=oil_content, fill=order), color= "black", shape = 21, size= 4)+
-  geom_smooth(aes(x=seed_mass, y=oil_content),method = "glm", color = "black", se=F)+
+  geom_point(aes(y=seed_mass, x=oil_content, fill=order), color= "black", shape = 21, size= 4)+
+  geom_smooth(aes(y=seed_mass, x=oil_content),method = "glm", color = "black", se=F)+
   scale_fill_manual (name= "Plant orders", values=col_order)+
   ggthemes::theme_tufte(base_size=12) + 
-  annotate("text", label="Post mean: - 0.29\n pMCMC: 0.18", x=250, y= 1, size = 4)+
-  labs( title = "B) Oil content vs seed mass relationship", y= "Oil content (%)", x= "Seed mass (mg)")+ 
+  annotate("text", label="Post mean: - 0.02\n CI: [ - 0.06 | 0.01 ]", y=300, x= 30, size = 3)+
+  labs( title = "B) Oil content vs seed mass relationship", x= "Oil content (%)", y= "Seed mass (mg)")+ 
   theme(text = element_text(family = "sans"),
         plot.title = element_text (size= 12),
         legend.position = "right", 
@@ -76,4 +76,4 @@ fig3A + fig3B + plot_layout(widths= c(0.45, 0.55))-> fig3;fig3
 
 # save plots
 ggsave(filename = "fig 3. regional patterns.png", plot =fig3 , path = "results/figures", 
-       device = "png",dpi = 600) #scale = 1, height = 150, , width = 180, units = "mm"
+       device = "png",dpi = 600) #, width = 180, height = 150, units = "mm"scale = 1, 

@@ -29,7 +29,7 @@ read.csv("data/species_traits.csv")%>%
   geom_smooth(method= "lm", color= "black", se=F)+
   ggthemes::theme_tufte(base_size=12) + 
   labs(tag = "A)", x= "Growing Degree Days (GDD)", y= "Oil content (%)")+
-  annotate("text", label="Post. mean: - 0.0002\n CI: [ - 0.0006 | 0.0002 ]", x=2000, y=32, size=3)+
+  annotate("text", label="Post. mean: - 0.0002\n CI: [ - 0.0006 | 0.0002 ]", x=1950, y=32, size=3)+
   theme(text = element_text(family = "sans"),
         plot.tag.position =c(0.01,0.99), 
         #plot.margin = unit(c(0,0,0,0),'cm'),
@@ -60,7 +60,7 @@ read.csv("data/species_traits.csv")%>%
   geom_smooth(method= "lm", color= "black", se=F)+
   ggthemes::theme_tufte(base_size=12) + 
   labs(x= "Growing Degree Days (GDD)", y= "UFA/SFA ratio")+
-  annotate("text", label="Post. mean: - 0.00006\n CI: [ - 0.0002 | 0.0002 ]", x=2000, y=18.8, size=3)+
+  annotate("text", label="Post. mean: - 0.00006\n CI: [ - 0.0002 | 0.0002 ]", x=1950, y=18.8, size=3)+
   theme(text = element_text(family = "sans"),
         #plot.margin = unit(c(0,0,0,0),'cm'),
         legend.position = "none",  
@@ -95,7 +95,7 @@ read.csv("data/species_traits.csv")%>%
   geom_smooth(method= "lm", color= "black", se=F)+
   ggthemes::theme_tufte(base_size=12) + 
   labs(tag = "B)", x= "Freezing Degree Days (FDD)", y= "Oil content (%)")+
-  annotate("text", label="Post. mean: 0.002\n CI: [ - 0.003 | 0.008 ]", x=140, y=30, size=3)+
+  annotate("text", label="Post. mean: 0.002\n CI: [ - 0.003 | 0.008 ]", x=138, y=29, size=3)+
   theme(text = element_text(family = "sans"),
         plot.tag.position =c(0.01,0.99), 
         #plot.margin = unit(c(0,0,0,0),'cm'),
@@ -126,7 +126,7 @@ read.csv("data/species_traits.csv")%>%
   geom_smooth(method= "lm", color= "black", se=F)+
   ggthemes::theme_tufte(base_size=12) + 
   labs( x= "Freezing Degree Days (FDD)", y= "UFA/SFA ratio")+
-  annotate("text", label="Post. mean: 0.0008\n CI: [ - 0.002 | 0.004 ]", x=140, y=18, size=3)+
+  annotate("text", label="Post. mean: 0.0008\n CI: [ - 0.002 | 0.004 ]", x=138, y=17, size=3)+
   theme(text = element_text(family = "sans"),
         #plot.margin = unit(c(0,0,0,0),'cm'),
         legend.position = "none",  
@@ -160,7 +160,7 @@ read.csv("data/species_traits.csv")%>%
   geom_smooth(method= "lm", color= "black", se=F)+
   ggthemes::theme_tufte(base_size=12) + 
   labs(tag = "C)", x= "Snow cover (days)", y= "Oil content (%)")+
-  annotate("text", label="Post. mean: 0.003\n CI: [ - 0.001 | 0.007 ]", x=130, y=28, size=3)+
+  annotate("text", label="Post. mean: 0.003\n CI: [ - 0.001 | 0.007 ]", x=125, y=28, size=3)+
   theme(text = element_text(family = "sans"),
         plot.tag.position =c(0.01,0.99), 
         #plot.margin = unit(c(0,0,0,0),'cm'),
@@ -191,7 +191,7 @@ read.csv("data/species_traits.csv")%>%
   geom_smooth(method= "lm", color= "black", se=F)+
   ggthemes::theme_tufte(base_size=12) + 
   labs( x= "Snow cover (days)", y= "UFA/SFA ratio")+
-  annotate("text", label="Post. mean: 0.002\n CI: [ - 0.0003 | 0.004 ]", x=130, y=16.5, size=3)+
+  annotate("text", label="Post. mean: 0.002\n CI: [ - 0.0003 | 0.004 ]", x=125, y=16.5, size=3)+
   theme(text = element_text(family = "sans"),
         #plot.margin = unit(c(0,0,0,0),'cm'),
         legend.position = "none", 

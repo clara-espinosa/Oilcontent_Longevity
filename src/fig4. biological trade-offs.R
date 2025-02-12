@@ -43,7 +43,7 @@ read.csv("data/species_traits.csv")%>% # from script 2 header data handling
   scale_y_continuous (limits = c(-0.75, 6))+
   ggthemes::theme_tufte(base_size=12) + 
   labs( title= "A) Seed mass (n=47)", x= "Oil content (%)", y= "Seed mass (log)")+ #tag = "A)",
-  annotate("text", label="Post. mean: - 0.02\n CI: [ - 0.06 | 0.02 ]", x=30, y=5.5, size=3)+ # with log x = 5 , without log x= 200
+  annotate("text", label="Post. mean: - 0.02\n CI: [ - 0.06 | 0.02 ]", x=29, y=5.5, size=3)+ # with log x = 5 , without log x= 200
   theme(text = element_text(family = "sans"),
         plot.title= element_text( size= 12, face = "bold"), #hjust = 0.5,
         plot.margin = unit(c(0, 0,0,0), "cm"),
@@ -113,7 +113,7 @@ read.csv("data/species_traits.csv")%>%
   geom_point(aes(fill=order), size= 4, shape=21)+
   labs(title= "B) Seed longevity (n= 35)", y= "p50 (days)", x = "Oil content (%)")+ #, tag= "B)"
   geom_smooth(aes(y=p50, x=oil.content),method="lm", color= "black", se = F)+
-  annotate("text", label ="Post mean: - 0.72\n CI: [ - 1.12 | - 0.27 ]", y=45,x= 30, size=3)+
+  annotate("text", label ="Post mean: - 0.72\n CI: [ - 1.12 | - 0.27 ]", y=45,x= 29, size=3)+
   scale_fill_manual (values=col_order)+ #direction =-1
   scale_y_continuous (limits = c(0,50))+
   ggthemes::theme_tufte(base_size=12) + 
@@ -188,7 +188,7 @@ read.csv("data/species_traits.csv")%>%
   geom_point(aes(fill =as.factor(order)),shape = 21, size = 4, color = "black", show.legend = T)+
   geom_smooth(method= "lm", color= "black", se= F)+
   scale_fill_manual (values=col_order,guide = guide_legend(nrow = 3) )+
-  annotate("text", label ="Post mean: 0.02\n CI: [ - 0.01 | 0.05 ]", x=30,y= 1150, size=3)+
+  annotate("text", label ="Post mean: 0.02\n CI: [ - 0.01 | 0.05 ]", x=29,y= 1150, size=3)+
   ggthemes::theme_tufte(base_size=12) + 
   labs( title= "C) Environmental Heat Sum (n= 34)", x= "Oil content (%)", y= "EHS (ºC)")+
   theme(text = element_text(family = "sans"),
