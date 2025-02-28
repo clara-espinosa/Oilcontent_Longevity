@@ -15,7 +15,6 @@ read.csv("data/oil_alpinedata.csv", sep= ",")%>%
   filter(units=="percentage")%>%
   dplyr::select(Taxon, community, oil.content, C12.0:C24.1n9) -> oil_data_per # df with oil content and FA types percentages
 
-
 read.csv("data/oil_alpinedata.csv", sep= ",")%>%  
   filter(units == "percentage")%>%
   gather(oil_type, oil_PER, 7:30)%>%
@@ -29,5 +28,3 @@ read.csv("data/oil_alpinedata.csv", sep= ",")%>%
   dplyr::select(Taxon, community, oil.content, ratio, UFA, SFA, C12.0:C24.1n9)%>%
   merge(read.csv("data/species_header.csv"), by = c("Taxon", "community"))%>%
   dplyr::select(Taxon,  family, order, community, year_analisis, ecology, oil.content, ratio, UFA, SFA, C12.0:C24.1n9)-> oil_alpine_data # data frame with all oil data together in wide format
-
-

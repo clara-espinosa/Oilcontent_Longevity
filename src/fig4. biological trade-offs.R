@@ -111,9 +111,9 @@ read.csv("data/species_traits.csv")%>%
                              "Saxifragales", "Poales"))%>%
   ggplot(aes(y=p50, x=oil.content), color="black")+
   geom_point(aes(fill=order), size= 4, shape=21)+
-  labs(title= "B) Seed longevity (n= 35)", y= "p50 (days)", x = "Oil content (%)")+ #, tag= "B)"
+  labs(title= "B) Seed longevity (n= 33)", y= "p50 (days)", x = "Oil content (%)")+ #, tag= "B)"
   geom_smooth(aes(y=p50, x=oil.content),method="lm", color= "black", se = F)+
-  annotate("text", label ="Post mean: - 0.72\n CI: [ - 1.12 | - 0.27 ]", y=45,x= 29, size=3)+
+  annotate("text", label ="Post mean: - 0.85\n CI: [ - 1.31 | - 0.39 ]", y=45,x= 29, size=3)+
   scale_fill_manual (values=col_order)+ #direction =-1
   scale_y_continuous (limits = c(0,50))+
   ggthemes::theme_tufte(base_size=12) + 
@@ -149,7 +149,7 @@ read.csv("data/species_traits.csv")%>%
   geom_point(aes(fill=order), size= 4, shape=21)+
   labs(title= "", y= "p50 (days)", x = "Ratio UFA/SFA", tag= "")+
   geom_smooth(aes(y=p50, x=ratio),method="lm", color= "black", se = F)+
-  annotate("text", label ="Post mean: - 0.96\n CI: [ -2.52 | 0.79 ]", y=45,x= 17.5, size=3)+
+  annotate("text", label ="Post mean: - 0.73\n CI: [ -2.29 | 1.15 ]", y=45,x= 17.5, size=3)+
   scale_y_continuous (limits = c(0,50))+
   scale_fill_manual (values=col_order)+ #direction =-1
   ggthemes::theme_tufte(base_size=12) + 

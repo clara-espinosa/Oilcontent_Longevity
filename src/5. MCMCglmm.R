@@ -83,10 +83,10 @@ read.csv("data/species_traits.csv")%>%
          Lp50 = log(p50), 
          SRp50 = sqrt(p50), )%>%
   na.omit()%>%
-  as.data.frame()-> oil_p50 #n=37
+  as.data.frame()-> oil_p50 #n=35
 
-unique(oil_p50$familia) # 17 families
-unique(oil_p50$Taxon) #35 levels (silene ciliata and thymus in both communities
+unique(oil_p50$familia) # 16 families
+unique(oil_p50$Taxon) #33 levels (silene ciliata and thymus in both communities
 
 hist(oil_p50$p50) # quite normally distributed
 
@@ -101,24 +101,24 @@ g6 # p50 ~ ratio
 
 x11()
 plot(g6)
-summary(g6)
+summary(g5)
 
 ### Random and phylo
 
 # Calculate lambda http://www.mpcm-evolution.com/practice/online-practical-material-chapter-11/chapter-11-1-simple-model-mcmcglmm
 
-lambda <- g6$VCV[,"animal"]/(g6$VCV[,"animal"] + g6$VCV[,"units"]) 
+lambda <- g5$VCV[,"animal"]/(g5$VCV[,"animal"] + g5$VCV[,"units"]) 
 
-mean(g6$VCV[,"animal"]/(g6$VCV[,"animal"] + g6$VCV[,"units"])) %>% round(2)
-coda::HPDinterval(g6$VCV[,"animal"]/(g6$VCV[,"animal"] + g6$VCV[,"units"]))[, 1] %>% round(2)
-coda::HPDinterval(g6$VCV[,"animal"]/(g6$VCV[,"animal"] + g6$VCV[,"units"]))[, 2] %>% round(2)
-lambda <- g6$VCV[,"animal"]/(g6$VCV[,"animal"] + g6$VCV[,"units"]) 
+mean(g5$VCV[,"animal"]/(g5$VCV[,"animal"] + g5$VCV[,"units"])) %>% round(2)
+coda::HPDinterval(g5$VCV[,"animal"]/(g5$VCV[,"animal"] + g5$VCV[,"units"]))[, 1] %>% round(2)
+coda::HPDinterval(g5$VCV[,"animal"]/(g5$VCV[,"animal"] + g5$VCV[,"units"]))[, 2] %>% round(2)
+lambda <- g5$VCV[,"animal"]/(g5$VCV[,"animal"] + g5$VCV[,"units"]) 
 
 
 # Random effects animal
-summary(g6)$Gcovariances[1, 1] %>% round(2) 
-summary(g6)$Gcovariances[1, 2] %>% round(2) 
-summary(g6)$Gcovariances[1, 3] %>% round(2)
+summary(g5)$Gcovariances[1, 1] %>% round(2) 
+summary(g5)$Gcovariances[1, 2] %>% round(2) 
+summary(g5)$Gcovariances[1, 3] %>% round(2)
 
 
 # Environmental Heat Sum (EHS, log transformed) ####
