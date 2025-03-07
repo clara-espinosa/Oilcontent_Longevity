@@ -1,6 +1,6 @@
 library(tidyverse);library(readxl);library(rstatix)
 library(ggrepel):library(vegan);library(ggpubr)
-library(patchwork)
+library(patchwork):library(paletteer)
 
 # descriptive statistics
 View (oil_alpine_data) # from script 1 format_oil_data
@@ -29,17 +29,11 @@ oil_alpine_data%>%
 
 
 #### PANEL A) Total oil content (%) per species ####
-#order like family fct relevel
-poales <- c("#78E208", "#45A747", "#396F3E")
-rosids <- c("#F2F9AA",  "#f3ec70","#f6e528","#Fad220","#fcb622", "#f68b08","#ff7125" ,"darkgoldenrod3", "#c87107",  "#8E5005") #, 
-asterids <- c("#08f9dd", "#16cacb", "#21a8be", "#2d7faf", "#275381", "#42346f")
-col <- c("#F2F9AA",  "#f3ec70","#f6e528","#Fad220", "#fcb622", "#f68b08", "#ff7125" ,"darkgoldenrod3","#c87107",  "#8E5005",
-         "#08f9dd", "#16cacb", "#21a8be", "#2d7faf", "#275381", "#42346f",
-         "#78E208", "#45A747", "#396F3E")
 # order like order fct relevel 
 col_order <- c( "#8E5005","darkgoldenrod3", "gold1", "orange","darkorange2", "orangered1" ,
-         "#08f9dd", "#21a8be", "#2d7faf", "#275381", "#42346f",
+         "skyblue1","deepskyblue",  "#2d7faf", "#275381", "#42346f",
          "#78E208")
+
 x11()
 read.csv("data/species_header.csv")%>%
   merge (oil_alpine_data )%>%
@@ -79,9 +73,10 @@ read.csv("data/species_header.csv")%>%
   coord_flip()+
   scale_fill_manual (values=col_order)+
   theme_classic(base_size=12) + 
-  labs( tag = "A)", y= "Oil content (%)")+ #title= "Species oil content (%)",
+  labs( tag = "(a)", y= "Oil content (%)")+ #title= "Species oil content (%)",
   theme(text = element_text(family = "sans"),
         plot.title = element_text (size= 14),
+        plot.tag = element_text(face="bold"),
         legend.position = "", 
         plot.background = element_blank(),
         plot.margin = unit(c(0, 0.2,0,0), "cm"),
@@ -93,11 +88,7 @@ read.csv("data/species_header.csv")%>%
         axis.text.y = element_text(size = 10, color = "black", face= "italic"))->fig2A;fig2A
 
 #### PANEL B) oil types percentatges per sp (% specific oil /total oil ID) ####
-library(viridis)
-library(scales)
-
-show_col(viridis_pal()(6))
-
+paletteer_d("colorBlindness::Blue2DarkOrange12Steps")
 read.csv("data/species_header.csv")%>%
   merge(oil_alpine_data)%>%
   dplyr::select(Taxon, family, C16.0, C18.2n6c, C18.1n9c, C18.3n3, C22.1n9, C18.3n6)%>%
@@ -128,14 +119,15 @@ read.csv("data/species_header.csv")%>%
   ggplot(aes(x=Taxon, y= oil_PER, fill= oil_type))+
   geom_bar(position = position_stack(reverse=T), stat = "identity",  color = "black", show.legend = T)+ #position = "stack", 
   coord_flip()+
-  scale_fill_manual(name= "", values = c("#440154FF", "#414497FF", "#2A788EFF", "#22A884FF", "#7AD151FF", "#FDE725FF", "lightgrey"), 
+  scale_fill_manual(name= "", values = c("#1E8E99FF", "#51C3CCFF", "#99F9FFFF", "#CCFEFFFF", "#FFE5CCFF", "#FFCA99FF", "#FFAD65FF"), 
                     guide = guide_legend (title.position = "top",direction = "horizontal")) +
   ggthemes::theme_tufte(base_size=12) + 
-  labs(tag = "B)", y= "Oil content (relative %)")+# title= "FA types  (>3%)", 
+  labs(tag = "(b)", y= "Oil content (relative %)")+# title= "FA types  (>3%)", 
   theme(text = element_text(family = "sans"),
         plot.title = element_text (size= 14),
         legend.position = "bottom", 
         legend.title = element_blank(),
+        plot.tag = element_text(face="bold"),
         legend.key.size = unit(1,"line"),
         legend.spacing.x = unit(0.1, "lines"),
         legend.text = element_text(size = 9, color = "black"),
@@ -178,9 +170,10 @@ read.csv("data/species_header.csv")%>%
                         guide = guide_legend (title.position = "top",direction = "horizontal", nrow =2, reverse = T)) +
   coord_flip()+
   ggthemes::theme_tufte(base_size=12) + 
-  labs( tag = "C)", y= "Oil content (relative %)")+ #title= "UFA vs SFA",
+  labs( tag = "(c)", y= "Oil content (relative %)")+ #title= "UFA vs SFA",
   theme(text = element_text(family = "sans"),
         plot.title = element_text (size= 14),
+        plot.tag = element_text(face="bold"),
         legend.position = "bottom", 
         legend.key.size = unit(1,"line"),
         legend.margin = margin(t = 0, unit='cm'),
@@ -235,16 +228,9 @@ pca_oil$var$coord[, 1:2] %>%
 
 
 ### PANEL D) Plot PCA species#########
-#order like family fct relevel
-poales <- c("#78E208", "#45A747", "#396F3E")
-rosids <- c("#F2F9AA",  "#f3ec70","#f6e528","#Fad220","#fcb622", "#f68b08","#ff7125" ,"darkgoldenrod3", "#c87107",  "#8E5005") #, 
-asterids <- c("#08f9dd", "#16cacb", "#21a8be", "#2d7faf", "#275381", "#42346f")
-col <- c("#F2F9AA",  "#f3ec70","#f6e528","#Fad220", "#fcb622", "#f68b08", "#ff7125" ,"darkgoldenrod3","#c87107",  "#8E5005",
-         "#08f9dd", "#16cacb", "#21a8be", "#2d7faf", "#275381", "#42346f",
-         "#78E208", "#45A747", "#396F3E")
 
 col_order <- c( "#8E5005","darkgoldenrod3", "gold1", "orange","darkorange2", "orangered1" ,
-                "#08f9dd", "#21a8be", "#2d7faf", "#275381", "#42346f",
+                "skyblue1","deepskyblue",  "#2d7faf", "#275381", "#42346f",
                 "#78E208")
 x11()
 pcaInds%>%
@@ -268,16 +254,17 @@ ggplot(pcaInds, aes(x = Dim.1, y = Dim.2)) +
   ggthemes::theme_tufte(base_size=12) + 
   scale_fill_manual(values=col_order)+
   guides(fill=guide_legend(ncol=1, keywidth=0.1,keyheight=0.1,default.unit="cm")) +
-  labs( tag = "D)")+#title= "PCA species",
+  labs( tag = "(d)")+#title= "PCA species",
   theme(text = element_text(family = "sans"),
         plot.title = element_text (size= 14),
+        plot.tag = element_text(face="bold"),
         legend.position = "left", 
         legend.title = element_blank(),
         legend.text = element_text(size = 10, color = "black"),
         panel.background = element_rect(color = "black", fill = NULL),
         axis.title = element_text(size = 10),
         axis.text = element_text(size = 10, color = "black"),
-        plot.margin = unit(c(0, 0,0,0), "cm")) +
+        plot.margin = unit(c(0, 0.2,0,0), "cm")) +
   scale_x_continuous(name = paste("Axis 1 (", round(pca_oil$eig[1, 2], 0),
                                   "% variance explained)", sep = "") ) + #,limits = c(-5, 5)
   scale_y_continuous(name = paste("Axis 2 (", round(pca_oil$eig[2, 2], 0), 
@@ -295,9 +282,10 @@ ggplot(pcaInds, aes(x = Dim.1, y = Dim.2)) +
   #geom_label_repel(data = pcaVars, aes(x = 3*Dim.1, y = 3*Dim.2, label = Variable),  show.legend = FALSE, size = 4, segment.size= 1,
    #point.padding = 0.2, nudge_x = .15, nudge_y = .5,segment.curvature = -1e-20, segment.linetype = 1, segment.color = "red", arrow = arrow(length = unit(0.015, "npc")))+
   ggthemes::theme_tufte(base_size=12) + 
-  labs( tag = "E)")+#title= "PCA variables",
+  labs( tag = "(e)")+#title= "PCA variables",
   theme(text = element_text(family = "sans"),
         plot.title = element_text (size= 14),
+        plot.tag = element_text(face="bold"),
         legend.position = "bottom", 
         legend.title = element_blank(),
         legend.text = element_text(size = 10, color = "black"),
@@ -327,5 +315,5 @@ fig2D + fig2E +
 
 ggpubr::ggarrange(fig2ABC, fig2DE,ncol =1, nrow= 2,common.legend = FALSE,heights = c(1.8,1))->fig2;fig2
 
-ggsave(filename = "fig2. oil exploration.png", plot =fig2 , path = "results/figures", 
+ggsave(filename = "fig 2. oil exploration.png", plot =fig2 , path = "results/figures", 
        device = "png", dpi = 600)

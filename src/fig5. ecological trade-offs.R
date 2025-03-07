@@ -3,9 +3,8 @@ library(tidyverse);library(readxl);library(rstatix); library(patchwork)
 library(ggrepel):library(vegan);library(ggpubr);library (viridis)
 
 col_order <- c( "#8E5005","darkgoldenrod3", "gold1", "orange","darkorange2", "orangered1" ,
-                "#08f9dd", "#21a8be", "#2d7faf", "#275381", "#42346f",
+                "skyblue1","deepskyblue",  "#2d7faf", "#275381", "#42346f",
                 "#78E208")
-
 ## PANEL A) OIL content and ratio vs GDD ####
 # oil content
 read.csv("data/species_traits.csv")%>%
@@ -28,10 +27,11 @@ read.csv("data/species_traits.csv")%>%
   scale_fill_manual (values=col_order)+
   geom_smooth(method= "lm", color= "black", se=F)+
   ggthemes::theme_tufte(base_size=12) + 
-  labs(tag = "A)", x= "Growing Degree Days (GDD)", y= "Oil content (%)")+
+  labs(tag = "(a)", x= "Growing Degree Days (GDD, ºC)", y= "Oil content (%)")+
   annotate("text", label="Post. mean: - 0.0002\n CI: [ - 0.0006 | 0.0002 ]", x=1950, y=32, size=3)+
   theme(text = element_text(family = "sans"),
         plot.tag.position =c(0.01,0.99), 
+        plot.tag = element_text(face="bold"),
         #plot.margin = unit(c(0,0,0,0),'cm'),
         legend.position = "none",  
         panel.background = element_rect(color = "black", fill = NULL),
@@ -59,7 +59,7 @@ read.csv("data/species_traits.csv")%>%
   scale_fill_manual (values=col_order)+
   geom_smooth(method= "lm", color= "black", se=F)+
   ggthemes::theme_tufte(base_size=12) + 
-  labs(x= "Growing Degree Days (GDD)", y= "UFA/SFA ratio")+
+  labs(x= "Growing Degree Days (GDD, ºC)", y= "UFA/SFA ratio")+
   annotate("text", label="Post. mean: - 0.00006\n CI: [ - 0.0002 | 0.0002 ]", x=1950, y=18.8, size=3)+
   theme(text = element_text(family = "sans"),
         #plot.margin = unit(c(0,0,0,0),'cm'),
@@ -94,10 +94,11 @@ read.csv("data/species_traits.csv")%>%
   scale_fill_manual (values=col_order)+
   geom_smooth(method= "lm", color= "black", se=F)+
   ggthemes::theme_tufte(base_size=12) + 
-  labs(tag = "B)", x= "Freezing Degree Days (FDD)", y= "Oil content (%)")+
+  labs(tag = "(b)", x= "Freezing Degree Days (FDD, ºC)", y= "Oil content (%)")+
   annotate("text", label="Post. mean: 0.002\n CI: [ - 0.003 | 0.008 ]", x=138, y=29, size=3)+
   theme(text = element_text(family = "sans"),
         plot.tag.position =c(0.01,0.99), 
+        plot.tag = element_text(face="bold"),
         #plot.margin = unit(c(0,0,0,0),'cm'),
         legend.position = "none",  
         panel.background = element_rect(color = "black", fill = NULL),
@@ -125,7 +126,7 @@ read.csv("data/species_traits.csv")%>%
   scale_fill_manual (values=col_order)+
   geom_smooth(method= "lm", color= "black", se=F)+
   ggthemes::theme_tufte(base_size=12) + 
-  labs( x= "Freezing Degree Days (FDD)", y= "UFA/SFA ratio")+
+  labs( x= "Freezing Degree Days (FDD, ºC)", y= "UFA/SFA ratio")+
   annotate("text", label="Post. mean: 0.0008\n CI: [ - 0.002 | 0.004 ]", x=138, y=17, size=3)+
   theme(text = element_text(family = "sans"),
         #plot.margin = unit(c(0,0,0,0),'cm'),
@@ -159,10 +160,11 @@ read.csv("data/species_traits.csv")%>%
   scale_fill_manual (values=col_order)+
   geom_smooth(method= "lm", color= "black", se=F)+
   ggthemes::theme_tufte(base_size=12) + 
-  labs(tag = "C)", x= "Snow cover (days)", y= "Oil content (%)")+
+  labs(tag = "(c)", x= "Snow cover (days)", y= "Oil content (%)")+
   annotate("text", label="Post. mean: 0.003\n CI: [ - 0.001 | 0.007 ]", x=125, y=28, size=3)+
   theme(text = element_text(family = "sans"),
         plot.tag.position =c(0.01,0.99), 
+        plot.tag = element_text(face="bold"),
         #plot.margin = unit(c(0,0,0,0),'cm'),
         legend.position = "none", 
         panel.background = element_rect(color = "black", fill = NULL),

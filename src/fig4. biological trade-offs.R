@@ -6,15 +6,8 @@ library(patchwork)
 read.csv("data/species_traits.csv")%>%
   get_summary_stats(EHS_mean)
 
-#order like family fct relevel
-poales <- c("#78E208", "#45A747", "#396F3E")
-rosids <- c("#F2F9AA",  "#f3ec70","#f6e528","#Fad220","#fcb622", "darkgoldenrod3", "#f68b08","#ff7125" ,"#c87107",  "#8E5005") #, 
-asterids <- c("#08f9dd", "#16cacb", "#21a8be", "#2d7faf", "#275381", "#42346f")
-col <- c("#F2F9AA",  "#f3ec70","#f6e528","#Fad220", "#fcb622","darkgoldenrod3", "#f68b08", "#ff7125" ,"#c87107",  "#8E5005",
-         "#08f9dd", "#16cacb", "#21a8be", "#2d7faf", "#275381", "#42346f",
-         "#78E208", "#45A747", "#396F3E")
 col_order <- c( "#8E5005","darkgoldenrod3", "gold1", "orange","darkorange2", "orangered1" ,
-                "#08f9dd", "#21a8be", "#2d7faf", "#275381", "#42346f",
+                "skyblue1","deepskyblue",  "#2d7faf", "#275381", "#42346f",
                 "#78E208")
 
 ### PANEL A)  seed mass x oil content and seed mass x ratio Ufa/Sfa #####
@@ -42,10 +35,11 @@ read.csv("data/species_traits.csv")%>% # from script 2 header data handling
   scale_fill_manual (values=col_order)+
   scale_y_continuous (limits = c(-0.75, 6))+
   ggthemes::theme_tufte(base_size=12) + 
-  labs( title= "A) Seed mass (n=47)", x= "Oil content (%)", y= "Seed mass (log)")+ #tag = "A)",
+  labs(tag= "(a)", title= "Seed mass (n=47)", x= "Oil content (%)", y= "Seed mass (log)")+ #tag = "A)",
   annotate("text", label="Post. mean: - 0.02\n CI: [ - 0.06 | 0.02 ]", x=29, y=5.5, size=3)+ # with log x = 5 , without log x= 200
   theme(text = element_text(family = "sans"),
         plot.title= element_text( size= 12, face = "bold"), #hjust = 0.5,
+        plot.tag = element_text(face="bold"),
         plot.margin = unit(c(0, 0,0,0), "cm"),
         legend.position = "none", 
         panel.background = element_rect(color = "black", fill = NULL),
@@ -111,7 +105,7 @@ read.csv("data/species_traits.csv")%>%
                              "Saxifragales", "Poales"))%>%
   ggplot(aes(y=p50, x=oil.content), color="black")+
   geom_point(aes(fill=order), size= 4, shape=21)+
-  labs(title= "B) Seed longevity (n= 33)", y= "p50 (days)", x = "Oil content (%)")+ #, tag= "B)"
+  labs(tag= "(b)",title= "Seed longevity (n=33)", y= "p50 (days)", x = "Oil content (%)")+ #, tag= "B)"
   geom_smooth(aes(y=p50, x=oil.content),method="lm", color= "black", se = F)+
   annotate("text", label ="Post mean: - 0.85\n CI: [ - 1.31 | - 0.39 ]", y=45,x= 29, size=3)+
   scale_fill_manual (values=col_order)+ #direction =-1
@@ -119,6 +113,7 @@ read.csv("data/species_traits.csv")%>%
   ggthemes::theme_tufte(base_size=12) + 
   theme (text = element_text(family = "sans"),
          plot.title = element_text (face = "bold",size = 12), #hjust = 0.5,
+         plot.tag = element_text(face="bold"),
          plot.margin = unit(c(0,0,0.5,0),'cm'),
          axis.title = element_text (size=10),
          axis.text = element_text (size = 9, color = "black"),
@@ -190,9 +185,10 @@ read.csv("data/species_traits.csv")%>%
   scale_fill_manual (values=col_order,guide = guide_legend(nrow = 3) )+
   annotate("text", label ="Post mean: 0.02\n CI: [ - 0.01 | 0.05 ]", x=29,y= 1150, size=3)+
   ggthemes::theme_tufte(base_size=12) + 
-  labs( title= "C) Environmental Heat Sum (n= 34)", x= "Oil content (%)", y= "EHS (ºC)")+
+  labs(tag = "(c)", title= "Germination timing (n=34)", x= "Oil content (%)", y= "EHS (ºC)")+
   theme(text = element_text(family = "sans"),
         plot.title= element_text( size= 12, face = "bold"),
+        plot.tag = element_text(face="bold"),
         plot.margin = unit(c(0,0,0,0),'cm'),
         legend.position = "bottom", 
         legend.title = element_blank(),
