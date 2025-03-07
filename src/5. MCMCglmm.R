@@ -74,7 +74,7 @@ summary(g4)$Gcovariances[1, 3] %>% round(2)
 # read data
 read.csv("data/species_traits.csv")%>%
   merge(read.csv("data/species_header.csv"), by = c ("Taxon", "community"))%>%
-  dplyr::select(Taxon,  family, community, p50, oil.content, ratio)%>%
+  dplyr::select(Taxon,  family, community, p50, oil.content, ratio, GDD, FDD, Snw)%>%
   rename(familia = family)%>%
   convert_as_factor(Taxon, familia) %>%
   mutate(ID = gsub(" ", "_", Taxon), animal = ID) %>%
@@ -91,17 +91,19 @@ unique(oil_p50$Taxon) #33 levels (silene ciliata and thymus in both communities
 hist(oil_p50$p50) # quite normally distributed
 
 # model
-MCMCglmm::MCMCglmm(p50 ~ ratio , # 
+MCMCglmm::MCMCglmm(p50 ~ ratio, # 
                    random = ~ animal,
                    family = "gaussian", pedigree = nnls_orig, prior = priors, data = oil_p50,
                    nitt = nite, thin = nthi, burnin = nbur,
                    verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g6
 g5 # p50 ~ oil.content
 g6 # p50 ~ ratio
+g15 # p50 ~ GDD + FDD + Snow
 
 x11()
 plot(g6)
 summary(g5)
+
 
 ### Random and phylo
 
