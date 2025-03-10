@@ -51,7 +51,7 @@ g4 # Lseedmass ~ ratio
 
 x11()
 plot(g4)   
-summary(g4)  
+summary(g3)  
 
 ### Random and phylo
 

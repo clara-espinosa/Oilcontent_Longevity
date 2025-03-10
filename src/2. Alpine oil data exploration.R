@@ -7,7 +7,7 @@ View (oil_alpine_data) # from script 1 format_oil_data
 
 read.csv("data/oil_alpinedata.csv", sep= ",")%>%  
   filter(units == "percentage")%>%
-  gather(oil_type, oil_PER, 7:30)%>%
+  gather(oil_type, oil_PER, 5:30)%>%
   group_by (oil_type)%>%
   get_summary_stats(oil_PER)%>%
   dplyr::select(oil_type, min, max, mean, se)%>%

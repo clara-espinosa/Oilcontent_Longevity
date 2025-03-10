@@ -17,7 +17,7 @@ read.csv("data/oil_alpinedata.csv", sep= ",")%>%
 
 read.csv("data/oil_alpinedata.csv", sep= ",")%>%  
   filter(units == "percentage")%>%
-  gather(oil_type, oil_PER, 7:30)%>%
+  gather(oil_type, oil_PER, 5:30)%>%
   merge(read.csv("data/FA_types.csv"))%>%
   dplyr::select(Taxon, community,oil_PER, saturation_type)%>%
   group_by(Taxon, community, saturation_type)%>%
