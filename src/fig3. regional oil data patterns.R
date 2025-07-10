@@ -49,7 +49,6 @@ read.csv("data/oil_regionaldata.csv", sep = ",")%>%
                              "Fabales","Malpighiales","Brassicales", "Malvales", 
                              "Saxifragales", "Poales"))%>% 
   rename(seed_mass= X50seed_mass_mg)%>%
-  #filter(source == "own_data")%>%
   ggplot()+
   geom_point(aes(y=seed_mass, x=oil_content, fill=order), color= "black", shape = 21, size= 4)+
   geom_smooth(aes(y=seed_mass, x=oil_content),method = "glm", color = "black", se=F)+

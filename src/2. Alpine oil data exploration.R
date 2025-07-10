@@ -68,12 +68,11 @@ read.csv("data/species_header.csv")%>%
   group_by(Taxon, family, order)%>%
   summarise(oil.content = mean(oil.content))%>%
   ggplot(aes(x=Taxon, y= oil.content, fill=order) )+ #family
-  #geom_point(size = 4, shape=21, color = "black", show.legend = F)+
-  geom_bar(stat = "identity", show.legend = F, color="black")+ #problem with Thymus and S. ciliata (2 accesions summ % oil)
+  geom_bar(stat = "identity", show.legend = F, color="black")+ 
   coord_flip()+
   scale_fill_manual (values=col_order)+
   theme_classic(base_size=12) + 
-  labs( tag = "(a)", y= "Oil content (%)")+ #title= "Species oil content (%)",
+  labs( tag = "(a)", y= "Oil content (%)")+ 
   theme(text = element_text(family = "sans"),
         plot.title = element_text (size= 14),
         plot.tag = element_text(face="bold"),
@@ -188,34 +187,26 @@ read.csv("data/species_header.csv")%>%
         axis.text.x = element_text(size = 10, color = "black"))-> fig2C;fig2C
 
 # PCA for Panel D and E : PCA variables + species #####
-# JOIN FAME composition (percentages relative to the total content of oil) merge with total oil for PCA
-
 str(oil_alpine_data)
-oil_alpine_data [, 7:36]%>%
-  FactoMineR::PCA() -> pca_oil
+oil_alpine_data [, 7:36]%>%  cor() 
+# remove C12:0, C20:1n9, C20:2n6 (hihgly correlated with other variables with higher contributions to axes)
+oil_alpine_data %>%
+  dplyr::select(C16.0, C18.0, C18.1n7c, C18.1n9c, C18.2n6c, C18.3n3, 
+                C18.3n6, C20.1n9, C20.4n6, C20.3n6, C22.1n9, C24.1n9,
+                oil.content, ratio) %>% cor()
+# looks like 2 groups of variables highly correlated
+# 1. C20.4n6, C20.3n6  >0.8
+# 2. C22.1n9, C24.1n9  >0.8
 
-pca_oil$var$contrib
-pca_oil$eig
-oil_alpine_data [, 7:36]%>%  cor() # remove C12:0, C20:1n9, C20:2n6 (hihgly correlated with other variables with higher contributions to axes)
-
-# PCa with only the FA with more than 3% relative proportion 
+# PCa with only the FA with more than 3% relative proportion and less than 0.8 correlation
 oil_alpine_data %>%
   dplyr::select(C16.0, C18.0, C18.1n7c, C18.1n9c, C18.2n6c, C18.3n3, 
                 C18.3n6, C20.1n9, C20.4n6, C22.1n9, 
-                oil.content, ratio)%>% #FAME >3% relative proportion
+                oil.content, ratio)%>% 
   FactoMineR::PCA() -> pca_oil
 x11()
 pca_oil$var$contrib
 pca_oil$eig
-oil_alpine_data %>%
-  dplyr::select(C16.0, C18.0, C18.1n7c, C18.1n9c, C18.2n6c, C18.3n3, 
-                C18.3n6, C20.1n9, C20.4n6, C22.1n9, 
-                oil.content, ratio) %>% cor()
-
-# looks like 2 groups of variables highly correlated
-# 1. C20.4n6, C20.3n6  >0.8
-# 2. C22.1n9, C24.1n9  >0.8
- 
 
 cbind(oil_alpine_data, data.frame(pca_oil$ind$coord[, 1:2])) %>%
   mutate(species = factor(Taxon))%>%
@@ -246,11 +237,9 @@ pcaInds%>%
                              "Fabales","Malpighiales","Brassicales", "Malvales", 
                              "Saxifragales", "Poales")) ->pcaInds 
 ggplot(pcaInds, aes(x = Dim.1, y = Dim.2)) +
-  #coord_fixed() +
   geom_hline(yintercept = 0, linetype = "dashed") +
   geom_vline(xintercept = 0, linetype = "dashed") +
   geom_point(aes(fill = order), color = "black", show.legend = T, size = 4, shape = 21) + # family
-  #geom_text_repel (data = pcaInds, aes (x = Dim.1, y = Dim.2, label = species), show.legend = F, size =4, max.overlaps = 5) +
   ggthemes::theme_tufte(base_size=12) + 
   scale_fill_manual(values=col_order)+
   guides(fill=guide_legend(ncol=1, keywidth=0.1,keyheight=0.1,default.unit="cm")) +
@@ -273,14 +262,10 @@ ggplot(pcaInds, aes(x = Dim.1, y = Dim.2)) +
 ### PANEL E) Plot PCA variables#########
 x11()
 ggplot(pcaInds, aes(x = Dim.1, y = Dim.2)) +
-  #coord_fixed() +
   geom_hline(yintercept = 0, linetype = "dashed") +
   geom_vline(xintercept = 0, linetype = "dashed") +
   geom_segment(data = pcaVars, aes(x = 0, y = 0, xend = 3*Dim.1, yend = 3*Dim.2), arrow = arrow()) +
-  #geom_label(data = pcaVars, aes(x = 3*Dim.1, y = 3*Dim.2, label = Variable),  show.legend = F, size = 4) +
   geom_label_repel(data = pcaVars, aes(x = 3*Dim.1, y = 3*Dim.2, label = Variable),  show.legend = F, size = 3) +
-  #geom_label_repel(data = pcaVars, aes(x = 3*Dim.1, y = 3*Dim.2, label = Variable),  show.legend = FALSE, size = 4, segment.size= 1,
-   #point.padding = 0.2, nudge_x = .15, nudge_y = .5,segment.curvature = -1e-20, segment.linetype = 1, segment.color = "red", arrow = arrow(length = unit(0.015, "npc")))+
   ggthemes::theme_tufte(base_size=12) + 
   labs( tag = "(e)")+#title= "PCA variables",
   theme(text = element_text(family = "sans"),
@@ -297,9 +282,6 @@ ggplot(pcaInds, aes(x = Dim.1, y = Dim.2)) +
                                   "% variance explained)", sep = "") ) + #,limits = c(-5, 5)
   scale_y_continuous(name = paste("Axis 2 (", round(pca_oil$eig[2, 2], 0), 
                                   "% variance explained)", sep = ""))-> fig2E;fig2E #, limits = c(-4, 4)
-
-
-
 
 
 # combine panels ####

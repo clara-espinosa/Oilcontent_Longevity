@@ -43,18 +43,9 @@ read.csv("data/oil_regionaldata.csv", sep =",") %>%
   column_to_rownames(var="label") %>% 
   select(oil_content, seed_mass)-> oil_phylo_regional
 
-#https://www.francoiskeck.fr/phylosignal/demo_plots.html
-
 obj_oil_regional <- phylo4d(as(tree, "phylo4"), data.frame(oil_phylo_regional), match.data=TRUE)
-
-#visualization oil content and seed mass with phylogenetic tree
-barplot.phylo4d(obj_oil_regional, tree.ratio = 0.2,  center=F, bar.col = rainbow(80), #bar.col = mat.col,  error.bar.sup = mat.e, 
-                trait.bg.col = "white", show.box = F, grid.vertical = F,
-                grid.horizontal = F, tip.labels = NULL, tree.ladderize =T) #rainbow(37)
-barplot(obj_oil_regional ,tree.type = "fan", tip.cex = 0.6, tree.open.angle = 160, trait.cex = 0.6)
 # calculate and test lambda phylogenetic signal
 phyloSignal(obj_oil_regional)
-
 
 # Phylo tree oil alpine data  #####
 # always check family names with http://www.mobot.org/MOBOT/research/APweb/
@@ -92,22 +83,14 @@ read.csv("data/species_traits.csv")%>%
   group_by(Taxon)%>%
   summarise(oil.content = mean(oil.content),
             ratio = mean(ratio),
-            seed.mass = mean(mass_50),
-            p50 = mean(p50),
-            EHS= mean(EHS_mean))%>%
-  select(Taxon,oil.content, ratio, seed.mass, p50, EHS)%>%
+            seed.mass = mean(mass_50))%>%
+  select(Taxon,oil.content, ratio, seed.mass)%>%
   mutate(label= gsub(" ","_", Taxon))%>%
   remove_rownames %>% 
   column_to_rownames(var="label") %>% 
-  select(oil.content, ratio, seed.mass, p50, EHS)-> oil_phylo_alpine 
-
-#https://www.francoiskeck.fr/phylosignal/demo_plots.html
+  select(oil.content, ratio, seed.mass)-> oil_phylo_alpine 
 
 obj_oil_alpine <- phylo4d(as(tree, "phylo4"), data.frame(oil_phylo_alpine), match.data=TRUE)
-# visualization of tree with traits
-barplot.phylo4d(obj_oil_alpine, tree.ratio = 0.2,  center=F, bar.col = rainbow(47),#bar.col = mat.col,  error.bar.sup = mat.e
-                trait.bg.col = "white", show.box = T, grid.vertical = F,
-                grid.horizontal = F, tip.labels = NULL, tree.ladderize =T) #rainbow(37)
 # calculation of lambda 
 phyloSignal(obj_oil_alpine)
 
@@ -155,13 +138,7 @@ read.csv("data/species_traits.csv")%>%
   na.omit()%>%
   select(p50, oil.content, ratio)-> oil_phylo_p50
 
-#https://www.francoiskeck.fr/phylosignal/demo_plots.html
-
 obj_oil_p50 <- phylo4d(as(tree, "phylo4"), data.frame(oil_phylo_p50), match.data=TRUE)
-# visualization of tree with traits
-barplot.phylo4d(obj_oil_p50, tree.ratio = 0.2,  center=F, bar.col = rainbow(47),#bar.col = mat.col,  error.bar.sup = mat.e
-                trait.bg.col = "white", show.box = T, grid.vertical = F,
-                grid.horizontal = F, tip.labels = NULL, tree.ladderize =T) #rainbow(37)
 # calculation of lambda 
 phyloSignal(obj_oil_p50)
 
@@ -209,12 +186,6 @@ read.csv("data/species_traits.csv")%>%
   na.omit()%>%
   select(EHS, oil.content, ratio)-> oil_phylo_EHS
 
-#https://www.francoiskeck.fr/phylosignal/demo_plots.html
-
 obj_oil_EHS <- phylo4d(as(tree, "phylo4"), data.frame(oil_phylo_EHS), match.data=TRUE)
-# visualization of tree with traits
-barplot.phylo4d(obj_oil_EHS, tree.ratio = 0.2,  center=F, bar.col = rainbow(47),#bar.col = mat.col,  error.bar.sup = mat.e
-                trait.bg.col = "white", show.box = T, grid.vertical = F,
-                grid.horizontal = F, tip.labels = NULL, tree.ladderize =T) #rainbow(37)
 # calculation of lambda 
 phyloSignal(obj_oil_EHS)

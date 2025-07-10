@@ -98,7 +98,6 @@ MCMCglmm::MCMCglmm(p50 ~ ratio, #
                    verbose = FALSE, saveX = FALSE, saveZ = FALSE, saveXL = FALSE, pr = FALSE, pl = FALSE) -> g6
 g5 # p50 ~ oil.content
 g6 # p50 ~ ratio
-g15 # p50 ~ GDD + FDD + Snow
 
 x11()
 plot(g6)

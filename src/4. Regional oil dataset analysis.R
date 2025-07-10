@@ -26,7 +26,6 @@ qqnorm(regional_oil_analysis$oil_content)
 # descriptive statistics
 regional_oil_analysis%>% 
   dplyr::select(Taxon, ecology, oil_content, seed_mass)%>%
-  #group_by(ecology)%>%
   get_summary_stats(seed_mass)
 
 ##### USE MCMC to take into account phylogeny! 
@@ -44,9 +43,6 @@ nbur = 100000
 ### Gaussian priors
 priors <- list(R = list(V = 1, nu = 0.2),
                G = list(G1 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)))
-                        #G2 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)
-                        #G3 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3),
-                        #G4 = list(V = 1, nu = 0.2, alpha.mu = 0, alpha.V = 1e3)
 
 # 1. COMPARISON between altitudinal preferences#####
 str(regional_oil_analysis)
@@ -60,7 +56,6 @@ plot(g1)
 summary(g1) 
   
 ### Random and phylo
-
 # Calculate lambda http://www.mpcm-evolution.com/practice/online-practical-material-chapter-11/chapter-11-1-simple-model-mcmcglmm
 
 lambda <- g1$VCV[,"animal"]/(g1$VCV[,"animal"] + g1$VCV[,"units"]) 

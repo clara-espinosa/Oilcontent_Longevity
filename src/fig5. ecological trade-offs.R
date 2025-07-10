@@ -22,7 +22,7 @@ read.csv("data/species_traits.csv")%>%
                              "Saxifragales", "Poales"))%>% 
   dplyr::select(community, Taxon, order, family, GDD, FDD, Snw, oil.content, ratio)%>%
   na.omit()%>%
-  ggplot(aes(y=oil.content, x = GDD))+ #, fill = family
+  ggplot(aes(y=oil.content, x = GDD))+ 
   geom_point(aes(fill = order),shape = 21, color = "black", show.legend = F, size= 4)+
   scale_fill_manual (values=col_order)+
   geom_smooth(method= "lm", color= "black", se=F)+
@@ -32,7 +32,6 @@ read.csv("data/species_traits.csv")%>%
   theme(text = element_text(family = "sans"),
         plot.tag.position =c(0.01,0.99), 
         plot.tag = element_text(face="bold"),
-        #plot.margin = unit(c(0,0,0,0),'cm'),
         legend.position = "none",  
         panel.background = element_rect(color = "black", fill = NULL),
         axis.title = element_text(9),
@@ -54,7 +53,7 @@ read.csv("data/species_traits.csv")%>%
                              "Saxifragales", "Poales"))%>% 
   dplyr::select(community, Taxon, order, family, GDD, FDD, Snw, oil.content, ratio)%>%
   na.omit()%>%
-  ggplot(aes(y=ratio, x = GDD))+ #, fill = family
+  ggplot(aes(y=ratio, x = GDD))+ 
   geom_point(aes(fill = order),shape = 21, color = "black", show.legend = F, size= 4)+
   scale_fill_manual (values=col_order)+
   geom_smooth(method= "lm", color= "black", se=F)+
@@ -62,7 +61,6 @@ read.csv("data/species_traits.csv")%>%
   labs(x= "Growing Degree Days (GDD, ºC)", y= "UFA/SFA ratio")+
   annotate("text", label="Post. mean: - 0.00006\n CI: [ - 0.0002 | 0.0002 ]", x=1950, y=18.8, size=3)+
   theme(text = element_text(family = "sans"),
-        #plot.margin = unit(c(0,0,0,0),'cm'),
         legend.position = "none",  
         panel.background = element_rect(color = "black", fill = NULL),
         axis.title = element_text(9),
@@ -89,7 +87,7 @@ read.csv("data/species_traits.csv")%>%
                              "Saxifragales", "Poales"))%>% 
   dplyr::select(community, Taxon, order, family, GDD, FDD, Snw, oil.content, ratio)%>%
   na.omit()%>%
-  ggplot(aes(y=oil.content, x = FDD))+ #, fill = family
+  ggplot(aes(y=oil.content, x = FDD))+ 
   geom_point(aes(fill = order),shape = 21, color = "black", show.legend = F, size= 4)+
   scale_fill_manual (values=col_order)+
   geom_smooth(method= "lm", color= "black", se=F)+
@@ -99,7 +97,6 @@ read.csv("data/species_traits.csv")%>%
   theme(text = element_text(family = "sans"),
         plot.tag.position =c(0.01,0.99), 
         plot.tag = element_text(face="bold"),
-        #plot.margin = unit(c(0,0,0,0),'cm'),
         legend.position = "none",  
         panel.background = element_rect(color = "black", fill = NULL),
         axis.title = element_text(9),
@@ -121,7 +118,7 @@ read.csv("data/species_traits.csv")%>%
                              "Saxifragales", "Poales"))%>% 
   dplyr::select(community, Taxon, order, family, GDD, FDD, Snw, oil.content, ratio)%>%
   na.omit()%>%
-  ggplot(aes(y=ratio, x = FDD))+ #, fill = family
+  ggplot(aes(y=ratio, x = FDD))+ #,
   geom_point(aes(fill = order),shape = 21, color = "black", show.legend = F, size= 4)+
   scale_fill_manual (values=col_order)+
   geom_smooth(method= "lm", color= "black", se=F)+
@@ -129,7 +126,6 @@ read.csv("data/species_traits.csv")%>%
   labs( x= "Freezing Degree Days (FDD, ºC)", y= "UFA/SFA ratio")+
   annotate("text", label="Post. mean: 0.0008\n CI: [ - 0.002 | 0.004 ]", x=138, y=17, size=3)+
   theme(text = element_text(family = "sans"),
-        #plot.margin = unit(c(0,0,0,0),'cm'),
         legend.position = "none",  
         panel.background = element_rect(color = "black", fill = NULL),
         axis.title = element_text(9),
@@ -155,7 +151,7 @@ read.csv("data/species_traits.csv")%>%
                              "Saxifragales", "Poales"))%>% 
   dplyr::select(community, Taxon, order, family, GDD, FDD, Snw, oil.content, ratio)%>%
   na.omit()%>%
-  ggplot(aes(y=oil.content, x = Snw))+ #, fill = family
+  ggplot(aes(y=oil.content, x = Snw))+ 
   geom_point(aes(fill = order),shape = 21, color = "black", show.legend = T, size= 4)+
   scale_fill_manual (values=col_order)+
   geom_smooth(method= "lm", color= "black", se=F)+
@@ -165,7 +161,6 @@ read.csv("data/species_traits.csv")%>%
   theme(text = element_text(family = "sans"),
         plot.tag.position =c(0.01,0.99), 
         plot.tag = element_text(face="bold"),
-        #plot.margin = unit(c(0,0,0,0),'cm'),
         legend.position = "none", 
         panel.background = element_rect(color = "black", fill = NULL),
         axis.title = element_text(9),
@@ -187,7 +182,7 @@ read.csv("data/species_traits.csv")%>%
                              "Saxifragales", "Poales"))%>% 
   dplyr::select(community, Taxon, order, family, GDD, FDD, Snw, oil.content, ratio)%>%
   na.omit()%>%
-  ggplot(aes(y=ratio, x = Snw))+ #, fill = family
+  ggplot(aes(y=ratio, x = Snw))+ 
   geom_point(aes(fill = order),shape = 21, color = "black", show.legend = T, size= 4)+
   scale_fill_manual (values=col_order)+
   geom_smooth(method= "lm", color= "black", se=F)+
@@ -195,7 +190,6 @@ read.csv("data/species_traits.csv")%>%
   labs( x= "Snow cover (days)", y= "UFA/SFA ratio")+
   annotate("text", label="Post. mean: 0.002\n CI: [ - 0.0003 | 0.004 ]", x=125, y=16.5, size=3)+
   theme(text = element_text(family = "sans"),
-        #plot.margin = unit(c(0,0,0,0),'cm'),
         legend.position = "none", 
         panel.background = element_rect(color = "black", fill = NULL),
         axis.title = element_text(9),
