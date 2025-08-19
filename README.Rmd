@@ -1,5 +1,5 @@
 ---
-title: "Article description.md"
+title: "Read me: Article summary.md"
 output: github_document
 ---
 
@@ -7,15 +7,14 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Functional trade-offs and ecological correlates of seed oil traits in alpine ecosystems
+
+This repository stores all the information related to the manuscript [*Functional trade-offs and ecological correlates of seed oil traits in alpine ecosystems*](http://doi.org/10.1111/plb.70097), including the raw datasets, the scripts to perform data cleaning, analysis and figures. 
 [![DOI](https://zenodo.org/badge/440159075.svg)](https://doi.org/10.5281/zenodo.14651803) update!!
 
 ![Seeds prepared for longevity analysis](seeds_longevity.jpg)
 
 ![Seeds prepared for oil analysis](seeds_oil.jpg)
-
-# Functional trade-offs and ecological correlates of seed oil traits in alpine ecosystems
-
-This repository stores all the information related to the manuscript [*Functional trade-offs and ecological correlates of seed oil traits in alpine ecosystems*](http://doi.org/10.1111/plb.70097), including the raw datasets, the scripts to perform data cleaning, analysis and figures. 
 
 ## Contents
 
@@ -47,4 +46,4 @@ The following materials are available in the folders of this repository:
 
 ## Citation
 
-Please cite the repository, datasets and article as: Espinosa del Alba, C., Mondoni, A., Baizán, S., Fernández-Pascual, E. and Jiménez-Alfaro, B.(2025).Functional trade-offs and ecological correlates of seed oil traits in alpine ecosystems. Plant Biology. DOI: http://doi.org/10.1111/plb.70097.
+Please cite the repository, datasets and article as: Espinosa del Alba, C., Mondoni, A., Baizán, S., Fernández-Pascual, E. and Jiménez-Alfaro, B.(2025). Functional trade-offs and ecological correlates of seed oil traits in alpine ecosystems. Plant Biology. DOI: http://doi.org/10.1111/plb.70097.
