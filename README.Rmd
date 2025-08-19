@@ -1,5 +1,5 @@
 ---
-title: "README.md"
+title: "Article description.md"
 output: github_document
 ---
 
@@ -7,9 +7,11 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-[![DOI](https://doi.org/10.5281/zenodo.14651803)] update!!
+[![DOI](https://zenodo.org/badge/440159075.svg)](https://doi.org/10.5281/zenodo.14651803) update!!
 
-![Dianthus langeanus Wilk. (Caryophyllaceae)](Dianthuslangeanus.png)
+![Seeds prepared for longevity analysis](seeds_longevity.jpg)
+
+![Seeds prepared for oil analysis](seeds_oil.jpg)
 
 # Functional trade-offs and ecological correlates of seed oil traits in alpine ecosystems
 
