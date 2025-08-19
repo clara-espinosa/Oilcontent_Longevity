@@ -1,4 +1,4 @@
-Article description.md
+Read me: Article summary.md
 ================
 
 # Functional trade-offs and ecological correlates of seed oil traits in alpine ecosystems
@@ -7,8 +7,7 @@ This repository stores all the information related to the manuscript
 [*Functional trade-offs and ecological correlates of seed oil traits in
 alpine ecosystems*](http://doi.org/10.1111/plb.70097), including the raw
 datasets, the scripts to perform data cleaning, analysis and figures.
-[![DOI](https://zenodo.org/badge/440159075.svg)](https://doi.org/10.5281/zenodo.14651803)
-update!!
+[![DOI](https://zenodo.org/badge/440159075.svg)](https://doi.org/10.5281/zenodo.16900176)
 
 <figure>
 <img src="seeds_longevity.jpg"
